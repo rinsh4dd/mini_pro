@@ -1,0 +1,757 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Kit History - MaatriCare</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #062e20;
+            --sidebar-hover: rgba(255, 255, 255, 0.08);
+            --sidebar-active: #d7e6dc;
+            --sidebar-active-text: #062e20;
+            --sidebar-text: #e2e8e5;
+            --sidebar-muted: #8da89d;
+            --page-bg: #faf7f0;
+            --card-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --subcard-bg: #ede8dc;
+            --subcard-warm: #f6f3ed;
+            --border-color: #ede8dc;
+            --border-light: #e5e0d4;
+            --accent-green: #062e20;
+            --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--page-bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 240px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 100;
+            padding: 1.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-brand {
+            padding: 0.5rem 0.75rem 1.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--sidebar-bg);
+            font-size: 1.2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .sidebar-brand h2 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.01em;
+            line-height: 1.15;
+        }
+
+        .sidebar-brand p {
+            font-size: 0.68rem;
+            color: var(--sidebar-muted);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            width: 100%;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0.7rem 1rem;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+        }
+
+        .nav-link i {
+            font-size: 1.05rem;
+            width: 20px;
+            text-align: center;
+            color: #a4c2b5;
+        }
+
+        .nav-link:hover {
+            background-color: var(--sidebar-hover);
+            color: #ffffff;
+        }
+
+        .nav-link.active {
+            background-color: var(--sidebar-active);
+            color: var(--sidebar-active-text);
+            font-weight: 700;
+        }
+
+        .nav-link.active i {
+            color: var(--sidebar-active-text);
+        }
+
+        .sidebar-bottom {
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-sidebar-logout {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.7rem 1rem;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .btn-sidebar-logout i {
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+            color: #a4c2b5;
+        }
+
+        .btn-sidebar-logout:hover {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+        }
+
+        /* ================= MAIN WRAPPER ================= */
+        .main-wrapper {
+            margin-left: 240px;
+            flex-grow: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--page-bg);
+            position: relative;
+        }
+
+        .top-header {
+            padding: 1.1rem 2.5rem;
+            background-color: var(--page-bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .breadcrumb-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb-wrap a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb-wrap a:hover {
+            color: var(--accent-green);
+        }
+
+        .breadcrumb-sep {
+            color: #9ca3af;
+        }
+
+        .breadcrumb-current {
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        .user-pill-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--card-bg);
+            padding: 5px 12px 5px 6px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .user-avatar-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--subcard-bg);
+            color: var(--accent-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .user-pill-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .content-container {
+            padding: 1.5rem 2.5rem 4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Page Top Bar */
+        .page-head-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .page-head-title h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+        }
+
+        .page-head-title p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* KPI Cards Grid */
+        .kit-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+        }
+
+        .kpi-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.35rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .kpi-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .kpi-blue { background: #e0f2fe; color: #0369a1; }
+        .kpi-green { background: #d1fae5; color: #065f46; }
+        .kpi-amber { background: #fef3c7; color: #b45309; }
+        .kpi-purple { background: #ede9fe; color: #6d28d9; }
+
+        .kpi-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .kpi-val {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+        }
+
+        .kpi-lbl {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* Kit Table & Records Card */
+        .kit-records-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 1.75rem 2rem;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .card-top-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-light);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .card-top-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-top-title i {
+            color: var(--accent-green);
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .kit-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.88rem;
+        }
+
+        .kit-table th {
+            background-color: var(--subcard-warm);
+            color: #4b5563;
+            font-weight: 700;
+            padding: 0.85rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .kit-table td {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #f3eee3;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .kit-table tr:hover td {
+            background-color: #faf8f5;
+        }
+
+        .kit-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            background: var(--subcard-bg);
+            color: var(--sidebar-bg);
+        }
+
+        .status-chip {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-collected {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-rescheduled {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        /* Empty State */
+        .empty-kit-state {
+            padding: 4rem 1.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: #6b7280;
+        }
+
+        .empty-icon {
+            font-size: 3.2rem;
+            color: #cbd5e1;
+        }
+
+        /* Poshan Info Card */
+        .poshan-info-box {
+            background: #eaf3ee;
+            border: 1px solid #d6e4db;
+            border-radius: 14px;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .poshan-icon {
+            font-size: 1.4rem;
+            color: #065f46;
+            margin-top: 2px;
+        }
+
+        .poshan-content h4 {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #064e3b;
+            margin-bottom: 4px;
+        }
+
+        .poshan-content p {
+            font-size: 0.84rem;
+            color: #065f46;
+            line-height: 1.45;
+        }
+
+        @media (max-width: 1024px) {
+            .kit-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .main-wrapper { margin-left: 0; }
+            .top-header { padding: 1rem 1.25rem; }
+            .content-container { padding: 1rem 1.25rem 3rem; }
+            .kit-kpi-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= LEFT SIDEBAR ================= -->
+    <aside class="sidebar">
+        <div>
+            <a href="/myapp/userhome/" class="sidebar-brand">
+                <div class="brand-logo-icon">
+                    <i class="fa-solid fa-person-breastfeeding"></i>
+                </div>
+                <div>
+                    <h2>MaatriCare</h2>
+                    <p>MATERNAL PORTAL</p>
+                </div>
+            </a>
+
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a href="/myapp/userhome/" class="nav-link">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_profile/" class="nav-link">
+                        <i class="fa-regular fa-user"></i>
+                        <span>My Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_pregnancy_record/" class="nav-link">
+                        <i class="fa-solid fa-person-pregnant"></i>
+                        <span>Pregnancy Record</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_child_profile/" class="nav-link">
+                        <i class="fa-regular fa-face-smile"></i>
+                        <span>Child Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_child_growth/" class="nav-link">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Child Growth</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_vaccination_schedule/" class="nav-link">
+                        <i class="fa-solid fa-syringe"></i>
+                        <span>Vaccination</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_kit_history/" class="nav-link active">
+                        <i class="fa-solid fa-box-archive"></i>
+                        <span>Nutrition Kits</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_notifications/" class="nav-link">
+                        <i class="fa-regular fa-bell"></i>
+                        <span>Notifications</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-bottom">
+            <a href="/myapp/logout/" class="btn-sidebar-logout">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN WRAPPER ================= -->
+    <div class="main-wrapper">
+        <header class="top-header">
+            <div class="breadcrumb-wrap">
+                <a href="/myapp/userhome/">Maternal Portal</a>
+                <span class="breadcrumb-sep">&rsaquo;</span>
+                <span class="breadcrumb-current">Nutrition Kit History</span>
+            </div>
+
+            <div class="user-pill-profile">
+                <div class="user-avatar-circle">
+                    <i class="fa-regular fa-user"></i>
+                </div>
+                <span class="user-pill-name">{{ mother.name|default:"Registered Mother" }}</span>
+            </div>
+        </header>
+
+        <main class="content-container">
+
+            <!-- Page Title -->
+            <div class="page-head-bar">
+                <div class="page-head-title">
+                    <h1>Nutrition Kit History & Distribution Log</h1>
+                    <p>Track all prenatal food rations, Matrutva Kits, and supplementary nutrition received from your local Anganwadi center.</p>
+                </div>
+            </div>
+
+            <!-- KPI Cards Grid -->
+            <div class="kit-kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icon kpi-blue">
+                        <i class="fa-solid fa-boxes-stacked"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-val">{{ total_kits }}</span>
+                        <span class="kpi-lbl">Total Kits Allocated</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon kpi-green">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-val">{{ collected_kits }}</span>
+                        <span class="kpi-lbl">Collected / Received</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon kpi-amber">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-val">{{ pending_kits }}</span>
+                        <span class="kpi-lbl">Pending Collection</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon kpi-purple">
+                        <i class="fa-regular fa-calendar-check"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-val" style="font-size: 1.05rem;">{{ last_distribution_date }}</span>
+                        <span class="kpi-lbl">Last Distribution Date</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nutrition Kit Records Table -->
+            <div class="kit-records-card">
+                <div class="card-top-header">
+                    <h2 class="card-top-title">
+                        <i class="fa-solid fa-box-archive"></i> Detailed Kit Allocation Records
+                    </h2>
+                    <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">
+                        Beneficiary: {{ mother.name }} &bull; Total Quantity: {{ total_qty }} packs
+                    </span>
+                </div>
+
+                {% if all_kits %}
+                <div class="table-responsive">
+                    <table class="kit-table">
+                        <thead>
+                            <tr>
+                                <th>Kit Type</th>
+                                <th>Product Name</th>
+                                <th>Contents / Details</th>
+                                <th>Scheduled Date</th>
+                                <th>Distribution Date</th>
+                                <th>Quantity</th>
+                                <th>Anganwadi Center</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for k in all_kits %}
+                            <tr>
+                                <td>
+                                    <span class="kit-type-badge">
+                                        <i class="fa-solid fa-tag"></i> {{ k.kit_type }}
+                                    </span>
+                                </td>
+                                <td style="font-weight: 800; color: var(--sidebar-bg);">{{ k.product_name }}</td>
+                                <td style="color: #4b5563; font-weight: 500; max-width: 250px;">{{ k.product_details }}</td>
+                                <td>{{ k.date|date:"M d, Y" }}</td>
+                                <td>{{ k.distribution_date|date:"M d, Y" }}</td>
+                                <td style="font-weight: 800;">{{ k.quantity }}</td>
+                                <td style="font-size: 0.82rem; color: #4b5563;">
+                                    <strong>{{ k.TEACHER.Name }}</strong><br>
+                                    <span style="color: #6b7280;">{{ k.TEACHER.center_name }}</span>
+                                </td>
+                                <td>
+                                    {% if k.status == 'Collected' or k.status == 'Distributed' %}
+                                    <span class="status-chip status-collected">
+                                        <i class="fa-solid fa-circle-check"></i> {{ k.status }}
+                                    </span>
+                                    {% elif k.status == 'Rescheduled' %}
+                                    <span class="status-chip status-rescheduled">
+                                        <i class="fa-solid fa-calendar-plus"></i> Rescheduled
+                                    </span>
+                                    {% else %}
+                                    <span class="status-chip status-pending">
+                                        <i class="fa-solid fa-clock"></i> Pending
+                                    </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-kit-state">
+                    <div class="empty-icon">
+                        <i class="fa-solid fa-box-open"></i>
+                    </div>
+                    <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-main);">No Nutrition Kits Recorded Yet</h3>
+                    <p style="font-size: 0.88rem; max-width: 440px;">
+                        When your local Anganwadi teacher assigns supplementary nutritional food packs or iron kits, your allocation history will appear here.
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Poshan Scheme Guidance Card -->
+            <div class="poshan-info-box">
+                <i class="fa-solid fa-heart-pulse poshan-icon"></i>
+                <div class="poshan-content">
+                    <h4>Supplementary Nutrition Program (ICDS & Poshan Abhiyaan)</h4>
+                    <p>
+                        Registered pregnant and lactating mothers are entitled to take-home rations (THR) including fortified micro-nutrient flour (Amrutham Nutrimix), iron and folic acid supplements, and protein enrichments to ensure healthy maternal and fetal development. Contact your local Anganwadi center for distribution schedules.
+                    </p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

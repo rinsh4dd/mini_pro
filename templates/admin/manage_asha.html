@@ -1,0 +1,971 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage ASHA - MaatriCare Admin</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #073423;
+            --sidebar-active: #154d37;
+            --sidebar-hover: #0e3d29;
+            --main-bg: #f9f6f0;
+            --card-bg: #ffffff;
+            --text-dark: #111827;
+            --text-muted: #6b7280;
+            --brand-green: #0f4a33;
+            --brand-green-hover: #0a3523;
+            --brand-green-light: #e6f4ee;
+            --border-color: #f0ebe1;
+            --input-bg: #faf8f4;
+            --input-border: #e2ddd3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--main-bg);
+            display: flex;
+            color: var(--text-dark);
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.75rem 1rem;
+            min-height: 100vh;
+            flex-shrink: 0;
+        }
+
+        .brand-header {
+            padding: 0 0.75rem 1.75rem 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #a8d5be;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .brand-icon-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .brand-text-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-subtitle {
+            font-size: 0.80rem;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.8rem 1rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item a:hover {
+            background-color: var(--sidebar-hover);
+            color: #ffffff;
+        }
+
+        .nav-item.active a {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .nav-item a i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .logout-wrapper {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.8rem 1rem;
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+        }
+
+        /* ================= MAIN WRAPPER ================= */
+        .main-wrapper {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        /* Top Header Bar */
+        .topbar {
+            height: 76px;
+            background-color: var(--main-bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .search-box {
+            position: relative;
+            width: 440px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.65rem 1rem 0.65rem 2.6rem;
+            border: 1px solid #e2ddd3;
+            border-radius: 30px;
+            background-color: #f1ede4;
+            font-size: 0.88rem;
+            color: var(--text-dark);
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            background-color: #ffffff;
+            border-color: var(--brand-green);
+            box-shadow: 0 0 0 3px rgba(15, 74, 51, 0.1);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: #4b5563;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            color: var(--brand-green);
+            background-color: rgba(15, 74, 51, 0.08);
+        }
+
+        .notif-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 7px;
+            height: 7px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            border: 1.5px solid #ffffff;
+        }
+
+        .profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .avatar-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ================= PAGE CONTENT ================= */
+        .content-container {
+            padding: 2.25rem 2.5rem 3.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+            max-width: 1240px;
+            width: 100%;
+        }
+
+        .page-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-main-title {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+            margin-bottom: 0.35rem;
+        }
+
+        .page-subtitle {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+        }
+
+        .btn-add-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            padding: 0.75rem 1.45rem;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 3px 10px rgba(15, 74, 51, 0.2);
+        }
+
+        .btn-add-primary:hover {
+            background-color: var(--brand-green-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(15, 74, 51, 0.25);
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 0.85rem 1.25rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-warning {
+            background-color: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #b45309;
+        }
+
+        .alert-success {
+            background-color: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+        }
+
+        .alert-error, .alert-danger {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+        }
+
+        /* ================= KPI METRIC CARDS ================= */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .kpi-card {
+            background-color: var(--card-bg);
+            border: 1px solid #ede7dc;
+            border-radius: 16px;
+            padding: 1.5rem 1.6rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            position: relative;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 20%;
+            bottom: 20%;
+            width: 4px;
+            border-radius: 0 4px 4px 0;
+            background-color: transparent;
+        }
+
+        .kpi-card.active-kpi::before {
+            background-color: var(--brand-green);
+        }
+
+        .kpi-label {
+            font-size: 0.86rem;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        .kpi-value-row {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1;
+        }
+
+        .kpi-subtext {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ================= REGISTRY TABLE CARD ================= */
+        .table-card {
+            background-color: var(--card-bg);
+            border: 1px solid #ede7dc;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.025);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .table-card-header {
+            padding: 1.25rem 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #f0ebe1;
+        }
+
+        .table-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .table-tools {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-table-tool {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.48rem 0.95rem;
+            background-color: #ffffff;
+            border: 1px solid #e2ddd3;
+            border-radius: 8px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-table-tool:hover {
+            background-color: #f7f4ee;
+            border-color: #d5cfc3;
+        }
+
+        .data-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .data-table th {
+            background-color: #faf8f4;
+            padding: 0.9rem 1.25rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: capitalize;
+            border-bottom: 1px solid #f0ebe1;
+            white-space: nowrap;
+        }
+
+        .data-table td {
+            padding: 1rem 1.25rem;
+            font-size: 0.88rem;
+            color: var(--text-dark);
+            border-bottom: 1px solid #f5f1e8;
+            vertical-align: middle;
+        }
+
+        .data-table tr:hover td {
+            background-color: #fbf9f5;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .worker-name-box {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .worker-name {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .worker-meta {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .status-badge-table {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 0.28rem 0.65rem;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background-color: #ecfdf5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+        }
+
+        .status-inactive {
+            background-color: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .action-links-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-action-edit {
+            color: var(--brand-green);
+            background-color: var(--brand-green-light);
+            border: 1px solid #c8e5d6;
+            padding: 0.38rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-action-edit:hover {
+            background-color: #d1ecde;
+        }
+
+        .btn-action-delete {
+            color: #dc2626;
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            padding: 0.38rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-action-delete:hover {
+            background-color: #fee2e2;
+        }
+
+        .btn-action-view {
+            color: #0284c7;
+            background-color: #f0f9ff;
+            border: 1px solid #bae6fd;
+            padding: 0.38rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .btn-action-view:hover {
+            background-color: #e0f2fe;
+            border-color: #7dd3fc;
+        }
+
+        /* Dossier Modal Styling */
+        .record-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 1.5rem;
+        }
+
+        .record-modal-overlay.open {
+            display: flex;
+        }
+
+        .record-modal-content {
+            background: #ffffff;
+            border-radius: 18px;
+            max-width: 680px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid #e2e8f0;
+            animation: modalFadeIn 0.22s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.96) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .record-modal-header {
+            padding: 1.25rem 1.6rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .record-modal-body {
+            padding: 1.6rem;
+        }
+
+        .record-modal-footer {
+            padding: 1rem 1.6rem;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        .empty-state-box {
+            padding: 4rem 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.92rem;
+        }
+
+        /* Table Pagination */
+        .table-footer {
+            padding: 1rem 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #f0ebe1;
+            background-color: #faf8f4;
+        }
+
+        .table-count-text {
+            font-size: 0.82rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .pagination-box {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .page-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: 1px solid #e2ddd3;
+            background-color: #ffffff;
+            color: #374151;
+            font-size: 0.82rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .page-btn:hover {
+            background-color: #f5f1e8;
+        }
+
+        .page-btn.active {
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            border-color: var(--sidebar-bg);
+        }
+
+        /* ================= BOTTOM BANNER CARD ================= */
+        .banner-card {
+            background-color: #f5f0e6;
+            border: 1px dashed #ded7c8;
+            border-radius: 14px;
+            padding: 1.75rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            color: #6b7280;
+        }
+
+        .banner-icon {
+            font-size: 1.6rem;
+            color: #0f4a33;
+        }
+
+        .banner-text {
+            font-size: 0.86rem;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        @media (max-width: 1024px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+            }
+
+            .content-container {
+                padding: 1.5rem;
+            }
+
+            .page-header-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= ADMIN SIDEBAR ================= -->
+    {% include 'admin/sidebar.html' %}
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <div class="main-wrapper">
+        
+        <header class="topbar">
+            <form action="/myapp/manage_asha/" method="GET" class="search-box">
+                {% if status_filter %}<input type="hidden" name="status" value="{{ status_filter }}">{% endif %}
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input 
+                    type="text" 
+                    name="q" 
+                    class="search-input" 
+                    placeholder="Search ASHA workers by name, area, or email..."
+                    value="{{ search_query|default:'' }}"
+                >
+            </form>
+
+            <div class="topbar-right">
+                <div class="profile-pill">
+                    <div class="avatar-box">
+                        <img src="{% static 'images/mother_child_logo.png' %}" alt="Admin Avatar" onerror="this.onerror=null; this.src='/static/images/mother_child_logo.png';">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="content-container">
+            
+            <!-- Page Header Row -->
+            <div class="page-header-row">
+                <div>
+                    <h1 class="page-main-title">Manage ASHA Workers</h1>
+                    <p class="page-subtitle">Oversee community health workers, track their activity, and manage assignments.</p>
+                </div>
+                <!-- Add New Worker Button linking to Add ASHA Form -->
+                <a href="/myapp/add_asha/" class="btn-add-primary">
+                    <i class="fa-solid fa-plus"></i> Add New Worker
+                </a>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'success' }}">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Top 2 KPI Metric Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-card active-kpi">
+                    <div class="kpi-label">Total Workers</div>
+                    <div class="kpi-value-row">
+                        <span class="kpi-value">{{ total_workers|default:0 }}</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">Active Status</div>
+                    <div class="kpi-value-row">
+                        <span class="kpi-value">{{ active_workers|default:0 }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ASHA Directory Data Table Card -->
+            <div class="table-card">
+                <div class="table-card-header">
+                    <div class="table-title">ASHA Directory</div>
+                    <div class="table-tools" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <form method="GET" action="/myapp/manage_asha/" style="display: inline-flex; align-items: center; gap: 0.45rem;">
+                            {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
+                            <label for="statusFilter" style="font-size: 0.84rem; font-weight: 600; color: #4b5563; display: flex; align-items: center; gap: 4px;">
+                                <i class="fa-solid fa-filter" style="color: var(--brand-green);"></i> Status:
+                            </label>
+                            <select name="status" id="statusFilter" onchange="this.form.submit()" class="btn-table-tool" style="padding: 0.45rem 0.85rem; font-weight: 600; cursor: pointer; outline: none; border-color: #e2ddd3;">
+                                <option value="all" {% if status_filter == 'all' or not status_filter %}selected{% endif %}>All Workers</option>
+                                <option value="Active" {% if status_filter == 'Active' %}selected{% endif %}>Active Only</option>
+                                <option value="Inactive" {% if status_filter == 'Inactive' %}selected{% endif %}>Inactive Only</option>
+                            </select>
+                        </form>
+                        <button class="btn-table-tool" onclick="window.print();">
+                            <i class="fa-solid fa-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+
+                <div class="data-table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 45px;">#</th>
+                                <th>Worker & Identity</th>
+                                <th>Assigned Ward & Address</th>
+                                <th>Contact Details</th>
+                                <th>Qualifications</th>
+                                <th>Status</th>
+                                <th>Joined Date</th>
+                                <th style="text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if workers %}
+                                {% for worker in workers %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                                <div style="width: 42px; height: 42px; border-radius: 50%; overflow: hidden; background: #e0f2fe; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1.5px solid #bae6fd;">
+                                                    {% if worker.image %}
+                                                        <img src="{{ worker.image.url }}" alt="{{ worker.Full_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                                    {% else %}
+                                                        <i class="fa-solid fa-user" style="color: #0284c7; font-size: 0.95rem;"></i>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="worker-name-box">
+                                                    <span class="worker-name" style="font-weight: 700; color: var(--text-dark);">{{ worker.Full_name }}</span>
+                                                    <span class="worker-meta">Age: {{ worker.Age }} yrs {% if worker.dob %}• DOB: {{ worker.dob|date:"d M Y" }}{% endif %}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="font-weight: 600; color: #1e293b;">{{ worker.Area_assigned }}</div>
+                                            <div style="font-size: 0.76rem; color: #64748b; margin-top: 2px; max-width: 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ worker.Address }}">
+                                                <i class="fa-solid fa-location-dot" style="color: #94a3b8; margin-right: 3px;"></i>{{ worker.Address|default:"No address registered" }}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="font-weight: 600; color: #1e293b;"><i class="fa-solid fa-phone" style="color: var(--brand-green); font-size: 0.75rem; margin-right: 4px;"></i>+91 {{ worker.Phone }}</div>
+                                            <div style="font-size: 0.76rem; color: #64748b; margin-top: 2px;"><i class="fa-regular fa-envelope" style="margin-right: 4px;"></i>{{ worker.Email }}</div>
+                                        </td>
+                                        <td>
+                                            <span style="background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; font-weight: 600; font-size: 0.78rem; padding: 4px 8px; border-radius: 6px; display: inline-block; max-width: 175px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ worker.Qualification }}">
+                                                <i class="fa-solid fa-user-graduate" style="margin-right: 4px;"></i>{{ worker.Qualification|default:"Not specified" }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge-table {% if worker.Current_status == 'Inactive' %}status-inactive{% else %}status-active{% endif %}">
+                                                {{ worker.Current_status|default:'Active' }}
+                                            </span>
+                                        </td>
+                                        <td>{{ worker.Joining_date|date:"d M, Y"|default:"-" }}</td>
+                                        <td style="text-align: right;">
+                                            <div class="action-links-box">
+                                                <a href="/myapp/edit_asha/{{ worker.id }}/" class="btn-action-edit" title="Edit Worker">
+                                                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                                                </a>
+                                                <a href="/myapp/delete_asha/{{ worker.id }}/" class="btn-action-delete" title="Delete Worker" onclick="return confirm('Warning: Are you sure you want to permanently delete this ASHA worker profile and login account? This action cannot be undone.');">
+                                                    <i class="fa-solid fa-trash-can"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="8">
+                                         <div class="empty-state-box">
+                                             No ASHA worker record added yet. Click 'Add New Worker' to get started.
+                                         </div>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-footer">
+                    <div class="table-count-text">
+                        Showing {% if workers %}1 to {{ workers|length }}{% else %}0 to 0{% endif %} of {{ total_workers|default:0 }} workers
+                    </div>
+                    <div class="pagination-box">
+                        <button class="page-btn" disabled><i class="fa-solid fa-angle-left"></i></button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn"><i class="fa-solid fa-angle-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Banner Card -->
+            <div class="banner-card">
+                <div class="banner-icon">
+                    <i class="fa-solid fa-hands-holding-child"></i>
+                </div>
+                <div class="banner-text">Community Wellness Network</div>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

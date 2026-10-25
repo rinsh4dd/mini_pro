@@ -1,0 +1,797 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anganwadi Teacher Dashboard | MaatriCare</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #062e20;
+            --sidebar-hover: #0a3d2b;
+            --sidebar-active: #0e4c36;
+            --sidebar-text-muted: #a3c4b5;
+            --brand-green: #083c2a;
+            --brand-green-hover: #052a1d;
+            --brand-green-light: #ecfdf5;
+            --brand-green-accent: #10b981;
+            --bg-page: #f8fafc;
+            --card-bg: #ffffff;
+            --text-heading: #0f172a;
+            --text-body: #334155;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --border-input: #cbd5e1;
+            --search-bg: #f1f5f9;
+            --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+            --card-hover-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* ================= Sidebar Navigation ================= */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.75rem 1.15rem 1.5rem;
+            z-index: 100;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            padding: 0 0.5rem 1.75rem;
+            text-decoration: none;
+            display: block;
+        }
+
+        .brand-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-sub {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--sidebar-text-muted);
+            margin-top: 4px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-item-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.72rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item-link i {
+            font-size: 1.05rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item-link:hover {
+            color: #ffffff;
+            background-color: var(--sidebar-hover);
+        }
+
+        .nav-item-link.active {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+        }
+
+        .sidebar-footer {
+            padding-top: 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.7rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            color: #ffffff;
+            background-color: rgba(239, 68, 68, 0.15);
+        }
+
+        /* ================= Main Container ================= */
+        .main-wrapper {
+            margin-left: 250px;
+            flex: 1;
+            min-width: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-page);
+        }
+
+        /* Top Header */
+        .top-header {
+            height: 74px;
+            padding: 0 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--brand-green);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 380px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 0.88rem;
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.65rem 1rem 0.65rem 2.6rem;
+            background-color: var(--search-bg);
+            border: 1px solid transparent;
+            border-radius: 9999px;
+            font-size: 0.88rem;
+            color: var(--text-heading);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            background-color: #ffffff;
+            border-color: #cbd5e1;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .worker-profile-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 1px solid var(--border-color);
+            padding-left: 1.25rem;
+        }
+
+        .worker-info {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .worker-name {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            line-height: 1.2;
+        }
+
+        .worker-id {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .worker-avatar-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #083c2a, #10b981);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+
+        /* ================= Content Body ================= */
+        .content-body {
+            padding: 2.25rem 2.5rem 3.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            width: 100%;
+            max-width: 1550px;
+            margin: 0 auto;
+        }
+
+        /* Center Banner */
+        .dashboard-banner-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.25rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .banner-title {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--brand-green);
+            letter-spacing: -0.02em;
+        }
+
+        .banner-sub {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .center-tag-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #ecfdf5;
+            color: #047857;
+            padding: 0.6rem 1.2rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            border: 1px solid #a7f3d0;
+        }
+
+        /* 4 Metrics Grid */
+        .metrics-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .metric-kpi-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.6rem 1.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 150px;
+            box-shadow: var(--shadow-card);
+            transition: all 0.25s ease;
+        }
+
+        .metric-kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-hover-shadow);
+        }
+
+        .kpi-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.85rem;
+        }
+
+        .kpi-icon-badge {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .kpi-icon-green {
+            background-color: #d1fae5;
+            color: #059669;
+        }
+
+        .kpi-icon-coral {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+
+        .kpi-icon-blue {
+            background-color: #e0f2fe;
+            color: #0284c7;
+        }
+
+        .kpi-icon-amber {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+
+        .kpi-label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-body);
+        }
+
+        .kpi-value {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: var(--text-heading);
+            line-height: 1.1;
+            margin-top: 4px;
+            letter-spacing: -0.02em;
+        }
+
+        /* Analytics Card */
+        .analytics-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.75rem 2rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .analytics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .stat-boxes-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .stat-mini-box {
+            padding: 1rem 1.25rem;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .btn-issue-top {
+            padding: 0.55rem 1.1rem;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border-radius: 10px;
+            font-size: 0.84rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-issue-top:hover {
+            background-color: var(--brand-green-hover);
+        }
+
+        /* Recent Activity Table Card */
+        .recent-section-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+        }
+
+        .recent-header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .recent-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text-heading);
+        }
+
+        .view-all-link {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--brand-green);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .view-all-link:hover {
+            text-decoration: underline;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            text-align: left;
+        }
+
+        .custom-table th {
+            background-color: #f8fafc;
+            padding: 1.1rem 1.5rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #475569;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .custom-table td {
+            padding: 1.15rem 1.5rem;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+            color: #334155;
+        }
+
+        .custom-table tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        @media (max-width: 1150px) {
+            .metrics-grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .stat-boxes-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-wrapper {
+                margin-left: 0;
+            }
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .search-container {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .metrics-grid-4, .stat-boxes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= Left Sidebar ================= -->
+    {% include 'anganwadi_teacher/sidebar.html' %}
+
+    <!-- ================= Main Container ================= -->
+    <main class="main-wrapper">
+
+        <!-- Top Header Navigation -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()" aria-label="Toggle Sidebar Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <div class="search-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search records...">
+                </div>
+            </div>
+
+            <!-- Profile Badge -->
+            <div class="header-actions">
+                <a href="/myapp/teacher_profile/" class="worker-profile-card" style="text-decoration: none;">
+                    <div class="worker-info">
+                        <span class="worker-name">{{ teacher.Name|default:"Anganwadi Teacher" }}</span>
+                        <span class="worker-id"><i class="fa-solid fa-location-dot" style="color:#10b981; margin-right:3px;"></i> {{ teacher.center_name|default:"Anganwadi Center" }}</span>
+                    </div>
+                    <div class="worker-avatar-badge" title="{{ teacher.Name|default:'Teacher' }}" style="overflow: hidden;">
+                        {% if teacher.image %}
+                            <img src="{{ teacher.image.url }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            {{ teacher.Name|slice:":1"|upper|default:"T" }}
+                        {% endif %}
+                    </div>
+                </a>
+            </div>
+        </header>
+
+        <!-- Content Body -->
+        <div class="content-body">
+
+            <!-- Center Ward Banner Card -->
+            <div class="dashboard-banner-card">
+                <div>
+                    <h2 class="banner-title">
+                        <i class="fa-solid fa-house-medical-flag" style="margin-right: 8px; color: #10b981;"></i> {{ teacher.Name|default:"Anganwadi Teacher" }}'s Portal
+                    </h2>
+                    <p class="banner-sub">Maternal & Infant Nutrition Distribution Overview</p>
+                </div>
+                <div class="center-tag-badge">
+                    <i class="fa-solid fa-location-dot"></i> {{ teacher.center_name|default:"Assigned Ward Center" }}
+                </div>
+            </div>
+
+            <!-- 4 Metrics KPI Grid -->
+            <div class="metrics-grid-4">
+
+                <!-- 1. Today's Distribution -->
+                <div class="metric-kpi-card">
+                    <div class="kpi-top-row">
+                        <div class="kpi-icon-badge kpi-icon-green">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="kpi-label">Today's Distribution</div>
+                        <div class="kpi-value">{{ today_distribution }}</div>
+                    </div>
+                </div>
+
+                <!-- 2. Pending Distribution -->
+                <div class="metric-kpi-card">
+                    <div class="kpi-top-row">
+                        <div class="kpi-icon-badge kpi-icon-coral">
+                            <i class="fa-regular fa-calendar-check"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="kpi-label">Pending Distribution</div>
+                        <div class="kpi-value">{{ pending_distribution }}</div>
+                    </div>
+                </div>
+
+                <!-- 3. Total Beneficiaries -->
+                <div class="metric-kpi-card">
+                    <div class="kpi-top-row">
+                        <div class="kpi-icon-badge kpi-icon-blue">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="kpi-label">Total Beneficiaries</div>
+                        <div class="kpi-value">{{ total_beneficiaries }}</div>
+                    </div>
+                </div>
+
+                <!-- 4. Total Stock -->
+                <div class="metric-kpi-card">
+                    <div class="kpi-top-row">
+                        <div class="kpi-icon-badge kpi-icon-amber">
+                            <i class="fa-solid fa-boxes-stacked"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="kpi-label">Total Stock Units</div>
+                        <div class="kpi-value">{{ stock_available }}</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Monthly Distribution Progress Analytics Card -->
+            <div class="analytics-card">
+                <div class="analytics-header">
+                    <div>
+                        <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--brand-green); display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-chart-line"></i> Monthly Collection Overview ({{ current_month_name }})
+                        </h3>
+                        <p style="font-size: 0.86rem; color: var(--text-muted); margin-top: 2px;">Fulfillment rate and pickup status for center beneficiaries.</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <a href="/myapp/kit_distribution/" class="btn-issue-top"><i class="fa-solid fa-plus"></i> Issue Kit</a>
+                        <a href="/myapp/teacher_beneficiaries/" class="btn-issue-top" style="background-color: #062e20;"><i class="fa-solid fa-bell"></i> Remind Uncollected</a>
+                    </div>
+                </div>
+
+                <div class="stat-boxes-grid">
+                    <div class="stat-mini-box" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
+                        <span style="font-size: 0.76rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Total Issued</span>
+                        <span style="font-size: 1.35rem; font-weight: 800; color: #0f172a;">{{ month_kits_count }}</span>
+                    </div>
+                    <div class="stat-mini-box" style="background-color: #ecfdf5; border: 1px solid #a7f3d0;">
+                        <span style="font-size: 0.76rem; color: #047857; font-weight: 700; text-transform: uppercase;">Collected</span>
+                        <span style="font-size: 1.35rem; font-weight: 800; color: #047857;">{{ month_collected_count }}</span>
+                    </div>
+                    <div class="stat-mini-box" style="background-color: #fffbeb; border: 1px solid #fde68a;">
+                        <span style="font-size: 0.76rem; color: #b45309; font-weight: 700; text-transform: uppercase;">Pending Pickup</span>
+                        <span style="font-size: 1.35rem; font-weight: 800; color: #b45309;">{{ month_pending_count }}</span>
+                    </div>
+                    <div class="stat-mini-box" style="background-color: #fef2f2; border: 1px solid #fecaca;">
+                        <span style="font-size: 0.76rem; color: #b91c1c; font-weight: 700; text-transform: uppercase;">Missed Pickup</span>
+                        <span style="font-size: 1.35rem; font-weight: 800; color: #b91c1c;">{{ month_missed_count }}</span>
+                    </div>
+                </div>
+
+                <!-- Collection Rate Progress Bar -->
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <span style="font-size: 0.86rem; font-weight: 700; color: #334155;">Fulfillment Rate:</span>
+                    <div style="flex: 1; height: 12px; background-color: #f1f5f9; border-radius: 9999px; overflow: hidden; border: 1px solid #e2e8f0;">
+                        <div style="width: {{ collection_rate_pct }}%; height: 100%; background: linear-gradient(90deg, #10b981, #059669); border-radius: 9999px;"></div>
+                    </div>
+                    <span style="font-size: 0.9rem; font-weight: 800; color: #059669;">{{ collection_rate_pct }}%</span>
+                </div>
+            </div>
+
+            <!-- Recent Distribution Card -->
+            <div class="recent-section-card">
+                <div class="recent-header">
+                    <h2 class="recent-title">Recent Distribution Activity</h2>
+                    <a href="/myapp/kit_history/" class="view-all-link">View Full History <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                {% if recent_distributions %}
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Beneficiary Mother</th>
+                                <th>Kit Category / Product</th>
+                                <th>Quantity</th>
+                                <th>Distribution Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dist in recent_distributions %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ dist.USER.name }}</strong>
+                                        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">Ph: {{ dist.USER.phone }}</div>
+                                    </td>
+                                    <td>
+                                        <strong>{{ dist.kit_type }}</strong>
+                                        <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">{{ dist.product_name|default:"Standard Supplement" }}</div>
+                                    </td>
+                                    <td><strong>{{ dist.quantity }} Unit(s)</strong></td>
+                                    <td>{{ dist.distribution_date|date:"M d, Y" }}</td>
+                                    <td>
+                                        {% if dist.status == 'Collected' %}
+                                            <span style="background-color: #d1fae5; color: #065f46; padding: 0.35rem 0.85rem; border-radius: 9999px; font-weight: 700; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 6px;">
+                                                <i class="fa-solid fa-circle-check"></i> Collected
+                                            </span>
+                                        {% elif dist.status == 'Missed' %}
+                                            <span style="background-color: #fee2e2; color: #991b1b; padding: 0.35rem 0.85rem; border-radius: 9999px; font-weight: 700; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 6px;">
+                                                <i class="fa-solid fa-circle-xmark"></i> Missed
+                                            </span>
+                                        {% else %}
+                                            <form method="POST" action="/myapp/update_kit_status/{{ dist.id }}/" style="display: inline-block;">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="next" value="/myapp/teacher_home/">
+                                                <select name="status" onchange="this.form.submit()" style="padding: 0.35rem 0.75rem; border-radius: 9999px; border: 1px solid #fcd34d; background-color: #fef3c7; color: #92400e; font-weight: 700; font-size: 0.78rem; cursor: pointer; outline: none;">
+                                                    <option value="Pending" selected>🕒 Select Status / Pending</option>
+                                                    <option value="Collected">✔ Mark as Collected</option>
+                                                    <option value="Missed">✖ Mark as Missed</option>
+                                                </select>
+                                            </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div style="padding: 4rem 1.5rem; text-align: center; color: var(--text-muted);">
+                        <i class="fa-solid fa-box-open" style="font-size: 2.5rem; margin-bottom: 0.75rem; opacity: 0.35;"></i>
+                        <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-heading);">No distribution record added yet</h3>
+                        <p style="font-size: 0.88rem; margin-top: 4px;">Records will appear here once kit distributions are added.</p>
+                        <a href="/myapp/kit_distribution/" class="btn-issue-top" style="margin-top: 1rem;">
+                            <i class="fa-solid fa-plus"></i> Issue Nutrition Kit
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

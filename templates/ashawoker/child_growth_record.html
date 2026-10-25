@@ -1,0 +1,1377 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Growth Records - ASHA Portal | MaatriCare</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js 4.4 Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <style>
+        :root {
+            --sidebar-bg: #073525;
+            --sidebar-hover: #0d4432;
+            --sidebar-active: #134d38;
+            --sidebar-text-muted: #97baa9;
+            --brand-green: #0c3829;
+            --brand-green-hover: #07261b;
+            --brand-green-light: #e8f5ef;
+            --brand-green-accent: #10b981;
+            --bg-page: #fbf9f4;
+            --card-bg: #ffffff;
+            --text-heading: #111827;
+            --text-body: #4b5563;
+            --text-muted: #6b7280;
+            --border-color: #ebe5db;
+            --border-input: #dcd6cb;
+            --search-bg: #f0ece2;
+            --shadow-card: 0 2px 12px rgba(7, 53, 37, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+            --amber-bg: #fffbeb;
+            --amber-border: #fde68a;
+            --amber-text: #b45309;
+            --rose-bg: #fef2f2;
+            --rose-text: #dc2626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* ================= Sidebar Navigation ================= */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem 1.25rem 1.75rem;
+            z-index: 100;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            padding: 0 0.5rem 2rem;
+            text-decoration: none;
+            display: block;
+        }
+
+        .brand-title {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-sub {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--sidebar-text-muted);
+            margin-top: 3px;
+            letter-spacing: 0.01em;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .nav-item-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0.78rem 1.1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.94rem;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item-link i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item-link:hover {
+            color: #ffffff;
+            background-color: var(--sidebar-hover);
+        }
+
+        .nav-item-link.active {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+        }
+
+        .sidebar-footer {
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.75rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.94rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            color: #ffffff;
+            background-color: rgba(239, 68, 68, 0.15);
+        }
+
+        /* ================= Main Container ================= */
+        .main-wrapper {
+            margin-left: 260px;
+            flex: 1;
+            min-width: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-page);
+        }
+
+        /* Top Header */
+        .top-header {
+            height: 80px;
+            padding: 0 2.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--bg-page);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--brand-green);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 360px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 0.88rem;
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.62rem 1rem 0.62rem 2.5rem;
+            background-color: var(--search-bg);
+            border: 1px solid transparent;
+            border-radius: 50px;
+            font-size: 0.88rem;
+            color: var(--text-heading);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            background-color: #ffffff;
+            border-color: var(--border-color);
+            box-shadow: 0 0 0 3px rgba(12, 56, 41, 0.08);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .worker-profile-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .worker-info {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .worker-name {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            line-height: 1.2;
+        }
+
+        .worker-id {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            justify-content: flex-end;
+        }
+
+        .worker-avatar-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background-color: #dbe8e1;
+            flex-shrink: 0;
+        }
+
+        .worker-avatar-badge {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #073525, #14593f);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+
+        /* ================= Content Body ================= */
+        .content-body {
+            padding: 1.75rem 2.25rem 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            width: 100%;
+        }
+
+        /* Flash Messages */
+        .alert-box {
+            padding: 0.85rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .alert-success {
+            background-color: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+        }
+
+        .alert-warning {
+            background-color: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #b45309;
+        }
+
+        .alert-close {
+            background: none;
+            border: none;
+            color: inherit;
+            opacity: 0.6;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        /* Header Card */
+        .page-header-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 1.25rem 1.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .page-title-group h1 {
+            font-size: 1.55rem;
+            font-weight: 800;
+            color: var(--brand-green);
+            letter-spacing: -0.02em;
+        }
+
+        .page-title-group p {
+            font-size: 0.86rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .header-controls-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .view-mode-tabs {
+            display: flex;
+            align-items: center;
+            background-color: #f0ece2;
+            padding: 4px;
+            border-radius: 12px;
+            gap: 4px;
+        }
+
+        .mode-tab-btn {
+            padding: 0.5rem 1.1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: #4b5563;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .mode-tab-btn.active {
+            background-color: #ffffff;
+            color: var(--brand-green);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+
+        /* Filter Pills */
+        .status-filters-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-pill {
+            padding: 0.42rem 0.95rem;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: #4b5563;
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .filter-pill:hover {
+            border-color: var(--brand-green);
+            color: var(--brand-green);
+        }
+
+        .filter-pill.active {
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border-color: var(--brand-green);
+        }
+
+        /* ================= Table View Layout ================= */
+        .table-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .custom-table th {
+            background-color: #f7f5ef;
+            padding: 0.9rem 1.25rem;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #374151;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .custom-table td {
+            padding: 1rem 1.25rem;
+            font-size: 0.88rem;
+            border-bottom: 1px solid #f3efe6;
+            vertical-align: middle;
+        }
+
+        .custom-table tr:hover td {
+            background-color: #fbf9f4;
+        }
+
+        .table-avatar-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .table-avatar-badge {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background-color: #e5f0ea;
+            color: var(--brand-green);
+            font-weight: 800;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .table-user-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .table-user-name {
+            font-weight: 700;
+            color: var(--text-heading);
+        }
+
+        .table-user-sub {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .status-chip {
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.76rem;
+            font-weight: 800;
+            display: inline-block;
+        }
+
+        .status-chip.normal {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-chip.underweight {
+            background-color: #fef3c7;
+            color: #b45309;
+        }
+
+        .status-chip.attention {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+
+        .records-counter-pill {
+            padding: 0.22rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            background-color: #f3f4f6;
+            color: #374151;
+            display: inline-block;
+        }
+
+        .table-actions-cell {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-table-action {
+            padding: 0.45rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-action-view-records {
+            background-color: var(--brand-green);
+            color: #ffffff;
+        }
+
+        .btn-action-view-records:hover {
+            background-color: var(--brand-green-hover);
+        }
+
+        .btn-action-add-log {
+            background-color: #e5f0ea;
+            color: var(--brand-green);
+        }
+
+        .btn-action-add-log:hover {
+            background-color: #cbe3d5;
+        }
+
+        /* ================= Form View Layout (Screen 17) ================= */
+        .form-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.25rem 2.5rem;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 1100px;
+        }
+
+        .form-section-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .form-select, .form-input, .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-input);
+            background-color: #ffffff;
+            font-size: 0.9rem;
+            color: var(--text-heading);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-select:focus, .form-input:focus, .form-textarea:focus {
+            border-color: var(--brand-green);
+            box-shadow: 0 0 0 3px rgba(12, 56, 41, 0.08);
+        }
+
+        .form-row-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+            line-height: 1.5;
+        }
+
+        .custom-file-upload-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border-input);
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #ffffff;
+            position: relative;
+            transition: border-color 0.2s;
+        }
+
+        .file-display-name {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            font-size: 0.88rem;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .btn-file-browse {
+            background-color: #f3f4f6;
+            color: #374151;
+            border: none;
+            border-left: 1px solid var(--border-input);
+            padding: 0.75rem 1.4rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .real-file-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .btn-save-growth {
+            padding: 0.8rem 1.75rem;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(12, 56, 41, 0.2);
+        }
+
+        .btn-save-growth:hover {
+            background-color: var(--brand-green-hover);
+        }
+
+        /* ================= Detailed Growth Modal ================= */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(7, 53, 37, 0.45);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .modal-backdrop.show {
+            display: flex;
+        }
+
+        .modal-card-large {
+            background-color: #ffffff;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 750px;
+            max-height: 88vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.18);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 1.25rem 1.75rem;
+            background-color: #faf8f3;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-body {
+            padding: 1.5rem 1.75rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.75rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #faf8f3;
+        }
+
+        .growth-history-card {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: box-shadow 0.2s;
+        }
+
+        .growth-history-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .growth-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #f0ece2;
+            padding-bottom: 6px;
+        }
+
+        .growth-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            font-size: 0.84rem;
+            background-color: #fbf9f4;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 1024px) {
+            .form-row-4 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-wrapper {
+                margin-left: 0;
+            }
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .search-container {
+                width: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= Left Sidebar ================= -->
+    {% include 'ashawoker/sidebar.html' %}
+
+    <!-- ================= Main Container ================= -->
+    <main class="main-wrapper">
+
+        <!-- Top Header Navigation -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()" aria-label="Toggle Sidebar Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <!-- Search Child Records (only shown on Children Registry list) -->
+                {% if active_tab != 'add' %}
+                <form method="GET" action="/myapp/child_growth_record/" class="search-container">
+                    <input type="hidden" name="tab" value="list">
+                    {% if condition_filter and condition_filter != 'all' %}
+                        <input type="hidden" name="condition" value="{{ condition_filter }}">
+                    {% endif %}
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" name="q" class="search-input" placeholder="Search child name, mother name..." value="{{ search_query|default:'' }}">
+                </form>
+                {% endif %}
+            </div>
+
+            <!-- Profile Badge -->
+            <div class="header-actions">
+                <a href="/myapp/ashaworker_profile/" class="worker-profile-card">
+                    <div class="worker-info">
+                        <span class="worker-name">{{ worker.Full_name|default:'ASHA Worker' }}</span>
+                        <span class="worker-id"><i class="fa-solid fa-location-dot"></i> {{ worker.Area_assigned|default:'Assigned Area' }}</span>
+                    </div>
+                    {% if worker.image %}
+                        <img src="{{ worker.image.url }}" alt="Profile Avatar" class="worker-avatar-img">
+                    {% else %}
+                        <img src="{% static 'images/asha_avatar.png' %}" alt="Profile Avatar" class="worker-avatar-img" onerror="this.src='/static/images/mother_child_logo.png'">
+                    {% endif %}
+                </a>
+            </div>
+        </header>
+
+        <!-- Body Content -->
+        <div class="content-body">
+
+            <!-- System Flash Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-box alert-{{ message.tags|default:'info' }}">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fa-solid {% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-triangle-exclamation{% else %}fa-circle-info{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button class="alert-close" onclick="this.parentElement.remove()">&times;</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Header Card with View Mode Switcher -->
+            <div class="page-header-card">
+                <div class="page-title-group">
+                    <h1>Child Growth Records</h1>
+                    <p>Track child development, review monthly growth checks, and log anthropometric metrics.</p>
+                </div>
+
+                <div class="header-controls-wrap">
+                    <div class="view-mode-tabs">
+                        <a href="/myapp/child_growth_record/?tab=list" class="mode-tab-btn {% if active_tab != 'add' %}active{% endif %}">
+                            <i class="fa-solid fa-children"></i>
+                            <span>Children Registry ({{ total_count }})</span>
+                        </a>
+                        <a href="/myapp/child_growth_record/?tab=add" class="mode-tab-btn {% if active_tab == 'add' %}active{% endif %}">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Log Growth Metrics</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 1: LIST OF CHILDREN (STATUS: NORMAL / UNDERWEIGHT / NEEDS ATTENTION) -->
+            {% if active_tab != 'add' %}
+
+                <!-- Condition Filter Pills -->
+                <div class="status-filters-row">
+                    <a href="/myapp/child_growth_record/?tab=list&condition=all{% if search_query %}&q={{ search_query }}{% endif %}" class="filter-pill {% if condition_filter == 'all' or not condition_filter %}active{% endif %}">
+                        All Children ({{ total_count }})
+                    </a>
+                    <a href="/myapp/child_growth_record/?tab=list&condition=normal{% if search_query %}&q={{ search_query }}{% endif %}" class="filter-pill {% if condition_filter == 'normal' %}active{% endif %}">
+                        Normal Growth ({{ normal_count }})
+                    </a>
+                    <a href="/myapp/child_growth_record/?tab=list&condition=underweight{% if search_query %}&q={{ search_query }}{% endif %}" class="filter-pill {% if condition_filter == 'underweight' %}active{% endif %}">
+                        Underweight ({{ underweight_count }})
+                    </a>
+                    <a href="/myapp/child_growth_record/?tab=list&condition=attention{% if search_query %}&q={{ search_query }}{% endif %}" class="filter-pill {% if condition_filter == 'attention' %}active{% endif %}">
+                        Needs Attention ({{ attention_count }})
+                    </a>
+                </div>
+
+                <!-- Children Table -->
+                <div class="table-card">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Child Name</th>
+                                <th>Mother Name</th>
+                                <th>Month / Age</th>
+                                <th>Blood Group</th>
+                                <th>Growth Records</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ch in children_list %}
+                                <tr>
+                                    <td>
+                                        <div class="table-avatar-cell">
+                                            <div class="table-avatar-badge">
+                                                {{ ch.obj.child_name|slice:":1"|upper }}
+                                            </div>
+                                            <div class="table-user-info">
+                                                <span class="table-user-name">{{ ch.obj.child_name }}</span>
+                                                <span class="table-user-sub">{{ ch.obj.gender }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <strong style="color: var(--text-heading);">{{ ch.obj.USER.name }}</strong>
+                                    </td>
+                                    <td>
+                                        <span style="font-weight: 700; color: var(--text-heading);">{{ ch.age_str }}</span>
+                                    </td>
+                                    <td>
+                                        <span style="font-weight: 800; background: #e5f0ea; color: var(--brand-green); padding: 4px 12px; border-radius: 50px; font-size: 0.8rem; display: inline-block;">
+                                            {{ ch.obj.blood_group|default:"O+" }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="records-counter-pill">
+                                            <i class="fa-regular fa-clipboard"></i> {{ ch.records_count }} Growth Logs
+                                        </span>
+                                        {% if ch.latest_rec %}
+                                            <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">
+                                                Last: {{ ch.latest_rec.growth_date|date:"M d, Y" }}
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="table-actions-cell">
+                                            <button 
+                                                type="button" 
+                                                class="btn-table-action btn-action-view-records" 
+                                                onclick="openChildRecordsModal('{{ ch.obj.id }}')"
+                                                title="View detailed growth records and trajectory"
+                                            >
+                                                <i class="fa-regular fa-eye"></i> View Record
+                                            </button>
+                                            <a 
+                                                href="/myapp/child_growth_record/?tab=add&selected_child={{ ch.obj.id }}" 
+                                                class="btn-table-action btn-action-add-log"
+                                                title="Add growth entry for this child"
+                                            >
+                                                <i class="fa-solid fa-plus"></i> Add
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+                                        <i class="fa-solid fa-children" style="font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.4;"></i>
+                                        <p>No child record added or found matching the criteria.</p>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+
+            <!-- TAB 2: LOG GROWTH METRICS ENTRY FORM (Screen 17) -->
+            <div class="form-card">
+                <form method="POST" action="/myapp/child_growth_record/" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="existing_record_id" id="existingRecordIdInput" value="">
+
+                    <!-- Select Child -->
+                    <div class="form-section-group" style="margin-bottom: 1.25rem;">
+                        <label class="form-label">Select Child *</label>
+                        <select name="child_id" id="childSelect" class="form-select" onchange="onChildSelectChange(this.value)" required>
+                            <option value="">-- Select Child --</option>
+                            {% for ch in all_children %}
+                                <option value="{{ ch.id }}" {% if selected_child_id and selected_child_id == ch.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ ch.child_name }} (Mother: {{ ch.USER.name }})
+                                </option>
+                            {% empty %}
+                                <option value="" disabled>No child record added yet</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- 3 Inputs in Row: Weight, Height, Checkup Month -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 1.25rem; margin-bottom: 1.25rem;">
+                        <div class="form-section-group">
+                            <label class="form-label">Weight (kg) *</label>
+                            <input type="number" step="0.1" name="weight" id="childWeightInput" class="form-input" placeholder="e.g. 3.5" required>
+                        </div>
+                        <div class="form-section-group">
+                            <label class="form-label">Height (cm) *</label>
+                            <input type="number" step="0.1" name="height" id="childHeightInput" class="form-input" placeholder="e.g. 50.0" required>
+                        </div>
+                        <div class="form-section-group">
+                            <label class="form-label">Checkup Age / Month (Auto-Assigned) *</label>
+                            <input type="hidden" name="checkup_month" id="checkupMonthInput" value="0">
+                            <input type="text" id="checkupMonthDisplay" class="form-input" value="Month 0 (Auto-Assigned)" readonly style="background-color: #f8fafc; font-weight: 700; color: #047857; border: 1px solid #a7f3d0;">
+                            <div id="monthModeNotice" style="margin-top: 6px; font-size: 0.8rem; font-weight: 700; padding: 6px 12px; border-radius: 10px; display: none;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Health Condition -->
+                    <div class="form-section-group" style="margin-bottom: 1.25rem;">
+                        <label class="form-label">Health Condition *</label>
+                        <select name="health_condition" id="childConditionSelect" class="form-select" required>
+                            <option value="">-- Select Health Condition --</option>
+                            <option value="Normal / Healthy Growth" selected>Normal / Healthy Growth</option>
+                            <option value="Mild Underweight">Mild Underweight</option>
+                            <option value="Moderate Stunted Growth">Moderate Stunted Growth</option>
+                            <option value="Severe Malnutrition (Action Required)">Severe Malnutrition (Action Required)</option>
+                            <option value="Excellent Progress">Excellent Progress</option>
+                        </select>
+                    </div>
+
+                    <!-- Extra Details (Any Additional Information) -->
+                    <div class="form-section-group" style="margin-bottom: 1.25rem;">
+                        <label class="form-label">Extra Details (Any Additional Information)</label>
+                        <textarea name="extra_details" id="childExtraDetailsInput" class="form-textarea" placeholder="Enter any additional details (optional)"></textarea>
+                    </div>
+
+                    <!-- Extra Report (if any) File Input -->
+                    <div class="form-section-group" style="margin-bottom: 1.5rem;">
+                        <label class="form-label">Extra Report (if any)</label>
+                        <div class="custom-file-upload-box">
+                            <span class="file-display-name" id="fileChosenLabel">
+                                <i class="fa-regular fa-file"></i>
+                                <span>Choose file</span>
+                            </span>
+                            <button type="button" class="btn-file-browse">Browse</button>
+                            <input 
+                                type="file" 
+                                name="extra_report" 
+                                class="real-file-input" 
+                                accept=".pdf,.png,.jpg,.jpeg" 
+                                onchange="onFileChosen(this)"
+                            >
+                        </div>
+                        <span style="font-size: 0.76rem; color: var(--text-muted); margin-top: 4px;">Upload any additional report (PDF only, Max size: 5MB)</span>
+                    </div>
+
+                    <!-- Save Growth Record Button -->
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <a href="/myapp/child_growth_record/?tab=list" style="color: var(--text-muted); font-size: 0.88rem; text-decoration: none; font-weight: 600;">
+                            <i class="fa-solid fa-arrow-left"></i> Back to Children Registry
+                        </a>
+                        <button type="submit" class="btn-save-growth" id="saveGrowthBtn">
+                            <i class="fa-solid fa-check"></i> <span>Save Growth Record</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+
+    <!-- ================= VIEW CHILD GROWTH RECORDS MODAL ================= -->
+    <div class="modal-backdrop" id="childRecordsModal">
+        <div class="modal-card-large">
+            <div class="modal-header">
+                <div>
+                    <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--brand-green);" id="modalChildName">Child Growth History</h3>
+                    <p style="font-size: 0.8rem; color: #6b7280; margin-top: 2px;" id="modalChildMeta">Monthly growth records</p>
+                </div>
+                <button onclick="closeChildRecordsModal()" style="background:none; border:none; font-size:1.3rem; cursor:pointer; color:#6b7280;">&times;</button>
+            </div>
+
+            <div class="modal-body" id="modalChildRecordsBody">
+                <div id="modalChildRecordsLogs">
+                    <!-- Log entries injected by JS -->
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <a href="#" id="modalAddGrowthLink" class="btn-table-action btn-action-view-records" style="padding: 0.6rem 1.2rem;">
+                    <i class="fa-solid fa-plus"></i> Log New Growth Metrics for this Child
+                </a>
+                <button type="button" onclick="closeChildRecordsModal()" class="btn-table-action" style="padding: 0.6rem 1.2rem; background: #e5e7eb; color: #374151;">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Growth Modal -->
+    <div class="modal-backdrop" id="deleteGrowthModal">
+        <div class="modal-card-large" style="max-width: 480px;">
+            <div class="modal-header" style="background-color: #fef2f2;">
+                <h3 style="font-size: 1.1rem; font-weight: 800; color: #dc2626;"><i class="fa-solid fa-triangle-exclamation"></i> Delete Record</h3>
+                <button onclick="closeDeleteGrowthModal()" style="background:none; border:none; font-size:1.3rem; cursor:pointer; color:#6b7280;">&times;</button>
+            </div>
+            <form method="POST" action="/myapp/child_growth_record/">
+                {% csrf_token %}
+                <input type="hidden" name="action_type" value="delete_growth_record">
+                <input type="hidden" name="record_id" id="deleteGrowthRecordId">
+                <div class="modal-body">
+                    <p style="font-size: 0.95rem; color: #374151;" id="deleteGrowthConfirmText">Are you sure you want to delete this growth record?</p>
+                </div>
+                <div class="modal-footer" style="justify-content: flex-end; gap: 10px;">
+                    <button type="button" onclick="closeDeleteGrowthModal()" class="btn-table-action" style="padding: 0.6rem 1rem; background:#e5e7eb; color:#374151;">Cancel</button>
+                    <button type="submit" class="btn-table-action" style="padding: 0.6rem 1.2rem; background: #dc2626; color: #ffffff;">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Client-side Dynamic Data -->
+    <script id="childrenModalDataScript" type="application/json">
+        {{ children_modal_data_json|safe }}
+    </script>
+
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        const childrenModalDataRaw = document.getElementById('childrenModalDataScript').textContent;
+        let childrenModalData = {};
+        try {
+            childrenModalData = JSON.parse(childrenModalDataRaw);
+        } catch (e) {
+            console.error("Could not parse children JSON data", e);
+        }
+
+        let modalGrowthChartInstance = null;
+
+        // Open Child Detailed Growth Records Modal
+        function openChildRecordsModal(childId) {
+            try {
+                if (!childId) return;
+                const key = String(childId);
+                const ch = childrenModalData[key] || childrenModalData[childId];
+                if (!ch) {
+                    console.warn("No child data found for ID:", childId);
+                    return;
+                }
+
+                document.getElementById('modalChildName').textContent = `${ch.name || 'Child'} — Growth Checkup History`;
+                const logsCount = ch.logs_count || (ch.logs ? ch.logs.length : 0);
+                document.getElementById('modalChildMeta').textContent = `Mother: ${ch.mother || 'N/A'} | Phone: ${ch.phone || 'N/A'} | Age: ${ch.age || 'N/A'} | Blood: ${ch.blood_group || 'O+'} | Records: ${logsCount} Growth Log${logsCount === 1 ? '' : 's'}`;
+                document.getElementById('modalAddGrowthLink').href = `/myapp/child_growth_record/?tab=add&selected_child=${ch.id}`;
+
+                const container = document.getElementById('modalChildRecordsLogs');
+                
+                if (ch.logs && ch.logs.length > 0) {
+                    let html = '';
+                    ch.logs.forEach((log, index) => {
+                        const condStr = String(log.condition || 'Normal');
+                        const statusClass = (condStr.includes('Malnutrition') || condStr.includes('Stunted')) ? 'background: #fee2e2; color: #dc2626;' : 
+                                            (condStr.includes('Underweight')) ? 'background: #fef3c7; color: #b45309;' : 
+                                            'background: #d1fae5; color: #065f46;';
+                        
+                        const safeChildName = String(ch.name || '').replace(/'/g, "\\'");
+                        const safeLogDate = String(log.date || '').replace(/'/g, "\\'");
+
+                        const stageBadge = `<span style="background: ${log.month === 0 ? '#d1fae5' : '#e0f2fe'}; color: ${log.month === 0 ? '#065f46' : '#0369a1'}; font-weight: 800; padding: 3px 10px; border-radius: 20px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 5px;"><i class="fa-regular fa-calendar-check"></i> ${log.stage_label || ('Month ' + (log.month !== undefined ? log.month : '0'))}</span>`;
+                        const titleText = `(${log.date || ''})`;
+
+                        const isNumericId = typeof log.id === 'number';
+                        const actionButtons = isNumericId ? `
+                            <button type="button" onclick="editMonthRecord('${ch.id}', ${log.month !== undefined ? log.month : 0})" style="background: #e5f0ea; border: 1px solid #c8e3d3; color: var(--brand-green); padding: 3px 8px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 700;" title="Edit this record">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit
+                            </button>
+                            <button type="button" onclick="confirmDeleteGrowth(${log.id}, '${safeChildName}', '${safeLogDate}')" style="background: none; border: none; color: #dc2626; cursor: pointer; font-size: 0.85rem;" title="Delete this entry">
+                                <i class="fa-regular fa-trash-can"></i> Delete
+                            </button>
+                        ` : '';
+
+                        html += `
+                            <div class="growth-history-card">
+                                <div class="growth-card-header">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        ${stageBadge}
+                                        <span style="color: #4b5563; font-size: 0.88rem; font-weight: 600;">${titleText}</span>
+                                        <span style="padding: 2px 8px; border-radius: 50px; font-size: 0.72rem; font-weight: 800; ${statusClass}">${condStr}</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        ${actionButtons}
+                                    </div>
+                                </div>
+                                <div class="growth-metrics-grid">
+                                    <div><strong>Weight:</strong> ${log.weight || '--'}</div>
+                                    <div><strong>Height:</strong> ${log.height || '--'}</div>
+                                    <div><strong>Condition:</strong> ${condStr}</div>
+                                </div>
+                                <div style="font-size: 0.82rem; color: #4b5563;">
+                                    <strong>Details & Notes:</strong> ${log.details || 'Routine Checkup'}
+                                </div>
+                                ${log.media_url ? `
+                                <div style="margin-top: 8px;">
+                                    <a href="${log.media_url}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; border-radius: 6px; text-decoration: none; font-size: 0.78rem; font-weight: 700;">
+                                        <i class="fa-solid fa-paperclip"></i> View Attached Report (${log.media_filename || 'Attachment'})
+                                    </a>
+                                </div>` : ''}
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 2.5rem 1rem; color: #6b7280;">
+                            <i class="fa-solid fa-chart-line" style="font-size: 2.2rem; margin-bottom: 0.5rem; opacity: 0.4;"></i>
+                            <p style="font-weight: 600;">No growth checkup record added yet for ${ch.name || 'this child'}.</p>
+                            <p style="font-size: 0.82rem; margin-top: 4px;">Click the button below to add the first growth checkup.</p>
+                        </div>
+                    `;
+                }
+
+                document.getElementById('childRecordsModal').classList.add('show');
+            } catch (err) {
+                console.error("Error opening child records modal:", err);
+                document.getElementById('childRecordsModal').classList.add('show');
+            }
+        }
+
+        function editMonthRecord(childId, monthNum) {
+            closeChildRecordsModal();
+            window.location.href = `/myapp/child_growth_record/?tab=add&selected_child=${childId}&edit_month=${monthNum}`;
+        }
+
+        function closeChildRecordsModal() {
+            document.getElementById('childRecordsModal').classList.remove('show');
+        }
+
+        function confirmDeleteGrowth(recId, childName, date) {
+            document.getElementById('deleteGrowthRecordId').value = recId;
+            document.getElementById('deleteGrowthConfirmText').textContent = `Are you sure you want to delete the growth check of "${childName}" dated ${date}?`;
+            document.getElementById('deleteGrowthModal').classList.add('show');
+        }
+
+        function closeDeleteGrowthModal() {
+            document.getElementById('deleteGrowthModal').classList.remove('show');
+        }
+
+        function getMonthLabel(m) {
+            const mNum = parseInt(m);
+            if (isNaN(mNum)) return `Month ${m}`;
+            if (mNum === 0) return "Month 0";
+            if (mNum === 12) return "Month 12 (1 Year)";
+            if (mNum === 18) return "Month 18 (1.5 Years)";
+            if (mNum === 24) return "Month 24 (2 Years)";
+            if (mNum === 36) return "Month 36 (3 Years)";
+            if (mNum === 48) return "Month 48 (4 Years)";
+            if (mNum === 60) return "Month 60 (5 Years)";
+            return `Month ${mNum}`;
+        }
+
+        function setFormMonth(mVal) {
+            const hiddenInput = document.getElementById('checkupMonthInput');
+            const displayInput = document.getElementById('checkupMonthDisplay');
+            if (hiddenInput) hiddenInput.value = mVal;
+            if (displayInput) displayInput.value = `${getMonthLabel(mVal)} (Auto-Assigned)`;
+        }
+
+        function onChildSelectChange(childId) {
+            if (!childId) {
+                const existingInput = document.getElementById('existingRecordIdInput');
+                const noticeBox = document.getElementById('monthModeNotice');
+                if (existingInput) existingInput.value = '';
+                if (noticeBox) noticeBox.style.display = 'none';
+                return;
+            }
+
+            const key = String(childId);
+            const ch = childrenModalData[key] || childrenModalData[childId];
+            if (!ch) return;
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const editMonthParam = urlParams.get('edit_month');
+
+            if (editMonthParam !== null && editMonthParam !== undefined && editMonthParam !== '') {
+                setFormMonth(editMonthParam);
+            } else if (ch.next_month_num !== undefined) {
+                setFormMonth(ch.next_month_num);
+            }
+
+            onMonthSelectChange();
+        }
+
+        function onMonthSelectChange() {
+            const childSelect = document.getElementById('childSelect');
+            const monthInput = document.getElementById('checkupMonthInput');
+            const existingInput = document.getElementById('existingRecordIdInput');
+            const noticeBox = document.getElementById('monthModeNotice');
+            const saveBtn = document.getElementById('saveGrowthBtn');
+
+            if (!childSelect || !childSelect.value) {
+                if (existingInput) existingInput.value = '';
+                if (noticeBox) noticeBox.style.display = 'none';
+                if (saveBtn) saveBtn.innerHTML = `<i class="fa-solid fa-check"></i> <span>Save Growth Record</span>`;
+                return;
+            }
+
+            const childId = childSelect.value;
+            const key = String(childId);
+            const ch = childrenModalData[key] || childrenModalData[childId];
+            if (!ch) return;
+
+            const selectedMonth = monthInput ? monthInput.value : "0";
+
+            if (ch.existing_months && ch.existing_months[selectedMonth]) {
+                const rec = ch.existing_months[selectedMonth];
+                if (existingInput) existingInput.value = rec.record_id || '';
+
+                if (document.getElementById('childWeightInput')) document.getElementById('childWeightInput').value = rec.weight;
+                if (document.getElementById('childHeightInput')) document.getElementById('childHeightInput').value = rec.height;
+                if (document.getElementById('childConditionSelect')) document.getElementById('childConditionSelect').value = rec.health_condition || 'Normal / Healthy Growth';
+                if (document.getElementById('childExtraDetailsInput')) document.getElementById('childExtraDetailsInput').value = rec.details || '';
+
+                if (noticeBox) {
+                    noticeBox.style.display = 'block';
+                    noticeBox.style.backgroundColor = '#ecfdf5';
+                    noticeBox.style.border = '1px solid #a7f3d0';
+                    noticeBox.style.color = '#047857';
+                    noticeBox.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> <strong>Edit Mode:</strong> Record for Month ${selectedMonth} already exists. Submitting will update existing entry for ${ch.name}.`;
+                }
+
+                if (saveBtn) {
+                    saveBtn.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> <span>Update Month ${selectedMonth} Growth Record</span>`;
+                }
+            } else {
+                if (existingInput) existingInput.value = '';
+                if (document.getElementById('childWeightInput')) document.getElementById('childWeightInput').value = '';
+                if (document.getElementById('childHeightInput')) document.getElementById('childHeightInput').value = '';
+                if (document.getElementById('childExtraDetailsInput')) document.getElementById('childExtraDetailsInput').value = '';
+
+                if (noticeBox) noticeBox.style.display = 'none';
+
+                if (saveBtn) {
+                    saveBtn.innerHTML = `<i class="fa-solid fa-plus"></i> <span>Save ${getMonthLabel(selectedMonth)} Growth Record</span>`;
+                }
+            }
+        }
+
+        function onFileChosen(input) {
+            const label = document.getElementById('fileChosenLabel');
+            if (input.files && input.files[0]) {
+                label.innerHTML = `<i class="fa-solid fa-file-pdf" style="color: #ef4444;"></i> <span>${input.files[0].name}</span>`;
+            } else {
+                label.innerHTML = `<i class="fa-regular fa-file"></i> <span>Choose file</span>`;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const childSelect = document.getElementById('childSelect');
+            if (childSelect && childSelect.value) {
+                onChildSelectChange(childSelect.value);
+            }
+        });
+    </script>
+</body>
+</html>

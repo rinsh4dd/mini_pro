@@ -1,0 +1,600 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Nutrition Kits - Anganwadi Portal | MaatriCare</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons for Sidebar -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #062e20;
+            --sidebar-hover: #0a3d2b;
+            --sidebar-active: #0e4c36;
+            --sidebar-text-muted: #a3c4b5;
+            --brand-green: #083c2a;
+            --brand-green-hover: #052a1d;
+            --brand-green-light: #ecfdf5;
+            --brand-green-accent: #10b981;
+            --bg-page: #f8fafc;
+            --card-bg: #ffffff;
+            --text-heading: #0f172a;
+            --text-body: #334155;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --border-input: #cbd5e1;
+            --search-bg: #f1f5f9;
+            --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+            --shadow-hover: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.75rem 1.15rem 1.5rem;
+            z-index: 100;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            padding: 0 0.5rem 1.75rem;
+            text-decoration: none;
+            display: block;
+        }
+
+        .brand-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-sub {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--sidebar-text-muted);
+            margin-top: 4px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-item-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.72rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item-link i {
+            font-size: 1.05rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item-link:hover {
+            color: #ffffff;
+            background-color: var(--sidebar-hover);
+        }
+
+        .nav-item-link.active {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+        }
+
+        .sidebar-footer {
+            padding-top: 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.7rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            color: #ffffff;
+            background-color: rgba(239, 68, 68, 0.15);
+        }
+
+        /* Main Container - Full Page Layout */
+        .main-wrapper {
+            margin-left: 250px;
+            flex: 1;
+            min-width: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-page);
+            width: calc(100% - 250px);
+        }
+
+        /* Top Header Navigation */
+        .top-header {
+            height: 74px;
+            padding: 0 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            width: 100%;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--brand-green);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 420px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.65rem 1.2rem;
+            background-color: var(--search-bg);
+            border: 1px solid transparent;
+            border-radius: 9999px;
+            font-size: 0.88rem;
+            color: var(--text-heading);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            background-color: #ffffff;
+            border-color: #cbd5e1;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .worker-profile-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 1px solid var(--border-color);
+            padding-left: 1.25rem;
+        }
+
+        .worker-info {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .worker-name {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            line-height: 1.2;
+        }
+
+        .worker-id {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .worker-avatar-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #083c2a, #10b981);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+
+        /* Content Body */
+        .content-body {
+            padding: 2.5rem 3rem 5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .page-header-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            box-shadow: var(--shadow-card);
+            width: 100%;
+        }
+
+        .page-title-group h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--brand-green);
+            letter-spacing: -0.02em;
+        }
+
+        .page-title-group p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .btn-add-stock {
+            padding: 0.85rem 2.2rem;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border: none;
+            border-radius: 14px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 4px 16px rgba(8, 60, 42, 0.22);
+            transition: all 0.2s ease;
+        }
+
+        .btn-add-stock:hover {
+            background-color: var(--brand-green-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(8, 60, 42, 0.3);
+            color: #ffffff;
+        }
+
+        .stats-badge-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-chip {
+            background-color: #f1f5f9;
+            padding: 0.65rem 1.25rem;
+            border-radius: 14px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Inventory Table Card */
+        .table-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            width: 100%;
+        }
+
+        .table-header-bar {
+            padding: 1.6rem 2.5rem;
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .table-header-bar h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--brand-green);
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            text-align: left;
+        }
+
+        .custom-table th {
+            background-color: #f8fafc;
+            padding: 1.25rem 1.75rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #475569;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .custom-table td {
+            padding: 1.35rem 1.75rem;
+            font-size: 0.92rem;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+            color: #334155;
+        }
+
+        .custom-table tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-wrapper {
+                margin-left: 0;
+                width: 100%;
+            }
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .search-container {
+                width: 200px;
+            }
+            .content-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= Left Sidebar ================= -->
+    {% include 'anganwadi_teacher/sidebar.html' %}
+
+    <!-- ================= Main Container ================= -->
+    <main class="main-wrapper">
+
+        <!-- Top Header Navigation -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()" aria-label="Toggle Sidebar Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Search kit inventory stock records...">
+                </div>
+            </div>
+
+            <!-- Profile Badge -->
+            <div class="header-actions">
+                <a href="/myapp/teacher_profile/" class="worker-profile-card" style="text-decoration: none; color: inherit;" title="View Profile">
+                    <div class="worker-info">
+                        <span class="worker-name">{{ teacher.Name|default:"Anganwadi Teacher" }}</span>
+                        <span class="worker-id">{{ teacher.center_name|default:"Anganwadi Center" }}</span>
+                    </div>
+                    <div class="worker-avatar-badge" title="{{ teacher.Name|default:'Teacher' }}" style="overflow:hidden; padding:0;">
+                        {% if teacher.image %}
+                            <img src="{{ teacher.image.url }}" alt="{{ teacher.Name }}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                        {% else %}
+                            {{ teacher.Name|slice:":1"|upper|default:"T" }}
+                        {% endif %}
+                    </div>
+                </a>
+            </div>
+        </header>
+
+        <!-- Body Content -->
+        <div class="content-body">
+
+            <!-- Flash Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div style="padding: 1.1rem 1.75rem; border-radius: 16px; background-color: #ecfdf5; border: 1px solid #a7f3d0; color: #047857; font-size: 0.94rem; font-weight: 600; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-card);">
+                        <span>{{ message }}</span>
+                        <button onclick="this.parentElement.remove()" style="background:none; border:none; color:inherit; font-size:1.3rem; cursor:pointer;">&times;</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Top Page Header Banner Card -->
+            <div class="page-header-card">
+                <div class="page-title-group">
+                    <h1>Currently Existing Nutrition Kits</h1>
+                    <p>View supplementary nutrition kit inventory currently available at your Anganwadi Center.</p>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                    <a href="/myapp/add_nutrition_kit/" class="btn-add-stock">
+                        Add Stock
+                    </a>
+
+                    <div class="stats-badge-row">
+                        <div class="stat-chip">
+                            <span>Total Items: {{ kits|length }}</span>
+                        </div>
+                        <div class="stat-chip" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.4); color: #047857; font-weight: 800;">
+                            <i class="fa-solid fa-boxes-stacked" style="margin-right: 4px;"></i> Total Stock: {{ total_stock_count }} Units
+                        </div>
+                        <div class="stat-chip">
+                            <span>Center: {{ teacher.center_name|default:"Anganwadi No. 4" }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FULL PAGE INVENTORY STOCK TABLE CARD -->
+            <div class="table-card">
+                <div class="table-header-bar">
+                    <h3>Currently Existing Kits & Stock Records</h3>
+                    <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Live inventory for {{ teacher.center_name|default:"Anganwadi Center" }}</span>
+                </div>
+                <div class="table-wrapper">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 24%;">Kit Details & Category</th>
+                                <th style="width: 26%;">Items Included in Kit</th>
+                                <th style="width: 34%;">Health Benefits & Details (Why Taken)</th>
+                                <th style="width: 10%;">Available Stock</th>
+                                <th style="width: 6%;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for k in kits %}
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; flex-direction: column; gap: 5px;">
+                                            <span style="font-weight: 800; color: #0f172a; font-size: 0.96rem;">{{ k.product_name }}</span>
+                                            <div>
+                                                {% if 'Pregnant' in k.kit_type or 'Pregnant' in k.product_name or 'Prenatal' in k.product_name %}
+                                                    <span style="background-color: #fef3c7; color: #92400e; padding: 0.22rem 0.7rem; border-radius: 9999px; font-weight: 700; font-size: 0.76rem; display: inline-block; border: 1px solid #fde68a;">
+                                                        {{ k.kit_type }}
+                                                    </span>
+                                                {% elif 'Lactat' in k.kit_type or 'Postnatal' in k.kit_type or 'Milk' in k.product_name %}
+                                                    <span style="background-color: #d1fae5; color: #065f46; padding: 0.22rem 0.7rem; border-radius: 9999px; font-weight: 700; font-size: 0.76rem; display: inline-block; border: 1px solid #a7f3d0;">
+                                                        {{ k.kit_type }}
+                                                    </span>
+                                                {% else %}
+                                                    <span style="background-color: #e0f2fe; color: #0369a1; padding: 0.22rem 0.7rem; border-radius: 9999px; font-weight: 700; font-size: 0.76rem; display: inline-block; border: 1px solid #bae6fd;">
+                                                        {{ k.kit_type }}
+                                                    </span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span style="font-weight: 600; color: #1e293b; font-size: 0.88rem; display: block; line-height: 1.45;">
+                                            {{ k.parsed_items|default:k.product_name }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span style="color: #475569; font-size: 0.85rem; display: block; line-height: 1.5;">
+                                            {{ k.parsed_description }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span style="font-weight: 800; font-size: 0.98rem; color: {% if k.quantity < 10 %}#dc2626{% else %}#047857{% endif %}; display: inline-block; background: #f8fafc; padding: 0.4rem 0.75rem; border-radius: 10px; border: 1px solid #e2e8f0; white-space: nowrap;">
+                                            {{ k.quantity }} {{ k.parsed_unit|default:"Packs" }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="/myapp/kit_distribution/" style="padding: 0.5rem 0.9rem; background-color: #083c2a; color: white; border-radius: 10px; font-weight: 700; font-size: 0.8rem; text-decoration: none; display: inline-block; box-shadow: 0 2px 6px rgba(8, 60, 42, 0.15); transition: all 0.2s ease;">
+                                            Distribute
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 4rem 1rem; color: var(--text-muted);">
+                                        <p style="font-weight: 700; font-size: 1.05rem; color: #1e293b;">No stock inventory records added yet.</p>
+                                        <p style="font-size: 0.88rem; color: #64748b; margin-top: 6px; margin-bottom: 1.25rem;">Click 'Add Stock' below to record incoming nutrition stock allocated to your Anganwadi center.</p>
+                                        <a href="/myapp/add_nutrition_kit/" class="btn-add-stock">
+                                            Add Your First Stock Item
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

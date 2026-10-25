@@ -1,0 +1,1141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Profile - Anganwadi Portal | MaatriCare</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #062e20;
+            --sidebar-hover: #0a3d2b;
+            --sidebar-active: #0e4c36;
+            --sidebar-text-muted: #a3c4b5;
+            --brand-green: #083c2a;
+            --brand-green-hover: #052a1d;
+            --brand-green-light: #ecfdf5;
+            --brand-green-accent: #10b981;
+            --bg-page: #f8fafc;
+            --card-bg: #ffffff;
+            --text-heading: #0f172a;
+            --text-body: #334155;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --border-input: #cbd5e1;
+            --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+            --card-hover-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.08);
+            --danger-color: #dc2626;
+            --success-color: #059669;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* ================= Sidebar Navigation ================= */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.75rem 1.15rem 1.5rem;
+            z-index: 100;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            padding: 0 0.5rem 1.75rem;
+            text-decoration: none;
+            display: block;
+        }
+
+        .brand-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-sub {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--sidebar-text-muted);
+            margin-top: 4px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-item-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.72rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item-link i {
+            font-size: 1.05rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item-link:hover {
+            color: #ffffff;
+            background-color: var(--sidebar-hover);
+        }
+
+        .nav-item-link.active {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+        }
+
+        .sidebar-footer {
+            padding-top: 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.7rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            color: #ffffff;
+            background-color: rgba(239, 68, 68, 0.15);
+        }
+
+        /* ================= Main Container ================= */
+        .main-wrapper {
+            margin-left: 250px;
+            flex: 1;
+            min-width: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-page);
+        }
+
+        /* Top Header */
+        .top-header {
+            height: 74px;
+            padding: 0 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--brand-green);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .header-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        .header-breadcrumb a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .header-breadcrumb a:hover {
+            color: var(--brand-green);
+        }
+
+        .header-breadcrumb .current {
+            color: var(--text-heading);
+            font-weight: 700;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .worker-profile-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 1px solid var(--border-color);
+            padding-left: 1.25rem;
+            text-decoration: none;
+        }
+
+        .worker-info {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .worker-name {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            line-height: 1.2;
+        }
+
+        .worker-id {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .worker-avatar-badge {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background-color: #ecfdf5;
+            color: #059669;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            border: 2px solid #a7f3d0;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .worker-avatar-badge img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ================= Content Layout ================= */
+        .content-body {
+            padding: 2rem 2.5rem 3.5rem;
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+        }
+
+        /* Flash Alerts */
+        .alert-box {
+            padding: 0.95rem 1.35rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .alert-success {
+            background-color: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+
+        .alert-warning {
+            background-color: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+        }
+
+        .alert-error, .alert-danger {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .alert-info {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+        }
+
+        /* Hero Banner Card */
+        .profile-hero-card {
+            background: linear-gradient(135deg, #062e20 0%, #0c4a34 100%);
+            border-radius: 20px;
+            padding: 2.25rem 2.5rem;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            box-shadow: 0 10px 30px rgba(6, 46, 32, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-hero-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(255,255,255,0) 70%);
+            pointer-events: none;
+        }
+
+        .hero-avatar-wrapper {
+            position: relative;
+            width: 104px;
+            height: 104px;
+            border-radius: 50%;
+            background: #ffffff;
+            padding: 3px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+            flex-shrink: 0;
+        }
+
+        .hero-avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hero-avatar-upload-btn {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--brand-green-accent);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2.5px solid #ffffff;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .hero-avatar-upload-btn:hover {
+            transform: scale(1.1);
+            background-color: #059669;
+        }
+
+        .hero-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .hero-name {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .hero-badges-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 0.65rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-pill.center-pill {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--brand-green);
+            font-weight: 800;
+        }
+
+        .hero-meta-grid {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            opacity: 0.92;
+            flex-wrap: wrap;
+        }
+
+        .hero-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Profile Tabs Navigation */
+        .profile-tabs-nav {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 2px;
+        }
+
+        .profile-tab-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.75rem 1.4rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            margin-bottom: -2px;
+        }
+
+        .profile-tab-btn:hover {
+            color: var(--brand-green);
+        }
+
+        .profile-tab-btn.active {
+            color: var(--brand-green);
+            border-bottom-color: var(--brand-green-accent);
+        }
+
+        /* Form Card */
+        .profile-form-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.25rem 2.5rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .section-header {
+            margin-bottom: 1.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .section-header h2 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-heading);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-header p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Image Upload Box */
+        .image-upload-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.25rem 1.5rem;
+            background-color: #f8fafc;
+            border: 1px dashed var(--border-input);
+            border-radius: 14px;
+            margin-bottom: 1.75rem;
+        }
+
+        .avatar-preview-box {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            background-color: #d1fae5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #059669;
+            font-size: 1.6rem;
+            font-weight: 800;
+        }
+
+        .avatar-preview-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-upload-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .btn-upload-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.55rem 1.1rem;
+            background-color: #ffffff;
+            border: 1px solid var(--border-input);
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: fit-content;
+        }
+
+        .btn-upload-trigger:hover {
+            border-color: var(--brand-green-accent);
+            color: #047857;
+            background-color: var(--brand-green-light);
+        }
+
+        .image-upload-hint {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+        }
+
+        /* Form Grids */
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.4rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .form-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.4rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: var(--text-heading);
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-input);
+            border-radius: 10px;
+            font-size: 0.92rem;
+            color: var(--text-heading);
+            background-color: #ffffff;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: var(--brand-green-accent);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+        }
+
+        .form-textarea {
+            min-height: 90px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .password-input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-input-wrap .form-input {
+            padding-right: 2.75rem;
+        }
+
+        .password-toggle-btn {
+            position: absolute;
+            right: 0.85rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 4px;
+        }
+
+        .password-toggle-btn:hover {
+            color: var(--text-heading);
+        }
+
+        .password-checklist {
+            background-color: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .password-checklist ul {
+            list-style: none;
+            margin-top: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .password-checklist li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .password-checklist li i {
+            color: var(--brand-green-accent);
+            font-size: 0.85rem;
+        }
+
+        .form-actions-footer {
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn-save-profile {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.8rem 1.8rem;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.94rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(8, 60, 42, 0.25);
+        }
+
+        .btn-save-profile:hover {
+            background-color: var(--brand-green-hover);
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 992px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-wrapper { margin-left: 0; }
+            .mobile-menu-toggle { display: block; }
+            .content-body { padding: 1.5rem 1.25rem; }
+            .profile-hero-card { flex-direction: column; text-align: center; gap: 1.25rem; }
+            .hero-badges-row { justify-content: center; }
+            .hero-meta-grid { justify-content: center; }
+            .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= Left Navigation Sidebar ================= -->
+    {% include 'anganwadi_teacher/sidebar.html' %}
+
+    <!-- ================= Main Container ================= -->
+    <main class="main-wrapper">
+
+        <!-- Top Header Navigation -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()" aria-label="Toggle Sidebar Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <div class="header-breadcrumb">
+                    <a href="/myapp/teacher_home/"><i class="fa-solid fa-house" style="margin-right: 4px;"></i> Dashboard</a>
+                    <i class="fa-solid fa-chevron-right" style="font-size: 0.72rem;"></i>
+                    <span class="current">Teacher Profile</span>
+                </div>
+            </div>
+
+            <!-- Top Right Profile Card -->
+            <div class="header-actions">
+                <a href="/myapp/teacher_profile/" class="worker-profile-card">
+                    <div class="worker-info">
+                        <span class="worker-name">{{ teacher.Name|default:'Anganwadi Teacher' }}</span>
+                        <span class="worker-id"><i class="fa-solid fa-location-dot" style="color: #10b981;"></i> {{ teacher.center_name|default:'Assigned Center' }}</span>
+                    </div>
+                    <div class="worker-avatar-badge" title="{{ teacher.Name|default:'Teacher' }}">
+                        {% if teacher.image %}
+                            <img src="{{ teacher.image.url }}" alt="Profile Avatar">
+                        {% else %}
+                            {{ teacher.Name|slice:":1"|upper|default:"T" }}
+                        {% endif %}
+                    </div>
+                </a>
+            </div>
+        </header>
+
+        <!-- Body Content -->
+        <div class="content-body">
+
+            <!-- System Flash Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-box alert-{{ message.tags|default:'info' }}">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fa-solid {% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-triangle-exclamation{% else %}fa-circle-info{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button class="alert-close" onclick="this.parentElement.remove()" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">&times;</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Profile Hero Banner Card -->
+            <div class="profile-hero-card">
+                <div class="hero-avatar-wrapper">
+                    {% if teacher.image %}
+                        <img src="{{ teacher.image.url }}" alt="Teacher Profile Picture" class="hero-avatar-img" id="heroAvatarImg">
+                    {% else %}
+                        <div class="avatar-preview-box" id="heroAvatarFallback" style="width: 100%; height: 100%; border-radius: 50%;">
+                            {{ teacher.Name|slice:":1"|upper|default:"T" }}
+                        </div>
+                    {% endif %}
+                    <label for="profileImageFileInput" class="hero-avatar-upload-btn" title="Change Profile Picture">
+                        <i class="fa-solid fa-camera"></i>
+                    </label>
+                </div>
+
+                <div class="hero-details">
+                    <h1 class="hero-name">{{ teacher.Name|default:"Anganwadi Teacher" }}</h1>
+                    <div class="hero-badges-row">
+                        <span class="hero-pill center-pill"><i class="fa-solid fa-location-dot"></i> {{ teacher.center_name|default:"Center Not Assigned" }}</span>
+                        <span class="hero-pill" style="background: rgba(167, 243, 208, 0.2); color: #ecfdf5; border: 1px solid rgba(167, 243, 208, 0.4);"><i class="fa-solid fa-circle-check" style="color: #a7f3d0;"></i> {{ teacher.Current_status|default:"Active" }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Section Navigation Tabs -->
+            <div class="profile-tabs-nav">
+                <a href="?tab=details" class="profile-tab-btn {% if active_tab != 'security' %}active{% endif %}">
+                    <i class="fa-solid fa-user-pen"></i>
+                    <span>Profile & Center Details</span>
+                </a>
+                <a href="?tab=security" class="profile-tab-btn {% if active_tab == 'security' %}active{% endif %}">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Password & Security</span>
+                </a>
+            </div>
+
+            <!-- TAB 1: Profile & Center Details -->
+            {% if active_tab != 'security' %}
+            <div class="profile-form-card">
+                <form method="POST" action="/myapp/teacher_profile/?tab=details" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="update_profile">
+
+                    <!-- SECTION 1: PERSONAL INFORMATION -->
+                    <div class="section-header">
+                        <h2><i class="fa-solid fa-user-pen" style="color: var(--brand-green);"></i> Personal Information</h2>
+                        <p>Teacher identity, photo, contact information, and assigned Anganwadi center.</p>
+                    </div>
+
+                    <!-- Profile Image Upload Section -->
+                    <div class="image-upload-section">
+                        <div class="avatar-preview-box">
+                            {% if teacher.image %}
+                                <img src="{{ teacher.image.url }}" alt="Preview" class="avatar-preview-img" id="previewImg">
+                            {% else %}
+                                <span id="previewFallbackText">{{ teacher.Name|slice:":1"|upper|default:"T" }}</span>
+                                <img src="" alt="Preview" class="avatar-preview-img" id="previewImg" style="display: none;">
+                            {% endif %}
+                        </div>
+                        <div class="image-upload-controls">
+                            <label class="form-label" style="font-size: 0.9rem;">Profile Photo</label>
+                            <label for="profileImageFileInput" class="btn-upload-trigger">
+                                <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                                <span>Choose New Photo</span>
+                            </label>
+                            <input 
+                                type="file" 
+                                name="image" 
+                                id="profileImageFileInput" 
+                                accept="image/png, image/jpeg, image/jpg, image/webp" 
+                                style="display: none;" 
+                                onchange="previewProfileImage(this)"
+                            >
+                            <span class="image-upload-hint">Supported formats: JPG, PNG, WEBP (Max: 5MB).</span>
+                        </div>
+                    </div>
+
+                    <!-- Row 1: Full Name & Assigned Center -->
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="name">Full Name *</label>
+                            <input type="text" name="name" id="name" class="form-input" value="{{ teacher.Name|default:'' }}" placeholder="Enter teacher's full name" required minlength="3">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="center_name">Assigned Center / Area *</label>
+                            <select name="center_name" id="center_name" class="form-select" required>
+                                <option value="" disabled>-- Select Center / Area --</option>
+                                <option value="Ward 01 - Main Community Center" {% if teacher.center_name == 'Ward 01 - Main Community Center' or 'Ward 01' in teacher.center_name or '01' in teacher.center_name %}selected{% endif %}>Ward 01 - Main Community Center</option>
+                                <option value="Ward 02 - East Sector" {% if teacher.center_name == 'Ward 02 - East Sector' or 'Ward 02' in teacher.center_name or '02' in teacher.center_name %}selected{% endif %}>Ward 02 - East Sector</option>
+                                <option value="Ward 03 - West Gram" {% if teacher.center_name == 'Ward 03 - West Gram' or 'Ward 03' in teacher.center_name or '03' in teacher.center_name %}selected{% endif %}>Ward 03 - West Gram</option>
+                                <option value="Ward 04 - North Colony" {% if teacher.center_name == 'Ward 04 - North Colony' or 'Ward 04' in teacher.center_name or '04' in teacher.center_name %}selected{% endif %}>Ward 04 - North Colony</option>
+                                <option value="Ward 05 - South Extension" {% if teacher.center_name == 'Ward 05 - South Extension' or 'Ward 05' in teacher.center_name or '05' in teacher.center_name %}selected{% endif %}>Ward 05 - South Extension</option>
+                                {% if teacher.center_name and not 'Ward' in teacher.center_name %}
+                                    <option value="{{ teacher.center_name }}" selected>{{ teacher.center_name }}</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Contact Number & Email -->
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="phone">Contact Number *</label>
+                            <input type="tel" name="phone" id="phone" class="form-input" value="{{ teacher.Phone|default:'' }}" placeholder="e.g. 9876543210" pattern="[6-9][0-9]{9}" maxlength="10" required title="10-digit mobile number starting with 6, 7, 8, or 9">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email Address *</label>
+                            <input 
+                                type="email" 
+                                name="email" 
+                                id="email" 
+                                class="form-input" 
+                                value="{{ teacher.Email|default:'' }}" 
+                                placeholder="e.g. teacher@gmail.com" 
+                                pattern="[a-zA-Z0-9._%+-]+@[gG][mM][aA][iI][lL]\.[cC][oO][mM]" 
+                                title="Please enter a valid @gmail.com email address" 
+                                oninput="if(!/^[a-zA-Z0-9._%+-]+@gmail\.com$/i.test(this.value.trim())){this.setCustomValidity('Please enter a valid @gmail.com email address (e.g., example@gmail.com)');}else{this.setCustomValidity('');}"
+                                oninvalid="this.setCustomValidity('Please enter a valid @gmail.com email address (e.g., example@gmail.com)')"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Date of Birth, Age & Gender -->
+                    <div class="form-grid-3">
+                        <div class="form-group">
+                            <label class="form-label" for="dob">Date of Birth (DOB) *</label>
+                            <input type="date" name="dob" id="dob" class="form-input" value="{{ teacher.dob|date:'Y-m-d'|default:'' }}" onchange="calculateAgeFromDob(this.value)" required>
+                            <small style="color: #047857; font-size: 0.78rem; margin-top: 3px; font-weight: 500;">Teacher must be at least 18 years old.</small>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="age">Calculated Age</label>
+                            <input type="number" name="age" id="age" class="form-input" value="{{ teacher.Age|default:'' }}" readonly style="background-color: #f8fafc;">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="gender">Gender *</label>
+                            <select name="gender" id="gender" class="form-select" required>
+                                <option value="Female" {% if teacher.Gender == 'Female' or not teacher.Gender %}selected{% endif %}>Female</option>
+                                <option value="Male" {% if teacher.Gender == 'Male' %}selected{% endif %}>Male</option>
+                                <option value="Other" {% if teacher.Gender == 'Other' %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Row 4: Address -->
+                    <div class="form-group" style="margin-bottom: 2rem;">
+                        <label class="form-label" for="address">Residential Address *</label>
+                        <textarea name="address" id="address" class="form-textarea" placeholder="Enter complete residential address" required rows="3">{{ teacher.Address|default:'' }}</textarea>
+                    </div>
+
+                    <!-- SECTION 2: PROFESSIONAL & OFFICIAL DETAILS -->
+                    <div class="section-header" style="margin-top: 1rem;">
+                        <h2><i class="fa-solid fa-briefcase" style="color: var(--brand-green);"></i> Official & Professional Records</h2>
+                        <p>Credentials, center appointment details, and qualifications as registered by Admin.</p>
+                    </div>
+
+                    <div class="form-grid-3">
+                        <div class="form-group">
+                            <label class="form-label" for="portal_username">Portal Username</label>
+                            <input type="text" id="portal_username" class="form-input" value="{{ teacher.LOGIN.username|default:'Not Linked' }}" readonly style="background-color: #f1f5f9; font-weight: 700; color: var(--brand-green);">
+                            <small style="color: #64748b; font-size: 0.76rem; margin-top: 3px;">System login ID (configured by Admin).</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="joining_date">Date of Joining *</label>
+                            <input type="date" name="joining_date" id="joining_date" class="form-input" value="{{ teacher.joining_date|date:'Y-m-d'|default:'' }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="status">Current Status *</label>
+                            <select name="status" id="status" class="form-select" required>
+                                <option value="Active" {% if teacher.Current_status == 'Active' or not teacher.Current_status %}selected{% endif %}>Active</option>
+                                <option value="Inactive" {% if teacher.Current_status == 'Inactive' %}selected{% endif %}>Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Qualifications & Certifications -->
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label class="form-label" for="qualification">Qualifications & Certifications *</label>
+                        <textarea name="qualification" id="qualification" class="form-textarea" rows="3" placeholder="Detail any teacher certifications, training completion, ECCE, or educational background..." required>{{ teacher.Qualification|default:'' }}</textarea>
+                    </div>
+
+                    <!-- Save Button -->
+                    <div class="form-actions-footer">
+                        <button type="submit" class="btn-save-profile">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <span>Save Profile Changes</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+
+            <!-- TAB 2: Password & Security -->
+            {% if active_tab == 'security' %}
+            <div class="profile-form-card">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-key" style="color: var(--brand-green);"></i> Change Password</h2>
+                    <p>Update your portal access credentials to ensure your account security.</p>
+                </div>
+
+                <form method="POST" action="/myapp/teacher_profile/?tab=security">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="change_password">
+
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="current_password">Current Password *</label>
+                            <div class="password-input-wrap">
+                                <input type="password" name="current_password" id="current_password" class="form-input" placeholder="Enter current password" required>
+                                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('current_password', this)">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="new_password">New Password *</label>
+                            <div class="password-input-wrap">
+                                <input type="password" name="new_password" id="new_password" class="form-input" placeholder="Enter new password (min. 6 chars)" minlength="6" required>
+                                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('new_password', this)">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="confirm_password">Confirm New Password *</label>
+                            <div class="password-input-wrap">
+                                <input type="password" name="confirm_password" id="confirm_password" class="form-input" placeholder="Confirm your new password" minlength="6" required>
+                                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('confirm_password', this)">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Password Requirement Box -->
+                    <div class="password-checklist">
+                        <strong style="color: var(--text-heading);"><i class="fa-solid fa-circle-info"></i> Password Guidelines:</strong>
+                        <ul>
+                            <li><i class="fa-solid fa-check"></i> Minimum 6 characters in length</li>
+                            <li><i class="fa-solid fa-check"></i> Mix of letters, numbers, and symbols is strongly recommended</li>
+                            <li><i class="fa-solid fa-check"></i> Both new password and confirmation password must match exactly</li>
+                        </ul>
+                    </div>
+
+                    <!-- Submit Password Button -->
+                    <div class="form-actions-footer">
+                        <button type="submit" class="btn-save-profile">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>Update Password</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+
+        </div>
+    </main>
+
+    <!-- JavaScript Logic -->
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Preview uploaded profile image immediately
+        function previewProfileImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const heroImg = document.getElementById('heroAvatarImg');
+                    const heroFallback = document.getElementById('heroAvatarFallback');
+                    const previewImg = document.getElementById('previewImg');
+                    const previewFallback = document.getElementById('previewFallbackText');
+
+                    if (heroImg) {
+                        heroImg.src = e.target.result;
+                    } else if (heroFallback) {
+                        heroFallback.innerHTML = '<img src="' + e.target.result + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+                    }
+
+                    if (previewImg) {
+                        previewImg.src = e.target.result;
+                        previewImg.style.display = 'block';
+                    }
+                    if (previewFallback) previewFallback.style.display = 'none';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Toggle password show/hide
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                if (icon) {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+            } else {
+                input.type = 'password';
+                if (icon) {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            }
+        }
+
+        // Auto calculate age from date of birth
+        function calculateAgeFromDob(dobValue) {
+            if (!dobValue) return;
+            const dob = new Date(dobValue);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            if (age >= 0) {
+                const ageInput = document.getElementById('age');
+                if (ageInput) ageInput.value = age;
+            }
+        }
+
+        // Email @gmail.com Form Submit Check
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('form').forEach(function(form) {
+                form.addEventListener('submit', function(e) {
+                    const emailInput = form.querySelector('input[name="email"]');
+                    if (emailInput && emailInput.value.trim()) {
+                        const val = emailInput.value.trim();
+                        if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/i.test(val)) {
+                            e.preventDefault();
+                            emailInput.setCustomValidity('Please enter a valid @gmail.com email address (e.g., example@gmail.com)');
+                            emailInput.reportValidity();
+                            emailInput.focus();
+                            return false;
+                        } else {
+                            emailInput.setCustomValidity('');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

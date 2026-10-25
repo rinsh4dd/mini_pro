@@ -1,0 +1,1007 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pregnancy Record - MaatriCare</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #062e20;
+            --sidebar-hover: rgba(255, 255, 255, 0.08);
+            --sidebar-active: #d7e6dc;
+            --sidebar-active-text: #062e20;
+            --sidebar-text: #e2e8e5;
+            --sidebar-muted: #8da89d;
+            --page-bg: #faf7f0;
+            --card-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --subcard-bg: #ede8dc;
+            --subcard-warm: #f6f3ed;
+            --border-color: #ede8dc;
+            --accent-green: #062e20;
+            --accent-green-pill: #eaf3ee;
+            --accent-green-badge: #d1fae5;
+            --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--page-bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 240px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 100;
+            padding: 1.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-brand {
+            padding: 0.5rem 0.75rem 1.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--sidebar-bg);
+            font-size: 1.2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .sidebar-brand h2 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.01em;
+            line-height: 1.15;
+        }
+
+        .sidebar-brand p {
+            font-size: 0.68rem;
+            color: var(--sidebar-muted);
+            margin-top: 2px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            width: 100%;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0.7rem 1rem;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link i {
+            font-size: 1.05rem;
+            width: 20px;
+            text-align: center;
+            color: #a4c2b5;
+        }
+
+        .nav-link:hover {
+            background-color: var(--sidebar-hover);
+            color: #ffffff;
+        }
+
+        .nav-link.active {
+            background-color: var(--sidebar-active);
+            color: var(--sidebar-active-text);
+            font-weight: 800;
+        }
+
+        .nav-link.active i {
+            color: var(--sidebar-active-text);
+        }
+
+        .sidebar-bottom {
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-sidebar-logout {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.7rem 1rem;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .btn-sidebar-logout i {
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+            color: #a4c2b5;
+        }
+
+        .btn-sidebar-logout:hover {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+        }
+        .btn-sidebar-logout:hover i {
+            color: #fca5a5;
+        }
+
+        /* ================= MAIN CONTAINER ================= */
+        .main-wrapper {
+            margin-left: 240px;
+            flex-grow: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--page-bg);
+            position: relative;
+        }
+
+        /* Top Header */
+        .top-header {
+            padding: 1.1rem 2.5rem;
+            background-color: var(--page-bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .breadcrumb-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .breadcrumb-wrap a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .breadcrumb-wrap a:hover {
+            color: var(--accent-green);
+        }
+
+        .breadcrumb-sep {
+            color: #9ca3af;
+            font-size: 0.8rem;
+        }
+
+        .top-header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .search-box-wrap {
+            position: relative;
+            width: 320px;
+            max-width: 100%;
+        }
+
+        .search-box-wrap i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8b968f;
+            font-size: 0.9rem;
+        }
+
+        .search-input {
+            width: 100%;
+            background-color: var(--subcard-bg);
+            border: 1px solid transparent;
+            border-radius: 8px;
+            padding: 0.65rem 1rem 0.65rem 2.4rem;
+            font-size: 0.88rem;
+            color: var(--text-main);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input::placeholder {
+            color: #8b968f;
+        }
+
+        .search-input:focus {
+            border-color: #cbd5e1;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(6, 46, 32, 0.06);
+        }
+
+        .top-action-btn {
+            background: none;
+            border: none;
+            color: #4b5563;
+            font-size: 1.15rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .top-action-btn:hover {
+            background-color: var(--subcard-bg);
+            color: var(--accent-green);
+        }
+
+        .user-pill-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-left: 0.75rem;
+            border-left: 1px solid #e5e0d4;
+        }
+
+        .user-avatar-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background-color: var(--subcard-bg);
+            color: #374151;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+        }
+
+        .user-pill-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-pill-name {
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .user-pill-sub {
+            font-size: 0.72rem;
+            color: #6b7280;
+        }
+
+        /* Content Area */
+        .content-container {
+            padding: 0.5rem 2.5rem 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* ================= HERO CARD ================= */
+        .pregnancy-hero-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem 1.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .hero-left-col {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .hero-icon-badge {
+            width: 58px;
+            height: 58px;
+            border-radius: 14px;
+            background-color: #d7e6dc;
+            color: var(--sidebar-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+        }
+
+        .hero-info-titles h1 {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge-status-pill {
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background-color: #e5e7eb;
+            color: #4b5563;
+        }
+
+        .badge-status-pill.active {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .hero-info-titles p {
+            font-size: 0.85rem;
+            color: #4b5563;
+            margin-top: 4px;
+        }
+
+        .hero-info-titles .last-date {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-top: 2px;
+        }
+
+        .hero-right-badges {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hero-stat-badge {
+            background-color: var(--subcard-warm);
+            border-radius: 10px;
+            padding: 0.85rem 1.25rem;
+            text-align: center;
+            min-width: 140px;
+        }
+
+        .hero-stat-badge .stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 700;
+            color: #6b7280;
+        }
+
+        .hero-stat-badge .stat-value {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-top: 2px;
+        }
+
+        /* ================= 4 METRIC CARDS ================= */
+        .metrics-4col-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+        }
+
+        .metric-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.4rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            box-shadow: var(--shadow-card);
+            transition: transform 0.2s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .metric-icon-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background-color: var(--subcard-bg);
+            color: #374151;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+        }
+
+        .metric-icon-box.green {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .metric-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .metric-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        .metric-value {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+        }
+
+        /* ================= MONTHLY RECORDS SECTION ================= */
+        .section-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+        }
+
+        .btn-export-link {
+            color: #374151;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background-color: var(--subcard-bg);
+            transition: all 0.2s ease;
+        }
+
+        .btn-export-link:hover {
+            background-color: #dfd8c7;
+            color: var(--text-main);
+        }
+
+        .monthly-records-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem 1.5rem;
+            box-shadow: var(--shadow-card);
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .empty-records-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 8px;
+            color: #6b7280;
+        }
+
+        .empty-icon-wrap {
+            font-size: 2.5rem;
+            color: #9ca3af;
+            margin-bottom: 4px;
+        }
+
+        .empty-records-box h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .empty-records-box p {
+            font-size: 0.88rem;
+            color: #6b7280;
+        }
+
+        /* Records Table */
+        .records-table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .records-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.88rem;
+        }
+
+        .records-table th {
+            background-color: #faf8f5;
+            color: #4b5563;
+            font-weight: 700;
+            padding: 0.85rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .records-table td {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #f3f0e8;
+            color: #1f2937;
+        }
+
+        .records-table tr:hover td {
+            background-color: #faf8f5;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .metrics-4col-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .main-wrapper {
+                margin-left: 0;
+            }
+            .top-header {
+                padding: 1rem 1.25rem;
+            }
+            .content-container {
+                padding: 0.5rem 1.25rem 3rem;
+            }
+            .metrics-4col-grid {
+                grid-template-columns: 1fr;
+            }
+            .pregnancy-hero-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .hero-right-badges {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= LEFT SIDEBAR ================= -->
+    <aside class="sidebar" id="mainSidebar">
+        <div>
+            <!-- Brand Header -->
+            <a href="/myapp/userhome/" class="sidebar-brand">
+                <div class="brand-logo-icon">
+                    <i class="fa-solid fa-person-breastfeeding"></i>
+                </div>
+                <div>
+                    <h2>MaatriCare</h2>
+                    <p>MATERNAL HEALTHCARE</p>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a href="/myapp/userhome/" class="nav-link">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_profile/" class="nav-link">
+                        <i class="fa-regular fa-user"></i>
+                        <span>My Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_pregnancy_record/" class="nav-link active">
+                        <i class="fa-solid fa-person-pregnant"></i>
+                        <span>Pregnancy Record</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_child_profile/" class="nav-link">
+                        <i class="fa-regular fa-face-smile"></i>
+                        <span>Child Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_child_growth/" class="nav-link">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Child Growth</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_vaccination_schedule/" class="nav-link">
+                        <i class="fa-solid fa-syringe"></i>
+                        <span>Vaccination</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_kit_history/" class="nav-link">
+                        <i class="fa-solid fa-box-archive"></i>
+                        <span>Nutrition Kits</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_notifications/" class="nav-link">
+                        <i class="fa-regular fa-bell"></i>
+                        <span>Notifications</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Bottom Logout -->
+        <div class="sidebar-bottom">
+            <a href="/myapp/logout/" class="btn-sidebar-logout">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN WRAPPER ================= -->
+    <div class="main-wrapper">
+
+        <!-- Top Header Navigation -->
+        <header class="top-header">
+            <div class="breadcrumb-wrap">
+                <a href="/myapp/userhome/">Maternal Portal</a>
+                <span class="breadcrumb-sep">&rsaquo;</span>
+                <span>Pregnancy Record</span>
+            </div>
+
+            <div class="top-header-right">
+                <div class="user-pill-profile">
+                    <div class="user-avatar-circle">
+                        <i class="fa-regular fa-user"></i>
+                    </div>
+                    <div class="user-pill-info">
+                        <span class="user-pill-name">{{ mother.name|default:"Registered Mother" }}</span>
+                        <span class="user-pill-sub">Patient ID: {{ patient_id }}</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Body -->
+        <main class="content-container">
+
+            <!-- Hero Pregnancy Record Banner -->
+            <div class="pregnancy-hero-card">
+                <div class="hero-left-col">
+                    <div class="hero-icon-badge">
+                        <i class="fa-solid fa-person-pregnant"></i>
+                    </div>
+                    <div class="hero-info-titles">
+                        <h1>
+                            <span>Pregnancy Record</span>
+                            <span class="badge-status-pill {% if is_active %}active{% endif %}">
+                                {% if is_active %}ACTIVE{% else %}INACTIVE{% endif %}
+                            </span>
+                        </h1>
+                        <p>Patient: {{ patient_name }}, Managing Physician: {{ managing_physician }},</p>
+                        <p class="last-date">Last Checkup Date: {{ last_checkup_date }}</p>
+                    </div>
+                </div>
+
+                <div class="hero-right-badges">
+                    <div class="hero-stat-badge">
+                        <div class="stat-label">CURRENT STATUS</div>
+                        <div class="stat-value">{{ status_str }}</div>
+                    </div>
+                    {% if not has_delivered and edd_str %}
+                    <div class="hero-stat-badge">
+                        <div class="stat-label">ESTIMATED DUE DATE</div>
+                        <div class="stat-value">{{ edd_str }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 4 Metric Cards Grid -->
+            <div class="metrics-4col-grid">
+                <!-- Current Weight -->
+                <div class="metric-card">
+                    <div class="metric-icon-box">
+                        <i class="fa-solid fa-hourglass-half"></i>
+                    </div>
+                    <div class="metric-info">
+                        <span class="metric-label">Current Weight</span>
+                        <span class="metric-value">{{ weight_str }} kg</span>
+                    </div>
+                </div>
+
+                <!-- Blood Pressure -->
+                <div class="metric-card">
+                    <div class="metric-icon-box">
+                        <i class="fa-solid fa-wave-square"></i>
+                    </div>
+                    <div class="metric-info">
+                        <span class="metric-label">Blood Pressure</span>
+                        <span class="metric-value">{{ bp_str }} mmHg</span>
+                    </div>
+                </div>
+
+                <!-- Height -->
+                <div class="metric-card">
+                    <div class="metric-icon-box">
+                        <i class="fa-solid fa-ruler-vertical"></i>
+                    </div>
+                    <div class="metric-info">
+                        <span class="metric-label">Height</span>
+                        <span class="metric-value">{{ height_str }} cm</span>
+                    </div>
+                </div>
+
+                <!-- Health Status -->
+                <div class="metric-card">
+                    <div class="metric-icon-box green">
+                        <i class="fa-solid fa-shield-heart"></i>
+                    </div>
+                    <div class="metric-info">
+                        <span class="metric-label">Health Status</span>
+                        <span class="metric-value">{{ health_status_str }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Records Section -->
+            <div>
+                <div class="section-header-row">
+                    <div>
+                        <h2 class="section-title">Antenatal Health & Checkup History</h2>
+                        {% if has_multiple_pregnancies %}
+                        <p style="font-size: 0.84rem; color: #64748b; margin-top: 3px;">
+                            <i class="fa-solid fa-code-branch" style="color: var(--brand-green); margin-right: 4px;"></i>
+                            Displaying separated antenatal logs for <strong>PREGNANCY #{{ current_preg_number|default:2 }} (Active)</strong> and <strong>PREGNANCY #1 (Delivered Child: {{ delivered_child.child_name|default:"Aarav Krishna" }})</strong>
+                        </p>
+                        {% endif %}
+                    </div>
+                    <a href="javascript:window.print()" class="btn-export-link">
+                        <i class="fa-solid fa-arrow-down-to-bracket"></i>
+                        <span>Export History</span>
+                    </a>
+                </div>
+
+                {% if has_multiple_pregnancies %}
+                <!-- CURRENT ACTIVE PREGNANCY -->
+                <div style="margin-top: 1.25rem;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; padding: 0.6rem 1rem; background: #e0f2fe; border: 1.5px solid #bae6fd; border-radius: 10px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="background: #0284c7; color: #ffffff; font-size: 0.75rem; font-weight: 800; padding: 3px 8px; border-radius: 6px;">PREGNANCY #{{ current_preg_number|default:2 }}</span>
+                            <span style="font-weight: 700; color: #0369a1; font-size: 0.95rem;">Current Active Pregnancy ({{ mother.gestation_month|default:7 }}th Month • Week {{ gest_weeks|default:29 }})</span>
+                        </div>
+                        <div style="font-size: 0.8rem; font-weight: 600; color: #0369a1;">
+                            <i class="fa-solid fa-calendar-check" style="margin-right: 4px;"></i>EDD: {{ edd_str|default:"Dec 14, 2026" }} • {{ current_preg_records|length }} Checkups Recorded
+                        </div>
+                    </div>
+
+                    <div class="monthly-records-card" style="margin-top: 0.4rem; margin-bottom: 1.75rem;">
+                        <div class="records-table-wrap">
+                            <table class="records-table">
+                                <thead>
+                                    <tr>
+                                        <th>Checkup Date</th>
+                                        <th>Gestation Age</th>
+                                        <th>Expected Delivery</th>
+                                        <th>Weight (kg)</th>
+                                        <th>Blood Pressure</th>
+                                        <th>Hemoglobin (g/dL)</th>
+                                        <th>Health Status</th>
+                                        <th>Clinical Observations & Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for r in current_preg_records %}
+                                    <tr>
+                                        <td><strong>{{ r.checkup_date|date:"M d, Y" }}</strong></td>
+                                        <td>
+                                            <span class="badge-status-pill active" style="background:#e0f2fe; color:#0369a1; border-color:#bae6fd; font-weight:700;">
+                                                <i class="fa-solid fa-person-pregnant" style="font-size:0.75rem; margin-right:3px;"></i>{{ r.gestation_week_display|default:"--" }}
+                                            </span>
+                                        </td>
+                                        <td>{{ r.expected_delivery_date|date:"M d, Y"|default:"--" }}</td>
+                                        <td><strong>{{ r.weight|default:"--" }}</strong></td>
+                                        <td>{{ r.blood_pressure|default:"--" }}</td>
+                                        <td>{{ r.hemoglobin|default:"--" }}</td>
+                                        <td><span class="badge-status-pill active">{{ r.health_status|default:"Normal" }}</span></td>
+                                        <td>{{ r.additional_report|default:"Routine Antenatal Checkup." }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PREGNANCY #1: DELIVERED PREGNANCY -->
+                <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; padding: 0.6rem 1rem; background: #ecfdf5; border: 1.5px solid #a7f3d0; border-radius: 10px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="background: #059669; color: #ffffff; font-size: 0.75rem; font-weight: 800; padding: 3px 8px; border-radius: 6px;">PREGNANCY #1 RESULT</span>
+                            <span style="font-weight: 700; color: #047857; font-size: 0.95rem;">Previous Pregnancy Result & Outcome (Delivered Child: {{ delivered_child.child_name|default:"Aarav Krishna" }})</span>
+                        </div>
+                        <div style="font-size: 0.8rem; font-weight: 600; color: #047857;">
+                            <i class="fa-solid fa-baby" style="margin-right: 4px;"></i>Born: {{ delivered_child.date_of_birth|date:"M d, Y"|default:"Aug 15, 2024" }} • Full 9-Month History ({{ previous_preg_records|length }} Checkups)
+                        </div>
+                    </div>
+
+                    <div class="monthly-records-card" style="margin-top: 0.4rem;">
+                        <div class="records-table-wrap">
+                            <table class="records-table">
+                                <thead>
+                                    <tr>
+                                        <th>Checkup Date</th>
+                                        <th>Gestation Age</th>
+                                        <th>Delivery Outcome</th>
+                                        <th>Weight (kg)</th>
+                                        <th>Blood Pressure</th>
+                                        <th>Hemoglobin (g/dL)</th>
+                                        <th>Health Status</th>
+                                        <th>Clinical Observations & Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for r in previous_preg_records %}
+                                    <tr>
+                                        <td><strong>{{ r.checkup_date|date:"M d, Y" }}</strong></td>
+                                        <td>
+                                            <span class="badge-status-pill" style="background:#ecfdf5; color:#047857; border: 1px solid #a7f3d0; font-weight:700;">
+                                                Month {{ forloop.counter }}
+                                            </span>
+                                        </td>
+                                        <td><span style="color: #065f46; font-weight: 600;">Delivered Child (Aug 15, 2024)</span></td>
+                                        <td>{{ r.weight|default:"--" }}</td>
+                                        <td>{{ r.blood_pressure|default:"--" }}</td>
+                                        <td>{{ r.hemoglobin|default:"--" }}</td>
+                                        <td><span class="badge-status-pill active">{{ r.health_status|default:"Normal" }}</span></td>
+                                        <td>{{ r.additional_report|default:"Routine Antenatal Checkup." }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                {% else %}
+                <div class="monthly-records-card" style="margin-top: 0.75rem;">
+                    {% if monthly_records %}
+                    <div class="records-table-wrap">
+                        <table class="records-table">
+                            <thead>
+                                <tr>
+                                    <th>Checkup Date</th>
+                                    <th>Gestational Age</th>
+                                    {% if not has_delivered %}
+                                    <th>Expected Delivery</th>
+                                    {% endif %}
+                                    <th>Weight (kg)</th>
+                                    <th>Blood Pressure</th>
+                                    <th>Hemoglobin (g/dL)</th>
+                                    <th>Health Status</th>
+                                    <th>Clinical Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for r in monthly_records %}
+                                <tr>
+                                    <td><strong>{{ r.checkup_date|date:"M d, Y" }}</strong></td>
+                                    <td>
+                                        <span class="badge-status-pill active" style="background:#e0f2fe; color:#0369a1; border-color:#bae6fd; font-weight:700;">
+                                            <i class="fa-solid fa-person-pregnant" style="font-size:0.75rem; margin-right:3px;"></i>{{ r.gestation_week_display|default:"--" }}
+                                        </span>
+                                    </td>
+                                    {% if not has_delivered %}
+                                    <td>{{ r.expected_delivery_date|date:"M d, Y"|default:"--" }}</td>
+                                    {% endif %}
+                                    <td>{{ r.weight|default:"--" }}</td>
+                                    <td>{{ r.blood_pressure|default:"--" }}</td>
+                                    <td>{{ r.hemoglobin|default:"--" }}</td>
+                                    <td>
+                                        <span class="badge-status-pill active">{{ r.health_status|default:"Normal" }}</span>
+                                    </td>
+                                    <td>{{ r.additional_report|default:"Routine Antenatal Checkup." }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="empty-records-box">
+                        <div class="empty-icon-wrap">
+                            <i class="fa-regular fa-folder-open"></i>
+                        </div>
+                        <h3>No record added</h3>
+                        <p>There are currently no monthly checkup records added for this profile.</p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+</html>

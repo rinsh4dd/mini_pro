@@ -1,0 +1,1121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Kit Distribution - Anganwadi Portal | MaatriCare</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #062e20;
+            --sidebar-hover: #0a3d2b;
+            --sidebar-active: #0e4c36;
+            --sidebar-text-muted: #a3c4b5;
+            --brand-green: #083c2a;
+            --brand-green-hover: #052a1d;
+            --brand-green-light: #ecfdf5;
+            --brand-green-accent: #10b981;
+            --bg-page: #f8fafc;
+            --card-bg: #ffffff;
+            --text-heading: #0f172a;
+            --text-body: #334155;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --border-input: #cbd5e1;
+            --search-bg: #f1f5f9;
+            --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.75rem 1.15rem 1.5rem;
+            z-index: 100;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            padding: 0 0.5rem 1.75rem;
+            text-decoration: none;
+            display: block;
+        }
+
+        .brand-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-sub {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--sidebar-text-muted);
+            margin-top: 4px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-item-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.72rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item-link i {
+            font-size: 1.05rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item-link:hover {
+            color: #ffffff;
+            background-color: var(--sidebar-hover);
+        }
+
+        .nav-item-link.active {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+        }
+
+        .sidebar-footer {
+            padding-top: 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.7rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            color: #ffffff;
+            background-color: rgba(239, 68, 68, 0.15);
+        }
+
+        /* Main Container */
+        .main-wrapper {
+            margin-left: 250px;
+            flex: 1;
+            min-width: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-page);
+        }
+
+        /* Top Header */
+        .top-header {
+            height: 74px;
+            padding: 0 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--brand-green);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .header-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        .header-breadcrumb a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .header-breadcrumb a:hover {
+            color: var(--brand-green);
+        }
+
+        .header-breadcrumb .current {
+            color: var(--text-heading);
+            font-weight: 700;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .worker-profile-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 1px solid var(--border-color);
+            padding-left: 1.25rem;
+        }
+
+        .worker-info {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .worker-name {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            line-height: 1.2;
+        }
+
+        .worker-id {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .worker-avatar-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #083c2a, #10b981);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+
+        /* Content Body */
+        .content-body {
+            padding: 2.25rem 2.5rem 3.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-header-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--brand-green);
+            letter-spacing: -0.02em;
+        }
+
+        .page-header-sub {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .leaf-decor-badge {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background-color: #ecfdf5;
+            color: var(--brand-green-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
+        }
+
+        /* Distribution Form Cards */
+        .dist-form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+            width: 100%;
+        }
+
+        .form-section-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem 2.25rem;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .section-tag {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--brand-green);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.45rem 1rem;
+            border-radius: 10px;
+            background-color: #f1f5f9;
+            width: fit-content;
+        }
+
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1.1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-input);
+            background-color: #ffffff;
+            font-size: 0.92rem;
+            color: var(--text-heading);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.12);
+        }
+
+        .stepper-quantity-wrap {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border-input);
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+
+        .btn-stepper {
+            background-color: #f8fafc;
+            border: none;
+            padding: 0.75rem 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #334155;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-stepper:hover {
+            background-color: #e2e8f0;
+        }
+
+        .stepper-input {
+            width: 100%;
+            border: none;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-heading);
+            outline: none;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+            line-height: 1.55;
+        }
+
+        .bottom-actions-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 1rem;
+            padding-top: 1rem;
+        }
+
+        .btn-cancel-action {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            transition: color 0.2s;
+        }
+
+        .btn-cancel-action:hover {
+            color: #0f172a;
+        }
+
+        .btn-confirm-dist {
+            padding: 0.85rem 2rem;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 14px rgba(8, 60, 42, 0.22);
+            transition: all 0.2s;
+        }
+
+        .btn-confirm-dist:hover {
+            background-color: var(--brand-green-hover);
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-wrapper {
+                margin-left: 0;
+            }
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .form-row-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= Left Sidebar ================= -->
+    {% include 'anganwadi_teacher/sidebar.html' %}
+
+    <!-- ================= Main Container ================= -->
+    <main class="main-wrapper">
+
+        <!-- Top Header Navigation -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()" aria-label="Toggle Sidebar Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <div class="header-breadcrumb">
+                    <a href="/myapp/teacher_home/"><i class="fa-solid fa-house" style="margin-right: 4px;"></i> Dashboard</a>
+                    <i class="fa-solid fa-chevron-right" style="font-size: 0.72rem;"></i>
+                    <span class="current">Kit Distribution</span>
+                </div>
+            </div>
+
+            <!-- Profile Badge -->
+            <div class="header-actions">
+                <a href="/myapp/teacher_profile/" class="worker-profile-card" style="text-decoration: none; color: inherit;" title="View Profile">
+                    <div class="worker-info">
+                        <span class="worker-name">{{ teacher.Name|default:"Anganwadi Teacher" }}</span>
+                        <span class="worker-id"><i class="fa-solid fa-location-dot" style="color:#10b981; margin-right:3px;"></i> {{ teacher.center_name|default:"Anganwadi Center" }}</span>
+                    </div>
+                    <div class="worker-avatar-badge" title="{{ teacher.Name|default:'Teacher' }}" style="overflow:hidden; padding:0;">
+                        {% if teacher.image %}
+                            <img src="{{ teacher.image.url }}" alt="{{ teacher.Name }}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                        {% else %}
+                            {{ teacher.Name|slice:":1"|upper|default:"T" }}
+                        {% endif %}
+                    </div>
+                </a>
+            </div>
+        </header>
+
+        <!-- Body Content -->
+        <div class="content-body">
+
+            <!-- Title Row -->
+            <div class="page-header-row">
+                <div>
+                    <h1 class="page-header-title">Nutrition Kit Distribution</h1>
+                    <p class="page-header-sub">Record the issuance of maternal and infant nutritional supplements.</p>
+                </div>
+                <div class="leaf-decor-badge">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <form method="POST" action="/myapp/kit_distribution/" class="dist-form-container" id="distForm">
+                {% csrf_token %}
+                <input type="hidden" name="dist_mode" id="distModeInput" value="single">
+
+                <!-- Mode Switcher Tabs -->
+                <div style="display: flex; gap: 12px; background: #ffffff; padding: 0.6rem; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-card);">
+                    <button type="button" id="tabSingleBtn" onclick="setDistMode('single')" style="flex: 1; padding: 0.85rem 1rem; border-radius: 12px; border: none; font-weight: 700; font-size: 0.92rem; cursor: pointer; transition: all 0.2s; background-color: var(--brand-green); color: #ffffff; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="fa-regular fa-user"></i>
+                        <span>Single Beneficiary Issue</span>
+                    </button>
+                    <button type="button" id="tabBulkBtn" onclick="setDistMode('bulk')" style="flex: 1; padding: 0.85rem 1rem; border-radius: 12px; border: 1px solid var(--border-input); font-weight: 700; font-size: 0.92rem; cursor: pointer; transition: all 0.2s; background-color: #f8fafc; color: var(--text-body); display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span>Bulk Group Issue & Notification</span>
+                    </button>
+                </div>
+
+                <!-- Section 1: BENEFICIARY INFORMATION (SINGLE MODE) -->
+                <div class="form-section-card" id="singleBeneficiaryCard">
+                    <div class="section-tag">
+                        <i class="fa-regular fa-user"></i>
+                        <span>BENEFICIARY INFORMATION (SINGLE)</span>
+                    </div>
+
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label class="form-label">Full Name *</label>
+                            <select name="mother_id" id="motherSelect" class="form-select" onchange="onMotherSelectChange(this.value)">
+                                <option value="">Select Beneficiary...</option>
+                                {% for m in mothers %}
+                                    <option value="{{ m.id }}" {% if selected_mother_id == m.id|stringformat:"s" %}selected{% endif %}>
+                                        {{ m.name }} (Spouse: {{ m.husband_name }}) {% if m.is_currently_pregnant %}— Pregnant: Month {{ m.gestation_month }}{% elif m.has_delivered %}— Delivered{% endif %}
+                                    </option>
+                                {% empty %}
+                                    <option value="" disabled>No mother record added yet</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Unique ID / Case No.</label>
+                            <input type="text" id="caseNoInput" class="form-input" placeholder="Select a mother" readonly style="background-color: #f8fafc;">
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Pregnancy Status & Month Info Box -->
+                    <div id="pregnancyStatusBadge" style="margin-top: 0.85rem; padding: 0.8rem 1.1rem; border-radius: 12px; background-color: #f8fafc; border: 1px solid var(--border-input); font-weight: 700; font-size: 0.92rem; color: #475569; display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-person-pregnant" style="font-size: 1.2rem; color: #10b981;"></i>
+                        <span id="pregStatusText">Select a woman to view pregnancy status & month</span>
+                    </div>
+                </div>
+
+                <!-- Section 1: BENEFICIARY INFORMATION (BULK GROUP MODE) -->
+                <div class="form-section-card" id="bulkBeneficiaryCard" style="display: none;">
+                    <div class="section-tag" style="background-color: #083c2a; color: #ffffff;">
+                        <i class="fa-solid fa-users"></i>
+                        <span>TARGET BENEFICIARY GROUP (MASS DISTRIBUTION)</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Select Target Group for Mass Issuance & Reminder *</label>
+                        <select name="target_group" id="targetGroupSelect" class="form-select">
+                            <option value="pregnant" selected>All Active Pregnant Women in Center Jurisdiction</option>
+                            <option value="lactating">All Active Lactating Mothers (0-6 Months Postpartum)</option>
+                            <option value="all">All Active Beneficiaries (Pregnant & Lactating)</option>
+                        </select>
+                    </div>
+
+                    <div style="background-color: #ecfdf5; border: 1px solid #a7f3d0; color: #047857; padding: 0.95rem 1.2rem; border-radius: 14px; font-size: 0.88rem; display: flex; align-items: flex-start; gap: 12px; line-height: 1.5;">
+                        <i class="fa-solid fa-shield-halved" style="font-size: 1.2rem; margin-top: 2px;"></i>
+                        <div>
+                            <strong>Monthly Limits Auto-Enforced:</strong> All eligible mothers in the selected group will be issued the chosen product. Beneficiaries who have <em>already collected</em> their kit for the current calendar month will be automatically skipped to respect monthly limits.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: KIT DETAILS -->
+                <div class="form-section-card">
+                    <div class="section-tag">
+                        <i class="fa-solid fa-box-open"></i>
+                        <span>KIT DETAILS</span>
+                    </div>
+
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label class="form-label">Kit Category *</label>
+                            <select name="kit_category" id="categorySelect" class="form-select" onchange="onCategoryChange(this.value)" required>
+                                <option value="" disabled selected>Select Category</option>
+                                <option value="Pregnant Care Kit">Pregnant Care Kit</option>
+                                <option value="Lactating Care Kit">Lactating Care Kit</option>
+                                <option value="General Nutrition Kit">General Nutrition Kit</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Kit Item / Selection *</label>
+                            <select name="kit_type" id="kitSelect" class="form-select" onchange="onKitItemChange()" required>
+                                <option value="" disabled selected>-- Select Category First --</option>
+                            </select>
+                            <div id="stockInfoBadge" style="margin-top: 8px; padding: 0.55rem 0.9rem; border-radius: 10px; font-size: 0.85rem; font-weight: 700; display: none;"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label class="form-label">Scheduled Pickup / Distribution Date *</label>
+                            <input type="date" name="distribution_date" id="distDateInput" class="form-input" value="{{ today_date }}" min="{{ today_date }}" onchange="updateNotificationMessage()" required>
+                            <small style="color: var(--text-muted); font-size: 0.78rem; margin-top: 4px; display: block;">
+                                <i class="fa-solid fa-calendar-day"></i> Select today or a future date for kit pickup schedule.
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Quantity per Beneficiary</label>
+                            <div class="stepper-quantity-wrap">
+                                <button type="button" class="btn-stepper" onclick="stepQuantity(-1)">-</button>
+                                <input type="number" name="quantity" id="quantityInput" class="stepper-input" value="1" min="1" max="100" oninput="updateStockBadge()">
+                                <button type="button" class="btn-stepper" onclick="stepQuantity(1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 1rem;">
+                        <label class="form-label">Distribution Status *</label>
+                        <select name="status" class="form-select" required>
+                            <option value="Pending" selected>Not Collected (Pending Pickup)</option>
+                            <option value="Collected">Collected</option>
+                        </select>
+                    </div>
+
+                    <!-- Notification Options -->
+                    <div style="padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                        <label style="display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 0.9rem; color: var(--brand-green); cursor: pointer;">
+                            <input type="checkbox" name="send_reminder" value="yes" checked style="width: 18px; height: 18px; accent-color: var(--brand-green);">
+                            <span>Automatically send Pickup Reminder Notification to beneficiaries</span>
+                        </label>
+                        <small style="display: block; color: var(--text-muted); font-size: 0.8rem; margin-top: 4px; margin-left: 28px;">
+                            Sends instant notification to mother portal for pickup schedule.
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Section 3: AUTOMATIC PICKUP NOTIFICATION MESSAGE -->
+                <div class="form-section-card">
+                    <div class="section-tag">
+                        <i class="fa-solid fa-bell"></i>
+                        <span>AUTOMATIC PICKUP NOTIFICATION MESSAGE</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Pickup Notification Message sent to Beneficiary *</label>
+                        <textarea name="reminder_message" id="reminderMsgInput" class="form-textarea" style="min-height: 95px;" placeholder="Automatic notification message with pickup date and kit details..."></textarea>
+                        <small style="color: var(--text-muted); font-size: 0.8rem; margin-top: 4px;">
+                            <i class="fa-solid fa-circle-info"></i> Automatically includes Scheduled Pickup Date, Kit Item Name, Category, and Details of Items included.
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="bottom-actions-row">
+                    <a href="/myapp/teacher_home/" class="btn-cancel-action">Cancel Action</a>
+                    <button type="submit" class="btn-confirm-dist">
+                        <span id="submitBtnText">Confirm Distribution & Notification</span>
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </main>
+
+    <!-- Client-side Dynamic Data for Mothers & Kits -->
+    <script id="mothersJsonData" type="application/json">
+        {{ mothers_json|safe }}
+    </script>
+    <script id="kitsByCategoryData" type="application/json">
+        {{ kits_by_category_json|safe }}
+    </script>
+    <script id="stockByNameData" type="application/json">
+        {{ stock_by_name_json|safe }}
+    </script>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        const mothersJson = document.getElementById('mothersJsonData').textContent;
+        let mothersMap = {};
+        try {
+            mothersMap = JSON.parse(mothersJson);
+        } catch (e) {
+            console.error("Could not parse mothers data", e);
+        }
+
+        const kitsByCategoryJson = document.getElementById('kitsByCategoryData').textContent;
+        let kitsByCategoryMap = {};
+        try {
+            kitsByCategoryMap = JSON.parse(kitsByCategoryJson);
+        } catch (e) {
+            console.error("Could not parse kits by category data", e);
+        }
+
+        const stockByNameJson = document.getElementById('stockByNameData') ? document.getElementById('stockByNameData').textContent : '{}';
+        let stockByNameMap = {};
+        try {
+            stockByNameMap = JSON.parse(stockByNameJson);
+        } catch (e) {
+            console.error("Could not parse stock data", e);
+        }
+
+        function updateCategoryOptions(mother) {
+            const categorySelect = document.getElementById('categorySelect');
+            if (!categorySelect) return;
+
+            const lactatingOpt = categorySelect.querySelector('option[value="Lactating Care Kit"]');
+            const pregnantOpt = categorySelect.querySelector('option[value="Pregnant Care Kit"]');
+
+            if (mother) {
+                if (!mother.has_given_birth) {
+                    // Not delivered (pregnant) -> Remove/hide Lactating Care Kit, show Pregnant Care Kit
+                    if (lactatingOpt) {
+                        lactatingOpt.disabled = true;
+                        lactatingOpt.style.display = 'none';
+                    }
+                    if (pregnantOpt) {
+                        pregnantOpt.disabled = false;
+                        pregnantOpt.style.display = 'block';
+                    }
+                    if (categorySelect.value === 'Lactating Care Kit' || !categorySelect.value) {
+                        categorySelect.value = 'Pregnant Care Kit';
+                        onCategoryChange('Pregnant Care Kit');
+                    }
+                } else {
+                    // Delivered (postpartum) -> Vice versa: Remove/hide Pregnant Care Kit, show Lactating Care Kit
+                    if (pregnantOpt) {
+                        pregnantOpt.disabled = true;
+                        pregnantOpt.style.display = 'none';
+                    }
+                    if (lactatingOpt) {
+                        lactatingOpt.disabled = false;
+                        lactatingOpt.style.display = 'block';
+                    }
+                    if (categorySelect.value === 'Pregnant Care Kit' || !categorySelect.value) {
+                        categorySelect.value = 'Lactating Care Kit';
+                        onCategoryChange('Lactating Care Kit');
+                    }
+                }
+            } else {
+                if (lactatingOpt) {
+                    lactatingOpt.disabled = false;
+                    lactatingOpt.style.display = 'block';
+                }
+                if (pregnantOpt) {
+                    pregnantOpt.disabled = false;
+                    pregnantOpt.style.display = 'block';
+                }
+            }
+        }
+
+        function onMotherSelectChange(motherId) {
+            const caseInput = document.getElementById('caseNoInput');
+            const badge = document.getElementById('pregnancyStatusBadge');
+            const text = document.getElementById('pregStatusText');
+            const submitBtn = document.querySelector('.btn-confirm-dist');
+
+            if (!motherId || !mothersMap[motherId]) {
+                if (caseInput) caseInput.value = '';
+                if (badge && text) {
+                    badge.style.backgroundColor = '#f8fafc';
+                    badge.style.borderColor = 'var(--border-input)';
+                    badge.style.color = '#64748b';
+                    text.innerHTML = 'Select a woman to view pregnancy status & month';
+                }
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    submitBtn.style.cursor = 'pointer';
+                }
+                updateCategoryOptions(null);
+                return;
+            }
+            const m = mothersMap[motherId];
+            if (caseInput) caseInput.value = m.case_no || `MC-MOTH-${m.id}`;
+
+            updateCategoryOptions(m);
+
+            if (badge && text) {
+                let statusHtml = '';
+                if (m.is_pregnant && m.pregnancy_month) {
+                    statusHtml = `<i class="fa-solid fa-person-pregnant" style="font-size:1.2rem; color:#10b981;"></i> <strong>Status: Pregnant &mdash; Month ${m.pregnancy_month}</strong> (${m.gestation_weeks ? m.gestation_weeks + ' Weeks Gestation' : 'Active Pregnancy'})`;
+                } else if (m.has_given_birth) {
+                    statusHtml = `<i class="fa-solid fa-baby" style="font-size:1.2rem; color:#3b82f6;"></i> <strong>Status: Postpartum / Given Birth</strong>`;
+                } else {
+                    statusHtml = `<i class="fa-solid fa-user-check" style="color:#64748b;"></i> <strong>Status: ${m.status_display || 'Registered Beneficiary'}</strong>`;
+                }
+
+                if (m.already_issued_this_month) {
+                    badge.style.backgroundColor = '#fef2f2';
+                    badge.style.borderColor = '#fca5a5';
+                    badge.style.color = '#991b1b';
+                    text.innerHTML = `${statusHtml}<br><div style="margin-top:6px; padding-top:6px; border-top:1px dashed #fca5a5; color:#dc2626; font-weight:800;"><i class="fa-solid fa-ban"></i> DUPLICATE RESTRICTION: Kit already scheduled/issued for this month ('${m.issued_kit_name}' - Status: ${m.issued_kit_status}). Beneficiary can only receive 1 kit per calendar month.</div>`;
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.style.opacity = '0.5';
+                        submitBtn.style.cursor = 'not-allowed';
+                    }
+                } else {
+                    badge.style.backgroundColor = m.is_pregnant ? '#ecfdf5' : (m.has_given_birth ? '#eff6ff' : '#f1f5f9');
+                    badge.style.borderColor = m.is_pregnant ? '#a7f3d0' : (m.has_given_birth ? '#bfdbfe' : '#cbd5e1');
+                    badge.style.color = m.is_pregnant ? '#047857' : (m.has_given_birth ? '#1e40af' : '#475569');
+                    text.innerHTML = statusHtml;
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.style.opacity = '1';
+                        submitBtn.style.cursor = 'pointer';
+                    }
+                }
+            }
+        }
+
+        const kitItemDetailsMap = {
+            "Amrutham Prenatal Nutrition Pack": {
+                category: "Pregnant Care Kit",
+                items: "Fortified Wheat Flour, Daliya, Ragi, Iron & Folic Acid Tablets"
+            },
+            "Maternal Iron & Micronutrient Pack": {
+                category: "Pregnant Care Kit",
+                items: "Iron Folic Acid Tablets, Calcium Supplements, Protein Drink Mix, Dates"
+            },
+            "Lactating Mother Health & Protein Kit": {
+                category: "Lactating Care Kit",
+                items: "Multigrain Mix, Dates, Calcium & Vitamin D Supplements, Protein Powder"
+            },
+            "Postnatal Recovery & Lactation Support Pack": {
+                category: "Lactating Care Kit",
+                items: "Lactation Support Powder, Shatavari Extract, Energy Dates, Multivitamin Capsules"
+            },
+            "Child Growth & Micronutrient Kit": {
+                category: "General Nutrition Kit",
+                items: "Nutritious Cereal Mix, Zinc & Vitamin Syrup, Fortified Mix"
+            }
+        };
+
+        function updateNotificationMessage() {
+            const kitSelect = document.getElementById('kitSelect');
+            const categorySelect = document.getElementById('categorySelect');
+            const msgInput = document.getElementById('reminderMsgInput');
+            const dateInput = document.getElementById('distDateInput');
+            if (!msgInput) return;
+
+            const selectedCat = categorySelect ? categorySelect.value : 'Pregnant Care Kit';
+            let selectedKit = kitSelect ? kitSelect.value : '';
+
+            if (!selectedKit && kitsByCategoryMap[selectedCat] && kitsByCategoryMap[selectedCat].length > 0) {
+                selectedKit = kitsByCategoryMap[selectedCat][0];
+            }
+
+            const info = kitItemDetailsMap[selectedKit] || { category: selectedCat || 'Standard', items: 'Supplementary Nutrients & Food Pack' };
+
+            let formattedDateStr = '';
+            if (dateInput && dateInput.value) {
+                const parts = dateInput.value.split('-');
+                if (parts.length === 3) {
+                    const d = new Date(parts[0], parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                    formattedDateStr = d.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+                }
+            }
+            if (!formattedDateStr) {
+                formattedDateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+            }
+
+            msgInput.value = `Your monthly MaatriCare Nutrition Supplement Kit (${selectedKit || selectedCat} - Category: ${info.category} | Items Included: ${info.items}) is scheduled for pickup at the Anganwadi Center on ${formattedDateStr}. Please collect it during operating hours.`;
+        }
+
+        function onCategoryChange(selectedCat) {
+            const kitSelect = document.getElementById('kitSelect');
+            kitSelect.innerHTML = '<option value="" disabled selected>Select Kit Item</option>';
+
+            if (!selectedCat) {
+                updateStockBadge();
+                return;
+            }
+
+            const items = kitsByCategoryMap[selectedCat] || [];
+            if (items.length === 0) {
+                const opt = document.createElement('option');
+                opt.value = selectedCat;
+                opt.textContent = selectedCat;
+                kitSelect.appendChild(opt);
+            } else {
+                let firstSelectableIndex = -1;
+                items.forEach((item, index) => {
+                    const opt = document.createElement('option');
+                    opt.value = item;
+                    const stockInfo = stockByNameMap[item];
+                    if (stockInfo) {
+                        const sQty = stockInfo.quantity;
+                        const sUnit = stockInfo.unit || 'Packs';
+                        opt.textContent = `${item} (${sQty > 0 ? sQty + ' ' + sUnit + ' in stock' : 'Out of Stock: 0 ' + sUnit})`;
+                        if (sQty <= 0) {
+                            opt.disabled = true;
+                        } else if (firstSelectableIndex === -1) {
+                            firstSelectableIndex = index;
+                        }
+                    } else {
+                        opt.textContent = item;
+                        if (firstSelectableIndex === -1) firstSelectableIndex = index;
+                    }
+                    kitSelect.appendChild(opt);
+                });
+
+                if (firstSelectableIndex !== -1 && kitSelect.options[firstSelectableIndex + 1]) {
+                    kitSelect.options[firstSelectableIndex + 1].selected = true;
+                }
+            }
+            updateNotificationMessage();
+            updateStockBadge();
+        }
+
+        function onKitItemChange() {
+            updateNotificationMessage();
+            updateStockBadge();
+        }
+
+        function updateStockBadge() {
+            const kitSelect = document.getElementById('kitSelect');
+            const qtyInput = document.getElementById('quantityInput');
+            const badge = document.getElementById('stockInfoBadge');
+            const submitBtn = document.querySelector('.btn-confirm-dist');
+            if (!badge || !kitSelect) return;
+
+            const selectedKit = kitSelect.value;
+            const qty = parseInt(qtyInput ? qtyInput.value : 1) || 1;
+
+            if (!selectedKit || !stockByNameMap[selectedKit]) {
+                badge.style.display = 'none';
+                return;
+            }
+
+            const info = stockByNameMap[selectedKit];
+            const available = info.quantity;
+            const unit = info.unit || 'Packs';
+            badge.style.display = 'flex';
+            badge.style.alignItems = 'center';
+            badge.style.gap = '8px';
+
+            if (available <= 0) {
+                badge.style.backgroundColor = '#fef2f2';
+                badge.style.border = '1px solid #fca5a5';
+                badge.style.color = '#dc2626';
+                badge.innerHTML = `<i class="fa-solid fa-circle-exclamation" style="font-size:1.05rem;"></i> <span><strong>Out of Stock:</strong> 0 ${unit} available in Anganwadi inventory. Please restock before distributing.</span>`;
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.style.opacity = '0.5';
+                    submitBtn.style.cursor = 'not-allowed';
+                }
+            } else if (available < qty) {
+                badge.style.backgroundColor = '#fffbeb';
+                badge.style.border = '1px solid #fde68a';
+                badge.style.color = '#b45309';
+                badge.innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="font-size:1.05rem;"></i> <span><strong>Insufficient Stock:</strong> Only ${available} ${unit} available in stock, but ${qty} requested.</span>`;
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.style.opacity = '0.5';
+                    submitBtn.style.cursor = 'not-allowed';
+                }
+            } else {
+                badge.style.backgroundColor = '#ecfdf5';
+                badge.style.border = '1px solid #a7f3d0';
+                badge.style.color = '#047857';
+                badge.innerHTML = `<i class="fa-solid fa-boxes-stacked" style="font-size:1.05rem;"></i> <span><strong>In Stock:</strong> ${available} ${unit} available (stock decreases to ${available - qty} ${unit} upon distribution).</span>`;
+                if (submitBtn) {
+                    const motherSelect = document.getElementById('motherSelect');
+                    const mId = motherSelect ? motherSelect.value : null;
+                    if (!mId || !mothersMap[mId] || !mothersMap[mId].already_issued_this_month) {
+                        submitBtn.disabled = false;
+                        submitBtn.style.opacity = '1';
+                        submitBtn.style.cursor = 'pointer';
+                    }
+                }
+            }
+        }
+
+        function stepQuantity(val) {
+            const input = document.getElementById('quantityInput');
+            let cur = parseInt(input.value) || 1;
+            cur = Math.max(1, cur + val);
+            input.value = cur;
+            updateStockBadge();
+        }
+
+        function setDistMode(mode) {
+            const singleCard = document.getElementById('singleBeneficiaryCard');
+            const bulkCard = document.getElementById('bulkBeneficiaryCard');
+            const modeInput = document.getElementById('distModeInput');
+            const singleBtn = document.getElementById('tabSingleBtn');
+            const bulkBtn = document.getElementById('tabBulkBtn');
+            const motherSelect = document.getElementById('motherSelect');
+            const submitBtn = document.querySelector('.btn-confirm-dist');
+
+            modeInput.value = mode;
+
+            if (mode === 'bulk') {
+                singleCard.style.display = 'none';
+                bulkCard.style.display = 'block';
+                if (motherSelect) motherSelect.removeAttribute('required');
+
+                singleBtn.style.backgroundColor = '#f8fafc';
+                singleBtn.style.color = 'var(--text-body)';
+                singleBtn.style.border = '1px solid var(--border-input)';
+
+                bulkBtn.style.backgroundColor = 'var(--brand-green)';
+                bulkBtn.style.color = '#ffffff';
+                bulkBtn.style.border = 'none';
+
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    submitBtn.style.cursor = 'pointer';
+                }
+
+                document.getElementById('submitBtnText').textContent = 'Confirm Bulk Distribution & Notifications';
+            } else {
+                singleCard.style.display = 'block';
+                bulkCard.style.display = 'none';
+                if (motherSelect) motherSelect.setAttribute('required', 'required');
+
+                singleBtn.style.backgroundColor = 'var(--brand-green)';
+                singleBtn.style.color = '#ffffff';
+                singleBtn.style.border = 'none';
+
+                bulkBtn.style.backgroundColor = '#f8fafc';
+                bulkBtn.style.color = 'var(--text-body)';
+                bulkBtn.style.border = '1px solid var(--border-input)';
+
+                document.getElementById('submitBtnText').textContent = 'Confirm Distribution & Notification';
+
+                if (motherSelect && motherSelect.value) {
+                    onMotherSelectChange(motherSelect.value);
+                }
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const sel = document.getElementById('motherSelect');
+            if (sel && sel.value) {
+                onMotherSelectChange(sel.value);
+            }
+            const catSel = document.getElementById('categorySelect');
+            if (catSel) {
+                catSel.addEventListener('change', updateNotificationMessage);
+            }
+            const kSel = document.getElementById('kitSelect');
+            if (kSel) {
+                kSel.addEventListener('change', updateNotificationMessage);
+            }
+            const dSel = document.getElementById('distDateInput');
+            if (dSel) {
+                dSel.addEventListener('change', updateNotificationMessage);
+            }
+            updateNotificationMessage();
+
+            const distForm = document.getElementById('distForm');
+            if (distForm) {
+                distForm.addEventListener('submit', function(e) {
+                    const mode = document.getElementById('distModeInput').value;
+                    if (mode === 'single') {
+                        const motherId = document.getElementById('motherSelect').value;
+                        if (motherId && mothersMap[motherId] && mothersMap[motherId].already_issued_this_month) {
+                            e.preventDefault();
+                            alert(`Duplicate Restriction: Beneficiary '${mothersMap[motherId].name}' already has a nutrition kit scheduled/issued for this month (${mothersMap[motherId].issued_kit_name}). A beneficiary can only receive 1 kit per calendar month.`);
+                            return false;
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

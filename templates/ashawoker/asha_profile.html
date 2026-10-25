@@ -1,0 +1,1109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - ASHA Portal | MaatriCare</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --brand-green: #0c3829;
+            --brand-green-hover: #07251b;
+            --brand-green-light: #e5f0ea;
+            --sidebar-bg: #073525;
+            --sidebar-hover: #0c4330;
+            --sidebar-active: #10523c;
+            --sidebar-text-muted: #8ea89d;
+            --bg-page: #f8f6f0;
+            --card-bg: #ffffff;
+            --text-heading: #121815;
+            --text-body: #404944;
+            --text-muted: #6b7570;
+            --border-color: #e5e0d3;
+            --border-input: #d6d0c2;
+            --danger-color: #dc2626;
+            --success-color: #059669;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* ================= Left Navigation Sidebar ================= */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem 1.25rem 1.75rem;
+            z-index: 100;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            padding: 0 0.5rem 2rem;
+            text-decoration: none;
+            display: block;
+        }
+
+        .brand-title {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-sub {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--sidebar-text-muted);
+            margin-top: 3px;
+            letter-spacing: 0.01em;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .nav-item-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0.78rem 1.1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.94rem;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item-link i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item-link:hover {
+            color: #ffffff;
+            background-color: var(--sidebar-hover);
+        }
+
+        .nav-item-link.active {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+        }
+
+        .sidebar-footer {
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.75rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.94rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            color: #ffffff;
+            background-color: rgba(239, 68, 68, 0.15);
+        }
+
+        /* ================= Main Container ================= */
+        .main-wrapper {
+            margin-left: 260px;
+            flex: 1;
+            min-width: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-page);
+        }
+
+        /* Top Header Navigation */
+        .top-header {
+            height: 80px;
+            padding: 0 2.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--bg-page);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--brand-green);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .header-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        .header-breadcrumb a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .header-breadcrumb a:hover {
+            color: var(--brand-green);
+        }
+
+        .header-breadcrumb .current {
+            color: var(--text-heading);
+            font-weight: 700;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        /* Worker Profile Badge */
+        .worker-profile-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .worker-info {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .worker-name {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            line-height: 1.2;
+        }
+
+        .worker-id {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            justify-content: flex-end;
+        }
+
+        .worker-avatar-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background-color: #dbe8e1;
+            flex-shrink: 0;
+        }
+
+        /* ================= Content Body ================= */
+        .content-body {
+            padding: 2.25rem 2.5rem 3.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+            max-width: 1200px;
+        }
+
+        /* Alert Box */
+        .alert-box {
+            padding: 0.85rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.92rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .alert-success { background-color: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+        .alert-warning { background-color: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+        .alert-info { background-color: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+        .alert-danger, .alert-error { background-color: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+        .alert-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: inherit;
+            opacity: 0.7;
+            padding: 0 4px;
+        }
+
+        /* Profile Hero Banner Card */
+        .profile-hero-card {
+            background: linear-gradient(135deg, #073525 0%, #0d4a34 50%, #155d43 100%);
+            border-radius: 20px;
+            padding: 2.25rem;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            box-shadow: 0 10px 30px rgba(7, 53, 37, 0.18);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-hero-card::after {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 70%);
+            pointer-events: none;
+        }
+
+        .hero-avatar-wrapper {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .hero-avatar-img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+            background-color: #dbe8e1;
+            display: block;
+        }
+
+        .hero-avatar-upload-btn {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            color: var(--brand-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid var(--brand-green-light);
+        }
+
+        .hero-avatar-upload-btn:hover {
+            background-color: var(--brand-green-light);
+            transform: scale(1.08);
+        }
+
+        .hero-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .hero-name {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+
+        .hero-badges-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 2px;
+        }
+
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-pill.ward-pill {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--brand-green);
+            font-weight: 800;
+        }
+
+        .hero-meta-grid {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .hero-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Profile Tabs */
+        .profile-tabs-nav {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 2px;
+        }
+
+        .profile-tab-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.75rem 1.4rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            margin-bottom: -2px;
+        }
+
+        .profile-tab-btn:hover {
+            color: var(--brand-green);
+        }
+
+        .profile-tab-btn.active {
+            color: var(--brand-green);
+            border-bottom-color: var(--brand-green);
+        }
+
+        /* Form Card */
+        .profile-form-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 2.25rem;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+        }
+
+        .section-header {
+            margin-bottom: 1.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #f0ece2;
+        }
+
+        .section-header h2 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-heading);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-header p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Image Upload Box */
+        .image-upload-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.25rem 1.5rem;
+            background-color: #faf8f3;
+            border: 1px dashed var(--border-input);
+            border-radius: 14px;
+            margin-bottom: 1.75rem;
+        }
+
+        .avatar-preview-box {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            background-color: #dbe8e1;
+        }
+
+        .avatar-preview-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-upload-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .btn-upload-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.55rem 1.1rem;
+            background-color: #ffffff;
+            border: 1px solid var(--border-input);
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: fit-content;
+        }
+
+        .btn-upload-trigger:hover {
+            border-color: var(--brand-green);
+            color: var(--brand-green);
+            background-color: var(--brand-green-light);
+        }
+
+        .image-upload-hint {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+        }
+
+        /* Form Grids */
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.4rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .form-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.4rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: var(--text-heading);
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-input);
+            border-radius: 10px;
+            font-size: 0.92rem;
+            color: var(--text-heading);
+            background-color: #ffffff;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: var(--brand-green);
+            box-shadow: 0 0 0 3px rgba(12, 56, 41, 0.08);
+        }
+
+        .form-textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .password-input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-input-wrap .form-input {
+            padding-right: 2.75rem;
+        }
+
+        .password-toggle-btn {
+            position: absolute;
+            right: 0.85rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 4px;
+        }
+
+        .password-toggle-btn:hover {
+            color: var(--text-heading);
+        }
+
+        .password-checklist {
+            background-color: #faf8f3;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .password-checklist ul {
+            list-style: none;
+            margin-top: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .password-checklist li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .password-checklist li i {
+            color: var(--brand-green);
+            font-size: 0.85rem;
+        }
+
+        /* Form Actions Footer */
+        .form-actions-footer {
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn-save-profile {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.8rem 1.8rem;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.94rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(12, 56, 41, 0.25);
+        }
+
+        .btn-save-profile:hover {
+            background-color: var(--brand-green-hover);
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 992px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-wrapper { margin-left: 0; }
+            .mobile-menu-toggle { display: block; }
+            .content-body { padding: 1.5rem 1.25rem; }
+            .profile-hero-card { flex-direction: column; text-align: center; gap: 1.25rem; }
+            .hero-badges-row { justify-content: center; }
+            .hero-meta-grid { justify-content: center; flex-wrap: wrap; }
+            .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= Left Navigation Sidebar ================= -->
+    {% include 'ashawoker/sidebar.html' %}
+
+    <!-- ================= Main Container ================= -->
+    <main class="main-wrapper">
+
+        <!-- Top Header Navigation -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()" aria-label="Toggle Sidebar Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <div class="header-breadcrumb">
+                    <a href="/myapp/ashaworker_home/"><i class="fa-solid fa-house" style="margin-right: 4px;"></i> Dashboard</a>
+                    <i class="fa-solid fa-chevron-right" style="font-size: 0.72rem;"></i>
+                    <span class="current">My Profile</span>
+                </div>
+            </div>
+
+            <!-- Top Right Profile Card -->
+            <div class="header-actions">
+                <a href="/myapp/ashaworker_profile/" class="worker-profile-card">
+                    <div class="worker-info">
+                        <span class="worker-name">{{ worker.Full_name|default:'ASHA Worker' }}</span>
+                        <span class="worker-id"><i class="fa-solid fa-location-dot"></i> {{ worker.Area_assigned|default:'Assigned Area' }}</span>
+                    </div>
+                    {% if worker.image %}
+                        <img src="{{ worker.image.url }}" alt="Profile Avatar" class="worker-avatar-img">
+                    {% else %}
+                        <img src="{% static 'images/asha_avatar.png' %}" alt="Profile Avatar" class="worker-avatar-img" onerror="this.src='/static/images/mother_child_logo.png'">
+                    {% endif %}
+                </a>
+            </div>
+        </header>
+
+        <!-- Body Content -->
+        <div class="content-body">
+
+            <!-- System Flash Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-box alert-{{ message.tags|default:'info' }}">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fa-solid {% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-triangle-exclamation{% else %}fa-circle-info{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button class="alert-close" onclick="this.parentElement.remove()">&times;</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Profile Hero Banner Card -->
+            <div class="profile-hero-card">
+                <div class="hero-avatar-wrapper">
+                    {% if worker.image %}
+                        <img src="{{ worker.image.url }}" alt="ASHA Profile Picture" class="hero-avatar-img" id="heroAvatarImg">
+                    {% else %}
+                        <img src="{% static 'images/asha_avatar.png' %}" alt="ASHA Profile Picture" class="hero-avatar-img" id="heroAvatarImg" onerror="this.src='/static/images/mother_child_logo.png'">
+                    {% endif %}
+                    <label for="profileImageFileInput" class="hero-avatar-upload-btn" title="Change Profile Picture">
+                        <i class="fa-solid fa-camera"></i>
+                    </label>
+                </div>
+
+                <div class="hero-details">
+                    <h1 class="hero-name">{{ worker.Full_name|default:"ASHA Worker" }}</h1>
+                    <div class="hero-badges-row">
+                        <span class="hero-pill ward-pill"><i class="fa-solid fa-location-dot"></i> {{ worker.Area_assigned|default:"Ward Not Assigned" }}</span>
+                        <span class="hero-pill" style="background: rgba(167, 243, 208, 0.2); color: #ecfdf5; border: 1px solid rgba(167, 243, 208, 0.4);"><i class="fa-solid fa-circle-check" style="color: #a7f3d0;"></i> {{ worker.Current_status|default:"Active" }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Section Navigation Tabs -->
+            <div class="profile-tabs-nav">
+                <a href="?tab=details" class="profile-tab-btn {% if active_tab != 'security' %}active{% endif %}">
+                    <i class="fa-solid fa-user-pen"></i>
+                    <span>Profile & Ward Details</span>
+                </a>
+                <a href="?tab=security" class="profile-tab-btn {% if active_tab == 'security' %}active{% endif %}">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Password & Security</span>
+                </a>
+            </div>
+
+            <!-- TAB 1: Profile & Ward Details -->
+            {% if active_tab != 'security' %}
+            <div class="profile-form-card">
+                <form method="POST" action="/myapp/ashaworker_profile/?tab=details" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="update_profile">
+
+                    <!-- SECTION 1: PERSONAL INFORMATION -->
+                    <div class="section-header">
+                        <h2><i class="fa-solid fa-user-pen" style="color: var(--brand-green);"></i> Personal Information</h2>
+                        <p>Worker identity, photo, contact information, and assigned jurisdiction.</p>
+                    </div>
+
+                    <!-- Profile Image Upload Section -->
+                    <div class="image-upload-section">
+                        <div class="avatar-preview-box">
+                            {% if worker.image %}
+                                <img src="{{ worker.image.url }}" alt="Preview" class="avatar-preview-img" id="previewImg">
+                            {% else %}
+                                <img src="{% static 'images/asha_avatar.png' %}" alt="Preview" class="avatar-preview-img" id="previewImg" onerror="this.src='/static/images/mother_child_logo.png'">
+                            {% endif %}
+                        </div>
+                        <div class="image-upload-controls">
+                            <label class="form-label" style="font-size: 0.9rem;">Profile Photo</label>
+                            <label for="profileImageFileInput" class="btn-upload-trigger">
+                                <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                                <span>Choose New Photo</span>
+                            </label>
+                            <input 
+                                type="file" 
+                                name="image" 
+                                id="profileImageFileInput" 
+                                accept="image/png, image/jpeg, image/jpg, image/webp" 
+                                style="display: none;" 
+                                onchange="previewProfileImage(this)"
+                            >
+                            <span class="image-upload-hint">Supported formats: JPG, PNG, WEBP (Max: 5MB).</span>
+                        </div>
+                    </div>
+
+                    <!-- Row 1: Full Name & Ward / Assigned Area -->
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="full_name">Full Name *</label>
+                            <input type="text" name="full_name" id="full_name" class="form-input" value="{{ worker.Full_name|default:'' }}" placeholder="Enter worker's full name" required minlength="3">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="area_assigned_display">
+                                Assigned Panchayath Area (Jurisdiction)
+                                <span style="font-size: 0.72rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 999px; font-weight: 700; margin-left: 6px; display: inline-flex; align-items: center; gap: 4px;">
+                                    <i class="fa-solid fa-lock" style="font-size: 0.65rem;"></i> Assigned by Admin
+                                </span>
+                            </label>
+                            <div style="position: relative;">
+                                <input type="text" id="area_assigned_display" class="form-input" value="{{ worker.Area_assigned|default:'Ward Not Assigned' }}" readonly style="background-color: #f8fafc; color: #334155; font-weight: 600; cursor: not-allowed; border-color: #cbd5e1; padding-right: 36px;">
+                                <i class="fa-solid fa-shield-halved" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.95rem;"></i>
+                            </div>
+                            <span class="image-upload-hint" style="color: #64748b; margin-top: 4px; display: block;">
+                                <i class="fa-solid fa-circle-info" style="color: #0284c7;"></i> Assigned by Admin. ASHA workers cannot change their jurisdiction.
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Phone & Email -->
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="phone">Contact Number *</label>
+                            <input type="tel" name="phone" id="phone" class="form-input" value="{{ worker.Phone|default:'' }}" placeholder="e.g. 9876543210" pattern="[6-9][0-9]{9}" maxlength="10" required title="10-digit mobile number starting with 6, 7, 8, or 9">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email Address *</label>
+                            <input 
+                                type="email" 
+                                name="email" 
+                                id="email" 
+                                class="form-input" 
+                                value="{{ worker.Email|default:'' }}" 
+                                placeholder="e.g. worker@gmail.com" 
+                                pattern="[a-zA-Z0-9._%+-]+@[gG][mM][aA][iI][lL]\.[cC][oO][mM]" 
+                                title="Please enter a valid @gmail.com email address" 
+                                oninput="if(!/^[a-zA-Z0-9._%+-]+@gmail\.com$/i.test(this.value.trim())){this.setCustomValidity('Please enter a valid @gmail.com email address (e.g., example@gmail.com)');}else{this.setCustomValidity('');}"
+                                oninvalid="this.setCustomValidity('Please enter a valid @gmail.com email address (e.g., example@gmail.com)')"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Date of Birth & Age -->
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="dob">Date of Birth (DOB) *</label>
+                            <input type="date" name="dob" id="dob" class="form-input" value="{{ worker.dob|date:'Y-m-d'|default:'' }}" onchange="calculateAgeFromDob(this.value)" required>
+                            <small style="color: #047857; font-size: 0.78rem; margin-top: 3px; font-weight: 500;">Worker must be at least 18 years old.</small>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="age">Calculated Age</label>
+                            <input type="number" name="age" id="age" class="form-input" value="{{ worker.Age|default:'' }}" readonly style="background-color: #f8fafc;">
+                        </div>
+                    </div>
+
+                    <!-- Row 4: Address -->
+                    <div class="form-group" style="margin-bottom: 2rem;">
+                        <label class="form-label" for="address">Residential Address *</label>
+                        <textarea name="address" id="address" class="form-textarea" placeholder="Enter complete residential address" required rows="3">{{ worker.Address|default:'' }}</textarea>
+                    </div>
+
+                    <!-- SECTION 2: PROFESSIONAL & OFFICIAL DETAILS -->
+                    <div class="section-header" style="margin-top: 1rem;">
+                        <h2><i class="fa-solid fa-briefcase" style="color: var(--brand-green);"></i> Official & Professional Records</h2>
+                        <p>Credentials, service appointment details, and certifications as registered by Admin.</p>
+                    </div>
+
+                    <div class="form-grid-3">
+                        <div class="form-group">
+                            <label class="form-label" for="portal_username">
+                                Portal Username
+                                <span style="font-size: 0.72rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 999px; font-weight: 700; margin-left: 6px; display: inline-flex; align-items: center; gap: 4px;">
+                                    <i class="fa-solid fa-lock" style="font-size: 0.65rem;"></i> Admin Set
+                                </span>
+                            </label>
+                            <div style="position: relative;">
+                                <input type="text" id="portal_username" class="form-input" value="{{ worker.LOGIN.username|default:'Not Linked' }}" readonly style="background-color: #f8fafc; font-weight: 700; color: var(--brand-green); cursor: not-allowed; border-color: #cbd5e1; padding-right: 36px;">
+                                <i class="fa-solid fa-shield-halved" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.95rem;"></i>
+                            </div>
+                            <small style="color: #64748b; font-size: 0.76rem; margin-top: 4px; display: block;">System login ID configured by Admin.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="joining_date_display">
+                                Date of Joining
+                                <span style="font-size: 0.72rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 999px; font-weight: 700; margin-left: 6px; display: inline-flex; align-items: center; gap: 4px;">
+                                    <i class="fa-solid fa-lock" style="font-size: 0.65rem;"></i> Admin Set
+                                </span>
+                            </label>
+                            <div style="position: relative;">
+                                <input type="text" id="joining_date_display" class="form-input" value="{{ worker.Joining_date|date:'d M Y'|default:'Not Assigned' }}" readonly style="background-color: #f8fafc; font-weight: 600; color: #334155; cursor: not-allowed; border-color: #cbd5e1; padding-right: 36px;">
+                                <i class="fa-regular fa-calendar-check" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.95rem;"></i>
+                            </div>
+                            <small style="color: #64748b; font-size: 0.76rem; margin-top: 4px; display: block;">Official appointment date recorded by Admin.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="status_display">
+                                Current Status
+                                <span style="font-size: 0.72rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 999px; font-weight: 700; margin-left: 6px; display: inline-flex; align-items: center; gap: 4px;">
+                                    <i class="fa-solid fa-lock" style="font-size: 0.65rem;"></i> Admin Set
+                                </span>
+                            </label>
+                            <div style="position: relative;">
+                                <input type="text" id="status_display" class="form-input" value="{{ worker.Current_status|default:'Active' }}" readonly style="background-color: #f8fafc; font-weight: 700; color: {% if worker.Current_status == 'Active' %}#059669{% else %}#d97706{% endif %}; cursor: not-allowed; border-color: #cbd5e1; padding-right: 36px;">
+                                <i class="fa-solid fa-circle-check" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: {% if worker.Current_status == 'Active' %}#059669{% else %}#d97706{% endif %}; font-size: 0.95rem;"></i>
+                            </div>
+                            <small style="color: #64748b; font-size: 0.76rem; margin-top: 4px; display: block;">Service status managed by Admin.</small>
+                        </div>
+                    </div>
+
+                    <!-- Qualifications & Certifications -->
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label class="form-label" for="qualification">Qualifications & Certifications *</label>
+                        <textarea name="qualification" id="qualification" class="form-textarea" rows="3" placeholder="Detail certifications, ASHA training module completion, or educational background..." required>{{ worker.Qualification|default:'' }}</textarea>
+                    </div>
+
+                    <!-- Save Button -->
+                    <div class="form-actions-footer">
+                        <button type="submit" class="btn-save-profile">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <span>Save Profile Changes</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+
+            <!-- TAB 2: Password & Security -->
+            {% if active_tab == 'security' %}
+            <div class="profile-form-card">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-key" style="color: var(--brand-green);"></i> Change Password</h2>
+                    <p>Update your account password to ensure your portal access remains secure.</p>
+                </div>
+
+                <form method="POST" action="/myapp/ashaworker_profile/?tab=security">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="change_password">
+
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="current_password">Current Password *</label>
+                            <div class="password-input-wrap">
+                                <input type="password" name="current_password" id="current_password" class="form-input" placeholder="Enter current password" required>
+                                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('current_password', this)">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="new_password">New Password *</label>
+                            <div class="password-input-wrap">
+                                <input type="password" name="new_password" id="new_password" class="form-input" placeholder="Enter new password (min. 6 chars)" minlength="6" required>
+                                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('new_password', this)">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="confirm_password">Confirm New Password *</label>
+                            <div class="password-input-wrap">
+                                <input type="password" name="confirm_password" id="confirm_password" class="form-input" placeholder="Confirm your new password" minlength="6" required>
+                                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('confirm_password', this)">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Password Requirement Box -->
+                    <div class="password-checklist">
+                        <strong style="color: var(--text-heading);"><i class="fa-solid fa-circle-info"></i> Password Guidelines:</strong>
+                        <ul>
+                            <li><i class="fa-solid fa-check"></i> Minimum 6 characters long</li>
+                            <li><i class="fa-solid fa-check"></i> Use a mix of letters, numbers, and symbols for best security</li>
+                            <li><i class="fa-solid fa-check"></i> Both new password and confirmation password must match exactly</li>
+                        </ul>
+                    </div>
+
+                    <!-- Submit Password Button -->
+                    <div class="form-actions-footer">
+                        <button type="submit" class="btn-save-profile">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>Update Password</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+
+        </div>
+    </main>
+
+    <!-- JavaScript Logic -->
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Preview uploaded profile image immediately in both hero and preview box
+        function previewProfileImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const heroImg = document.getElementById('heroAvatarImg');
+                    const previewImg = document.getElementById('previewImg');
+                    if (heroImg) heroImg.src = e.target.result;
+                    if (previewImg) previewImg.src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Toggle password show/hide
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                if (icon) {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+            } else {
+                input.type = 'password';
+                if (icon) {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            }
+        }
+
+        // Auto calculate age from date of birth
+        function calculateAgeFromDob(dobValue) {
+            if (!dobValue) return;
+            const dob = new Date(dobValue);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            if (age >= 0) {
+                const ageInput = document.getElementById('age');
+                if (ageInput) ageInput.value = age;
+            }
+        }
+
+        // Email @gmail.com Form Submit Check
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('form').forEach(function(form) {
+                form.addEventListener('submit', function(e) {
+                    const emailInput = form.querySelector('input[name="email"]');
+                    if (emailInput && emailInput.value.trim()) {
+                        const val = emailInput.value.trim();
+                        if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/i.test(val)) {
+                            e.preventDefault();
+                            emailInput.setCustomValidity('Please enter a valid @gmail.com email address (e.g., example@gmail.com)');
+                            emailInput.reportValidity();
+                            emailInput.focus();
+                            return false;
+                        } else {
+                            emailInput.setCustomValidity('');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

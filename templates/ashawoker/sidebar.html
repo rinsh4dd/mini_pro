@@ -1,0 +1,64 @@
+<!-- ================= Reusable ASHA Worker Left Sidebar ================= -->
+<aside class="sidebar" id="sidebar">
+    <div>
+        <!-- Brand -->
+        <a href="/myapp/ashaworker_home/" class="sidebar-brand">
+            <h1 class="brand-title">MaatriCare</h1>
+            <p class="brand-sub">Maternal Health</p>
+        </a>
+
+        <!-- Navigation Links -->
+        <ul class="sidebar-menu">
+            <li>
+                <a href="/myapp/ashaworker_home/"
+                    class="nav-item-link {% if 'ashaworker_home' in request.path or active_page == 'dashboard' %}active{% endif %}">
+                    <i class="fa-solid fa-table-cells-large"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="/myapp/verify_mother/"
+                    class="nav-item-link {% if 'verify_mother' in request.path or active_page == 'verify_mother' %}active{% endif %}">
+                    <i class="fa-solid fa-user-check"></i>
+                    <span>Verify Mothers</span>
+                </a>
+            </li>
+            <li>
+                <a href="/myapp/manage_pregnancy/"
+                    class="nav-item-link {% if 'manage_pregnancy' in request.path or active_page == 'manage_pregnancy' %}active{% endif %}">
+                    <i class="fa-solid fa-person-breastfeeding"></i>
+                    <span>Pregnancy Records</span>
+                </a>
+            </li>
+            <li>
+                <a href="/myapp/register_newborn/"
+                    class="nav-item-link {% if 'register_newborn' in request.path or active_page == 'register_newborn' %}active{% endif %}">
+                    <i class="fa-solid fa-baby"></i>
+                    <span>Newborn</span>
+                </a>
+            </li>
+            <li>
+                <a href="/myapp/child_growth_record/"
+                    class="nav-item-link {% if 'child_growth_record' in request.path or active_page == 'child_growth_record' %}active{% endif %}">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Child Growth</span>
+                </a>
+            </li>
+            <li>
+                <a href="/myapp/ashaworker_profile/"
+                    class="nav-item-link {% if 'ashaworker_profile' in request.path or active_page == 'profile' %}active{% endif %}">
+                    <i class="fa-regular fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Bottom Logout -->
+    <div class="sidebar-footer">
+        <a href="/myapp/logout/" class="logout-link" title="Logout from ASHA Portal">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</aside>

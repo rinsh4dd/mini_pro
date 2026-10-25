@@ -1,0 +1,45 @@
+<!-- ================= Reusable Admin Left Sidebar ================= -->
+{% load static %}
+<aside class="sidebar">
+    <div>
+        <div class="brand-header">
+            <div class="brand-icon-box">
+                <img src="{% static 'images/mother_child_logo.png' %}" alt="MaatriCare" onerror="this.onerror=null; this.src='/static/images/mother_child_logo.png';">
+            </div>
+            <div class="brand-text-wrapper">
+                <span class="brand-title">MaatriCare</span>
+                <span class="brand-subtitle">Maternal Health</span>
+            </div>
+        </div>
+
+        <ul class="nav-list">
+            <li class="nav-item {% if 'adminhome' in request.path or active_page == 'dashboard' %}active{% endif %}">
+                <a href="/myapp/adminhome/"><i class="fa-solid fa-table-cells-large"></i> Dashboard</a>
+            </li>
+            <li class="nav-item {% if 'manage_asha' in request.path or 'add_asha' in request.path or 'edit_asha' in request.path or active_page == 'asha' %}active{% endif %}">
+                <a href="/myapp/manage_asha/"><i class="fa-solid fa-user-gear"></i> Manage ASHA</a>
+            </li>
+            <li class="nav-item {% if 'manage_anganwadi' in request.path or 'add_anganwadi' in request.path or 'edit_anganwadi' in request.path or active_page == 'anganwadi' %}active{% endif %}">
+                <a href="/myapp/manage_anganwadi/"><i class="fa-solid fa-graduation-cap"></i> Manage Anganwadi</a>
+            </li>
+            <li class="nav-item {% if 'add_vaccination' in request.path or active_page == 'add_vaccination' %}active{% endif %}">
+                <a href="/myapp/add_vaccination/"><i class="fa-solid fa-syringe"></i> Add Vaccination</a>
+            </li>
+            <li class="nav-item {% if 'schedule_vaccination' in request.path or active_page == 'schedule_vaccination' %}active{% endif %}">
+                <a href="/myapp/schedule_vaccination/"><i class="fa-solid fa-calendar-check"></i> Schedule Vaccine</a>
+            </li>
+            <li class="nav-item {% if 'vaccination_records' in request.path or active_page == 'vaccination_records' %}active{% endif %}">
+                <a href="/myapp/vaccination_records/"><i class="fa-solid fa-clipboard-list"></i> Vaccination Records</a>
+            </li>
+            <li class="nav-item {% if 'report' in request.path or active_page == 'report' %}active{% endif %}">
+                <a href="/myapp/report/"><i class="fa-solid fa-chart-column"></i> Reports</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="logout-wrapper">
+        <a href="/myapp/logins/" class="logout-link">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </a>
+    </div>
+</aside>

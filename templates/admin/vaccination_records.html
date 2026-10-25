@@ -1,0 +1,879 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaccination Records - MaatriCare Admin</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #073423;
+            --sidebar-active: #154d37;
+            --sidebar-hover: #0e3d29;
+            --main-bg: #f9f6f0;
+            --card-bg: #ffffff;
+            --text-dark: #111827;
+            --text-muted: #6b7280;
+            --brand-green: #062e20;
+            --brand-green-hover: #0c4a34;
+            --brand-green-light: #e6f4ee;
+            --border-color: #f0ebe1;
+            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--main-bg);
+            display: flex;
+            color: var(--text-dark);
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.75rem 1rem;
+            min-height: 100vh;
+            flex-shrink: 0;
+        }
+
+        .brand-header {
+            padding: 0 0.75rem 1.75rem 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #a8d5be;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .brand-icon-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .brand-text-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-subtitle {
+            font-size: 0.80rem;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.8rem 1rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item a:hover {
+            background-color: var(--sidebar-hover);
+            color: #ffffff;
+        }
+
+        .nav-item.active a {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .nav-item a i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .logout-wrapper {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.8rem 1rem;
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+        }
+
+        /* ================= MAIN WRAPPER ================= */
+        .main-wrapper {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .topbar {
+            height: 76px;
+            background-color: var(--main-bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #374151;
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background-color: #ede8dc;
+            color: var(--brand-green);
+        }
+
+        .topbar-page-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+        }
+
+        .topbar-breadcrumb {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: var(--brand-green-light);
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .content-container {
+            padding: 2.25rem 2.5rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.85rem;
+        }
+
+        /* Django Messages Alert */
+        .alert-message-bar {
+            padding: 0.9rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .alert-success {
+            background-color: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        .alert-warning {
+            background-color: #fffbeb;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+        .alert-info {
+            background-color: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+
+        /* Registry Card & Table */
+        .registry-card {
+            background-color: #ffffff;
+            border: 1px solid #eae5dc;
+            border-radius: 20px;
+            padding: 1.75rem 2rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .registry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .registry-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--brand-green);
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .custom-table th {
+            background-color: #faf8f5;
+            padding: 0.85rem 1rem;
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6b7280;
+            border-bottom: 1px solid #ede8dc;
+            text-align: left;
+        }
+
+        .custom-table td {
+            padding: 1rem;
+            font-size: 0.88rem;
+            border-bottom: 1px solid #f3efe6;
+            color: #111827;
+            vertical-align: middle;
+        }
+
+        .custom-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .vax-code-pill {
+            background-color: #e6f4ee;
+            color: #062e20;
+            font-weight: 800;
+            font-size: 0.78rem;
+            padding: 3px 10px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+
+        .btn-delete-row {
+            background: none;
+            border: none;
+            color: #dc2626;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-delete-row:hover {
+            background-color: #fee2e2;
+        }
+
+        /* Modal Backdrop */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(6, 46, 32, 0.45);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .modal-backdrop.show {
+            display: flex;
+        }
+
+        .modal-card {
+            background-color: #ffffff;
+            border-radius: 18px;
+            width: 100%;
+            max-width: 460px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .form-input-with-icon {
+            width: 100%;
+            background-color: #fffdf9;
+            border: 1px solid #efeae1;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-textarea {
+            width: 100%;
+            background-color: #fffdf9;
+            border: 1px solid #efeae1;
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            outline: none;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; min-height: auto; }
+            .topbar { padding: 0 1.25rem; }
+            .content-container { padding: 1.5rem 1.25rem 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= ADMIN SIDEBAR ================= -->
+    {% include 'admin/sidebar.html' %}
+
+    <!-- ================= MAIN WRAPPER ================= -->
+    <div class="main-wrapper">
+        
+        <header class="topbar">
+            <div class="topbar-left">
+                <a href="/myapp/adminhome/" class="back-btn" title="Back to Dashboard">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <div class="header-title-block">
+                    <h2 class="topbar-page-title">Vaccination Records & Immunization Tracking</h2>
+                    <span class="topbar-breadcrumb">Vaccination Management / Immunization Records</span>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <a href="/myapp/schedule_vaccination/" style="padding: 0.55rem 1.15rem; background-color: var(--brand-green); color: #fff; text-decoration: none; border-radius: 10px; font-size: 0.88rem; font-weight: 700; display: inline-flex; align-items: center; gap: 7px;">
+                        <i class="fa-solid fa-calendar-plus"></i> Schedule New Vaccine
+                    </a>
+                    <div class="profile-pill">
+                        <div class="avatar-box">
+                            <img src="{% static 'images/mother_child_logo.png' %}" alt="Admin Avatar" onerror="this.onerror=null; this.src='/static/images/mother_child_logo.png';">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="content-container">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-message-bar {% if message.tags == 'success' %}alert-success{% elif message.tags == 'info' %}alert-info{% else %}alert-warning{% endif %}">
+                        <i class="fa-solid {% if message.tags == 'success' %}fa-circle-check{% elif message.tags == 'info' %}fa-circle-info{% else %}fa-triangle-exclamation{% endif %}"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- ================= KPI SUMMARY CARDS ================= -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem;">
+                <div style="background: #ffffff; border: 1px solid #eae5dc; border-radius: 16px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                    <div style="width: 46px; height: 46px; border-radius: 12px; background-color: #e6f0eb; color: #062e20; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.78rem; font-weight: 700; color: #6b7280; text-transform: uppercase;">Total Scheduled</span>
+                        <h4 style="font-size: 1.45rem; font-weight: 800; color: #111827; margin-top: 2px;">{{ records_count }}</h4>
+                    </div>
+                </div>
+
+                <div style="background: #ffffff; border: 1px solid #a7f3d0; border-radius: 16px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                    <div style="width: 46px; height: 46px; border-radius: 12px; background-color: #ecfdf5; color: #047857; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.78rem; font-weight: 700; color: #047857; text-transform: uppercase;">Taken / Vaccinated</span>
+                        <h4 style="font-size: 1.45rem; font-weight: 800; color: #065f46; margin-top: 2px;">{{ taken_count }}</h4>
+                    </div>
+                </div>
+
+                <div style="background: #ffffff; border: 1px solid #fecaca; border-radius: 16px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                    <div style="width: 46px; height: 46px; border-radius: 12px; background-color: #fef2f2; color: #dc2626; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.78rem; font-weight: 700; color: #dc2626; text-transform: uppercase;">Missed Vaccinations</span>
+                        <h4 style="font-size: 1.45rem; font-weight: 800; color: #991b1b; margin-top: 2px;">{{ missed_count }}</h4>
+                    </div>
+                </div>
+
+                <div style="background: #ffffff; border: 1px solid #fde68a; border-radius: 16px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                    <div style="width: 46px; height: 46px; border-radius: 12px; background-color: #fffbeb; color: #d97706; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.78rem; font-weight: 700; color: #d97706; text-transform: uppercase;">Scheduled / Pending</span>
+                        <h4 style="font-size: 1.45rem; font-weight: 800; color: #92400e; margin-top: 2px;">{{ pending_count }}</h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= VACCINATION REGISTRY TABLE ================= -->
+            <div class="registry-card">
+                <div class="registry-header">
+                    <div>
+                        <h3 class="registry-title"><i class="fa-solid fa-clipboard-list"></i> Immunization Records Registry</h3>
+                        <p style="font-size: 0.8rem; color: #6b7280; margin-top: 2px;">Track whether children have taken or missed vaccinations, reschedule missed doses, and notify mothers.</p>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                        <!-- Status Filter Buttons -->
+                        <div style="display: flex; background: #f3efe6; border-radius: 10px; padding: 3px;">
+                            <button type="button" class="vax-filter-btn active" onclick="filterByStatus('all', this)" style="padding: 5px 12px; border: none; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; background: #062e20; color: #fff;">All ({{ records_count }})</button>
+                            <button type="button" class="vax-filter-btn" onclick="filterByStatus('Taken', this)" style="padding: 5px 12px; border: none; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; background: transparent; color: #374151;">Taken ({{ taken_count }})</button>
+                            <button type="button" class="vax-filter-btn" onclick="filterByStatus('Missed', this)" style="padding: 5px 12px; border: none; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; background: transparent; color: #374151;">Missed ({{ missed_count }})</button>
+                            <button type="button" class="vax-filter-btn" onclick="filterByStatus('Scheduled', this)" style="padding: 5px 12px; border: none; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; background: transparent; color: #374151;">Scheduled ({{ pending_count }})</button>
+                        </div>
+                        <div style="position: relative; width: 220px;">
+                            <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #8c867a; font-size: 0.85rem;"></i>
+                            <input type="text" id="tableSearchInput" onkeyup="filterTable()" placeholder="Search child / mother..." style="width: 100%; padding: 0.5rem 0.85rem 0.5rem 2.2rem; border-radius: 8px; border: 1px solid #eae5dc; font-size: 0.82rem; outline: none;">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table class="custom-table" id="vaxTable">
+                        <thead>
+                            <tr>
+                                <th>Child Name & UID</th>
+                                <th>Mother Name</th>
+                                <th>Vaccine & Code</th>
+                                <th>Date of Administration</th>
+                                <th>Status</th>
+                                <th>Clinical Notes / Remarks</th>
+                                <th style="text-align: right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in scheduled_records %}
+                                <tr data-status="{{ r.status|default:'Scheduled' }}">
+                                    <td>
+                                        <strong style="color: var(--brand-green);">{{ r.CHILD.child_name }}</strong>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted);">UID: CH-{{ r.CHILD.id|stringformat:"04d" }}</div>
+                                    </td>
+                                    <td>
+                                        <span style="font-weight: 600; color: #374151;">{{ r.CHILD.USER.name|default:"N/A" }}</span>
+                                    </td>
+                                    <td>
+                                        <div style="font-weight: 700; color: #111827;">{{ r.vaccine_name }}</div>
+                                        <span class="vax-code-pill">{{ r.vaccine_code|default:"VAC" }}</span>
+                                    </td>
+                                    <td>
+                                        <span style="font-weight: 700; color: #111827;">{{ r.vaccination_date|date:"M d, Y"|default:"TBD" }}</span>
+                                    </td>
+                                    <td>
+                                        {% if r.status == 'Taken' %}
+                                            <span style="background-color: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-weight: 700; font-size: 0.78rem; padding: 4px 10px; border-radius: 50px; display: inline-flex; align-items: center; gap: 5px;">
+                                                <i class="fa-solid fa-circle-check"></i> Taken
+                                            </span>
+                                        {% elif r.status == 'Missed' %}
+                                            <span style="background-color: #fef2f2; color: #dc2626; border: 1px solid #fecaca; font-weight: 700; font-size: 0.78rem; padding: 4px 10px; border-radius: 50px; display: inline-flex; align-items: center; gap: 5px;">
+                                                <i class="fa-solid fa-circle-xmark"></i> Missed
+                                            </span>
+                                        {% elif r.status == 'Rescheduled' %}
+                                            <span style="background-color: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-weight: 700; font-size: 0.78rem; padding: 4px 10px; border-radius: 50px; display: inline-flex; align-items: center; gap: 5px;">
+                                                <i class="fa-solid fa-calendar-day"></i> Rescheduled
+                                            </span>
+                                        {% else %}
+                                            <span style="background-color: #fffbeb; color: #b45309; border: 1px solid #fde68a; font-weight: 700; font-size: 0.78rem; padding: 4px 10px; border-radius: 50px; display: inline-flex; align-items: center; gap: 5px;">
+                                                <i class="fa-solid fa-clock"></i> Scheduled
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span style="font-size: 0.82rem; color: #4b5563;">{{ r.description|default:"Routine Immunization" }}</span>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <div style="display: inline-flex; align-items: center; gap: 6px;">
+                                            {% if r.status == 'Taken' %}
+                                                <!-- Taken Status Badge Only in Actions -->
+                                                <span style="background-color: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-weight: 700; font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 5px;">
+                                                    <i class="fa-solid fa-check"></i> Taken
+                                                </span>
+                                             {% elif r.status == 'Missed' %}
+                                                <!-- Reschedule Option ONLY for Missed Vaccinations -->
+                                                <button type="button" style="padding: 4px 12px; background-color: #1d4ed8; color: #ffffff; border: none; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; box-shadow: 0 2px 6px rgba(29, 78, 216, 0.2);" onclick="openRescheduleModal('{{ r.id }}', '{{ r.CHILD.child_name|escapejs }}', '{{ r.vaccine_name|escapejs }}', '{{ r.vaccination_date|date:"Y-m-d" }}')" title="Reschedule missed vaccination">
+                                                    <i class="fa-solid fa-calendar-plus"></i> Reschedule
+                                                </button>
+                                            {% elif r.status == 'Rescheduled' %}
+                                                <!-- Rescheduled Actions: Taken or Missed -->
+                                                <form method="POST" action="/myapp/vaccination_records/" style="display: inline;">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action_type" value="update_vax_status">
+                                                    <input type="hidden" name="record_id" value="{{ r.id }}">
+                                                    <input type="hidden" name="status" value="Taken">
+                                                    <button type="submit" style="padding: 4px 10px; background-color: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;" title="Mark vaccine as Taken">
+                                                        <i class="fa-solid fa-check"></i> Taken
+                                                    </button>
+                                                </form>
+                                                <form method="POST" action="/myapp/vaccination_records/" style="display: inline;">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action_type" value="update_vax_status">
+                                                    <input type="hidden" name="record_id" value="{{ r.id }}">
+                                                    <input type="hidden" name="status" value="Missed">
+                                                    <button type="submit" style="padding: 4px 10px; background-color: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;" title="Mark vaccine as Missed">
+                                                        <i class="fa-solid fa-xmark"></i> Missed
+                                                    </button>
+                                                </form>
+                                            {% else %}
+                                                <!-- Scheduled Initial Actions: Select Taken or Missed -->
+                                                <form method="POST" action="/myapp/vaccination_records/" style="display: inline;">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action_type" value="update_vax_status">
+                                                    <input type="hidden" name="record_id" value="{{ r.id }}">
+                                                    <input type="hidden" name="status" value="Taken">
+                                                    <button type="submit" style="padding: 4px 10px; background-color: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;" title="Mark vaccine as Taken">
+                                                        <i class="fa-solid fa-check"></i> Taken
+                                                    </button>
+                                                </form>
+                                                <form method="POST" action="/myapp/vaccination_records/" style="display: inline;">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action_type" value="update_vax_status">
+                                                    <input type="hidden" name="record_id" value="{{ r.id }}">
+                                                    <input type="hidden" name="status" value="Missed">
+                                                    <button type="submit" style="padding: 4px 10px; background-color: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;" title="Mark vaccine as Missed">
+                                                        <i class="fa-solid fa-xmark"></i> Missed
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+
+                                            <!-- Delete Button -->
+                                            <button type="button" class="btn-delete-row" onclick="confirmDeleteVax('{{ r.id }}', '{{ r.CHILD.child_name|escapejs }}', '{{ r.vaccine_name|escapejs }}')" title="Delete this vaccination entry">
+                                                <i class="fa-regular fa-trash-can"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="7" style="text-align: center; padding: 2.5rem 1rem; color: var(--text-muted);">
+                                        <i class="fa-solid fa-clipboard-list" style="font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.4;"></i>
+                                        <p style="font-weight: 600;">No vaccination records found.</p>
+                                        <p style="font-size: 0.82rem; margin-top: 4px;">Use the Schedule Vaccine page to schedule new vaccinations for children.</p>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ================= RESCHEDULE VACCINATION MODAL ================= -->
+    <div class="modal-backdrop" id="rescheduleVaxModal">
+        <div class="modal-card">
+            <div style="padding: 1.25rem 1.5rem; background-color: #eff6ff; border-bottom: 1px solid #bfdbfe; display: flex; align-items: center; justify-content: space-between;">
+                <h3 style="font-size: 1.05rem; font-weight: 800; color: #1e40af;"><i class="fa-solid fa-calendar-plus"></i> Reschedule Vaccination</h3>
+                <button type="button" onclick="closeRescheduleModal()" style="background:none; border:none; font-size:1.3rem; cursor:pointer; color:#6b7280;">&times;</button>
+            </div>
+            <form method="POST" action="/myapp/vaccination_records/">
+                {% csrf_token %}
+                <input type="hidden" name="action_type" value="reschedule_vax">
+                <input type="hidden" name="record_id" id="rescheduleRecordId">
+                <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+                    <p style="font-size: 0.88rem; color: #374151;" id="rescheduleInfoText">Rescheduling vaccination appointment.</p>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="newVaxDateInput">New Date of Administration *</label>
+                        <input type="date" name="new_vaccination_date" id="newVaxDateInput" class="form-input-with-icon" onchange="updateAutoRescheduleMessage()" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="rescheduleReminderMessage">Reminder Notification Message (Auto-Generated from Date)</label>
+                        <textarea name="reminder_message" id="rescheduleReminderMessage" class="form-textarea" rows="3" placeholder="Automated reminder notification for mother..."></textarea>
+                    </div>
+
+                    <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.82rem; color: #166534; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>An automated reminder notification with the updated date will be sent to the mother upon saving.</span>
+                    </div>
+                </div>
+                <div style="padding: 1rem 1.5rem; background-color: #faf7f0; border-top: 1px solid #ede8dc; display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" onclick="closeRescheduleModal()" style="padding: 0.6rem 1rem; background: #e5e7eb; color: #374151; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Cancel</button>
+                    <button type="submit" style="padding: 0.6rem 1.2rem; background: #1d4ed8; color: #ffffff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-calendar-check"></i> Reschedule & Send Reminder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= REMINDER NOTIFICATION MODAL ================= -->
+    <div class="modal-backdrop" id="reminderVaxModal">
+        <div class="modal-card">
+            <div style="padding: 1.25rem 1.5rem; background-color: #f5f3ff; border-bottom: 1px solid #ddd6fe; display: flex; align-items: center; justify-content: space-between;">
+                <h3 style="font-size: 1.05rem; font-weight: 800; color: #6d28d9;"><i class="fa-solid fa-bell"></i> Send Vaccination Reminder</h3>
+                <button type="button" onclick="closeReminderModal()" style="background:none; border:none; font-size:1.3rem; cursor:pointer; color:#6b7280;">&times;</button>
+            </div>
+            <form method="POST" action="/myapp/vaccination_records/">
+                {% csrf_token %}
+                <input type="hidden" name="action_type" value="send_vax_reminder">
+                <input type="hidden" name="record_id" id="reminderRecordId">
+                <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+                    <p style="font-size: 0.88rem; color: #374151;" id="reminderTargetText">Send reminder notification to mother.</p>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="vaxReminderMessageInput">Reminder Notification Message</label>
+                        <textarea name="reminder_message" id="vaxReminderMessageInput" class="form-textarea" rows="4" placeholder="Enter custom reminder message for the mother..."></textarea>
+                    </div>
+                </div>
+                <div style="padding: 1rem 1.5rem; background-color: #faf7f0; border-top: 1px solid #ede8dc; display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" onclick="closeReminderModal()" style="padding: 0.6rem 1rem; background: #e5e7eb; color: #374151; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Cancel</button>
+                    <button type="submit" style="padding: 0.6rem 1.2rem; background: #6d28d9; color: #ffffff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-paper-plane"></i> Send Notification</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= DELETE VACCINATION MODAL ================= -->
+    <div class="modal-backdrop" id="deleteVaxModal">
+        <div class="modal-card">
+            <div style="padding: 1.25rem 1.5rem; background-color: #fef2f2; border-bottom: 1px solid #fee2e2; display: flex; align-items: center; justify-content: space-between;">
+                <h3 style="font-size: 1.05rem; font-weight: 800; color: #dc2626;"><i class="fa-solid fa-triangle-exclamation"></i> Delete Vaccination Entry</h3>
+                <button type="button" onclick="closeDeleteVaxModal()" style="background:none; border:none; font-size:1.3rem; cursor:pointer; color:#6b7280;">&times;</button>
+            </div>
+            <form method="POST" action="/myapp/vaccination_records/">
+                {% csrf_token %}
+                <input type="hidden" name="action_type" value="delete_vaccination">
+                <input type="hidden" name="record_id" id="deleteVaxRecordId">
+                <div style="padding: 1.5rem;">
+                    <p style="font-size: 0.92rem; color: #374151;" id="deleteVaxConfirmText">Are you sure you want to delete this vaccination entry?</p>
+                </div>
+                <div style="padding: 1rem 1.5rem; background-color: #faf7f0; border-top: 1px solid #ede8dc; display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" onclick="closeDeleteVaxModal()" style="padding: 0.6rem 1rem; background: #e5e7eb; color: #374151; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Cancel</button>
+                    <button type="submit" style="padding: 0.6rem 1.2rem; background: #dc2626; color: #ffffff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Delete Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function filterByStatus(statusStr, btnElem) {
+            const btns = document.querySelectorAll('.vax-filter-btn');
+            btns.forEach(b => {
+                b.style.background = 'transparent';
+                b.style.color = '#374151';
+                b.classList.remove('active');
+            });
+            btnElem.style.background = '#062e20';
+            btnElem.style.color = '#ffffff';
+            btnElem.classList.add('active');
+
+            const trs = document.querySelectorAll('#vaxTable tbody tr');
+            trs.forEach(tr => {
+                const st = tr.getAttribute('data-status');
+                if (statusStr === 'all') {
+                    tr.style.display = '';
+                } else if (statusStr === 'Scheduled') {
+                    if (st === 'Scheduled' || st === 'Pending' || !st) {
+                        tr.style.display = '';
+                    } else {
+                        tr.style.display = 'none';
+                    }
+                } else if (st === statusStr) {
+                    tr.style.display = '';
+                } else {
+                    tr.style.display = 'none';
+                }
+            });
+        }
+
+        let currentRescheduleChild = '';
+        let currentRescheduleVax = '';
+
+        function formatDateForDisplay(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                const year = parts[0];
+                const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                const monthIdx = parseInt(parts[1], 10) - 1;
+                const day = parseInt(parts[2], 10);
+                if (monthIdx >= 0 && monthIdx < 12) {
+                    return `${monthNames[monthIdx]} ${day}, ${year}`;
+                }
+            }
+            return dateStr;
+        }
+
+        function updateAutoRescheduleMessage() {
+            const dateVal = document.getElementById('newVaxDateInput').value;
+            const formattedDate = formatDateForDisplay(dateVal) || dateVal;
+            const msgBox = document.getElementById('rescheduleReminderMessage');
+            if (msgBox) {
+                msgBox.value = `Vaccination Reschedule Notification: Vaccination (${currentRescheduleVax}) for ${currentRescheduleChild} has been rescheduled to ${formattedDate}. Please bring your child on this date for immunization.`;
+            }
+        }
+
+        function openRescheduleModal(id, childName, vaxName, currentDate) {
+            currentRescheduleChild = childName;
+            currentRescheduleVax = vaxName;
+            document.getElementById('rescheduleRecordId').value = id;
+            document.getElementById('rescheduleInfoText').textContent = `Rescheduling "${vaxName}" for child "${childName}".`;
+            const targetDate = currentDate || new Date().toISOString().split('T')[0];
+            document.getElementById('newVaxDateInput').value = targetDate;
+            updateAutoRescheduleMessage();
+            document.getElementById('rescheduleVaxModal').classList.add('show');
+        }
+
+        function closeRescheduleModal() {
+            document.getElementById('rescheduleVaxModal').classList.remove('show');
+        }
+
+        function openReminderModal(id, childName, motherName, vaxName, dateStr) {
+            document.getElementById('reminderRecordId').value = id;
+            const targetInfo = motherName ? `Send reminder to mother ${motherName} for child "${childName}".` : `Send reminder to mother of child "${childName}".`;
+            document.getElementById('reminderTargetText').textContent = targetInfo;
+            document.getElementById('vaxReminderMessageInput').value = `Vaccination Reminder: Please be reminded that vaccination (${vaxName}) for ${childName} is scheduled on ${dateStr}. Kindly visit your designated Anganwadi / Health Center.`;
+            document.getElementById('reminderVaxModal').classList.add('show');
+        }
+
+        function closeReminderModal() {
+            document.getElementById('reminderVaxModal').classList.remove('show');
+        }
+
+        function confirmDeleteVax(id, childName, vaxName) {
+            document.getElementById('deleteVaxRecordId').value = id;
+            document.getElementById('deleteVaxConfirmText').textContent = `Are you sure you want to delete the vaccination entry "${vaxName}" for child "${childName}"?`;
+            document.getElementById('deleteVaxModal').classList.add('show');
+        }
+
+        function closeDeleteVaxModal() {
+            document.getElementById('deleteVaxModal').classList.remove('show');
+        }
+
+        function filterTable() {
+            const input = document.getElementById('tableSearchInput');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('vaxTable');
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                let textContent = tr[i].textContent.toLowerCase();
+                if (textContent.includes(filter)) {
+                    tr[i].style.display = '';
+                } else {
+                    tr[i].style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

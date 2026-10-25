@@ -1,0 +1,628 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Stock / New Kit - Anganwadi Portal | MaatriCare</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons for Sidebar -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #062e20;
+            --sidebar-hover: #0a3d2b;
+            --sidebar-active: #0e4c36;
+            --sidebar-text-muted: #a3c4b5;
+            --brand-green: #083c2a;
+            --brand-green-hover: #052a1d;
+            --brand-green-light: #ecfdf5;
+            --brand-green-accent: #10b981;
+            --bg-page: #f8fafc;
+            --card-bg: #ffffff;
+            --text-heading: #0f172a;
+            --text-body: #334155;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --border-input: #cbd5e1;
+            --search-bg: #f1f5f9;
+            --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.75rem 1.15rem 1.5rem;
+            z-index: 100;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            padding: 0 0.5rem 1.75rem;
+            text-decoration: none;
+            display: block;
+        }
+
+        .brand-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-sub {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--sidebar-text-muted);
+            margin-top: 4px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-item-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.72rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item-link i {
+            font-size: 1.05rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item-link:hover {
+            color: #ffffff;
+            background-color: var(--sidebar-hover);
+        }
+
+        .nav-item-link.active {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+        }
+
+        .sidebar-footer {
+            padding-top: 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.7rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            color: #ffffff;
+            background-color: rgba(239, 68, 68, 0.15);
+        }
+
+        /* Main Container */
+        .main-wrapper {
+            margin-left: 250px;
+            flex: 1;
+            min-width: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-page);
+            width: calc(100% - 250px);
+        }
+
+        /* Top Header */
+        .top-header {
+            height: 74px;
+            padding: 0 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            width: 100%;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--brand-green);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .worker-profile-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 1px solid var(--border-color);
+            padding-left: 1.25rem;
+        }
+
+        .worker-info {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .worker-name {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            line-height: 1.2;
+        }
+
+        .worker-id {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .worker-avatar-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #083c2a, #10b981);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+
+        /* Content Body */
+        .content-body {
+            padding: 2.5rem 3rem 5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .breadcrumb-bar a {
+            color: var(--brand-green-accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .breadcrumb-bar a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb-bar span.separator {
+            color: #94a3b8;
+        }
+
+        /* Add Stock Card */
+        .add-stock-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem 3rem;
+            box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.04), 0 4px 12px -2px rgba(15, 23, 42, 0.02);
+            width: 100%;
+        }
+
+        .card-title-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2.25rem;
+        }
+
+        .card-title-header h2 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--brand-green);
+        }
+
+        .card-title-header p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Form Grid */
+        .form-grid-layout {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem 2rem;
+            width: 100%;
+        }
+
+        .grid-full-width {
+            grid-column: span 2;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            display: block;
+            letter-spacing: -0.01em;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.8rem 1.15rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-input);
+            background-color: #ffffff;
+            font-size: 0.92rem;
+            color: var(--text-heading);
+            outline: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+            font-family: inherit;
+        }
+
+        .form-input::placeholder, .form-textarea::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: var(--brand-green-accent);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+            background-color: #ffffff;
+        }
+
+        .form-actions-bar {
+            grid-column: span 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.25rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 0.75rem;
+        }
+
+        .btn-back {
+            padding: 0.8rem 1.8rem;
+            background-color: #f1f5f9;
+            color: #334155;
+            border: 1px solid var(--border-input);
+            border-radius: 12px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .btn-submit {
+            padding: 0.85rem 2.25rem;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.94rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 4px 14px rgba(8, 60, 42, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--brand-green-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(8, 60, 42, 0.28);
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-wrapper {
+                margin-left: 0;
+                width: 100%;
+            }
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .content-body {
+                padding: 1.5rem;
+            }
+            .add-stock-card {
+                padding: 1.75rem;
+            }
+            .form-grid-layout {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .grid-full-width, .form-actions-bar {
+                grid-column: span 1;
+            }
+            .form-actions-bar {
+                flex-direction: column-reverse;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= Left Sidebar ================= -->
+    {% include 'anganwadi_teacher/sidebar.html' %}
+
+    <!-- ================= Main Container ================= -->
+    <main class="main-wrapper">
+
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()" aria-label="Toggle Sidebar Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <span style="font-size: 1rem; font-weight: 800; color: var(--brand-green);">Add Stock / New Kit Item</span>
+            </div>
+
+            <div class="header-actions">
+                <a href="/myapp/teacher_profile/" class="worker-profile-card" style="text-decoration: none; color: inherit;" title="View Profile">
+                    <div class="worker-info">
+                        <span class="worker-name">{{ teacher.Name|default:"Anganwadi Teacher" }}</span>
+                        <span class="worker-id">{{ teacher.center_name|default:"Anganwadi Center" }}</span>
+                    </div>
+                    <div class="worker-avatar-badge" title="{{ teacher.Name|default:'Teacher' }}" style="overflow:hidden; padding:0;">
+                        {% if teacher.image %}
+                            <img src="{{ teacher.image.url }}" alt="{{ teacher.Name }}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                        {% else %}
+                            {{ teacher.Name|slice:":1"|upper|default:"T" }}
+                        {% endif %}
+                    </div>
+                </a>
+            </div>
+        </header>
+
+        <!-- Body Content -->
+        <div class="content-body">
+
+            <!-- Breadcrumb Navigation -->
+            <div class="breadcrumb-bar">
+                <a href="/myapp/manage_kit/">Nutrition Kits</a>
+                <span class="separator">/</span>
+                <span>Add Stock</span>
+            </div>
+
+            <!-- ADD STOCK FORM CARD -->
+            <div class="add-stock-card">
+                <div class="card-title-header">
+                    <div>
+                        <h2>Record Incoming Stock / Add New Kit Item</h2>
+                        <p>Select category, choose or type kit name, specify items included, health benefits, and quantity received.</p>
+                    </div>
+                    <span style="background-color: #ecfdf5; color: #047857; padding: 0.4rem 0.95rem; border-radius: 9999px; font-weight: 700; font-size: 0.82rem; border: 1px solid #a7f3d0;">
+                        Anganwadi Teacher Portal
+                    </span>
+                </div>
+
+                <form method="POST" action="/myapp/add_nutrition_kit/">
+                    {% csrf_token %}
+                    <div class="form-grid-layout">
+
+                        <!-- 1. Kit Category -->
+                        <div class="form-group">
+                            <label class="form-label">1. Kit Category *</label>
+                            <select name="kit_category" id="categorySelect" class="form-select" onchange="onCategoryChange(this.value)" required>
+                                <option value="" disabled selected>-- Select Kit Category --</option>
+                                <option value="Pregnant Care Kit">Pregnant Care Kit (Maternal Care & Gestation)</option>
+                                <option value="Lactating Care Kit">Lactating Care Kit (Postnatal & Milk Production)</option>
+                                <option value="General Nutrition Kit">General Nutrition Kit (Child Growth & Family)</option>
+                            </select>
+                        </div>
+
+                        <!-- 2. Kit Name -->
+                        <div class="form-group">
+                            <label class="form-label">2. Kit Name *</label>
+                            <select name="product_name" id="kitSelect" class="form-select" onchange="onKitChange(this.value)" required>
+                                <option value="" disabled selected>-- Select Category First --</option>
+                            </select>
+                            <div id="customKitNameWrap" style="margin-top: 12px; display: none;">
+                                <input type="text" name="custom_product_name" id="customKitNameInput" class="form-input" placeholder="Type custom kit name..." style="font-weight: 600;">
+                            </div>
+                        </div>
+
+                        <!-- 3. Items Included -->
+                        <div class="form-group grid-full-width">
+                            <label class="form-label">3. Items Included in Kit *</label>
+                            <input type="text" name="contents" id="kitContentsInput" class="form-input" placeholder="Enter items included (e.g. Iron & Folic Acid Tablets, Calcium D3, Shatavari...)" required>
+                        </div>
+
+                        <!-- 4. Health Benefits & Details -->
+                        <div class="form-group grid-full-width">
+                            <label class="form-label">4. Details of Items, Health Benefits & Purpose (Why Taken by Beneficiary) *</label>
+                            <textarea name="descriptions" id="kitDescInput" class="form-textarea" style="min-height: 110px; resize: vertical; line-height: 1.6;" rows="3" placeholder="Enter health benefits and reasons why taken by the beneficiary..." required></textarea>
+                        </div>
+
+                        <!-- 5. Quantity Received -->
+                        <div class="form-group grid-full-width">
+                            <label class="form-label">5. Stock Quantity Received *</label>
+                            <input type="number" name="quantity" class="form-input" placeholder="Enter stock quantity received (e.g. 50)" min="1" required style="font-weight: 600;">
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="form-actions-bar">
+                            <a href="/myapp/manage_kit/" class="btn-back">
+                                Back to Nutrition Kits
+                            </a>
+                            <button type="submit" class="btn-submit">
+                                Save & Record Kit Stock
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        const kitsByCategoryMap = {
+            "Pregnant Care Kit": [
+                "Maternal Medicines & Iron Micronutrient Kit",
+                "Amrutham Prenatal Nutrition Food Pack",
+                "custom"
+            ],
+            "Lactating Care Kit": [
+                "Milk Production & Galactagogue Herbal Pack",
+                "Postnatal Recovery & Protein Vitality Kit",
+                "custom"
+            ],
+            "General Nutrition Kit": [
+                "Child Growth Micronutrient & Syrup Kit",
+                "custom"
+            ]
+        };
+
+        function onCategoryChange(category) {
+            const kitSelect = document.getElementById('kitSelect');
+            if (!kitSelect) return;
+
+            kitSelect.innerHTML = '<option value="" disabled selected>-- Select Kit Name --</option>';
+            const kits = kitsByCategoryMap[category] || [];
+            kits.forEach((kitName) => {
+                const opt = document.createElement('option');
+                opt.value = kitName;
+                if (kitName === 'custom') {
+                    opt.textContent = "Type Custom Kit Name...";
+                } else {
+                    opt.textContent = kitName;
+                }
+                kitSelect.appendChild(opt);
+            });
+
+            const customWrap = document.getElementById('customKitNameWrap');
+            const customInput = document.getElementById('customKitNameInput');
+            if (customWrap) customWrap.style.display = 'none';
+            if (customInput) customInput.removeAttribute('required');
+        }
+
+        function onKitChange(kitName) {
+            const customWrap = document.getElementById('customKitNameWrap');
+            const customInput = document.getElementById('customKitNameInput');
+
+            if (kitName === 'custom') {
+                if (customWrap) customWrap.style.display = 'block';
+                if (customInput) customInput.setAttribute('required', 'required');
+            } else {
+                if (customWrap) customWrap.style.display = 'none';
+                if (customInput) customInput.removeAttribute('required');
+            }
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

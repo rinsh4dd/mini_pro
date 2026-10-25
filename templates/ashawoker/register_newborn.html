@@ -1,0 +1,975 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Newborn - ASHA Portal | MaatriCare</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #073525;
+            --sidebar-hover: #0d4432;
+            --sidebar-active: #134d38;
+            --sidebar-text-muted: #97baa9;
+            --brand-green: #0c3829;
+            --brand-green-hover: #07261b;
+            --brand-green-light: #e8f5ef;
+            --brand-green-accent: #10b981;
+            --bg-page: #fbf9f4;
+            --card-bg: #ffffff;
+            --text-heading: #111827;
+            --text-body: #4b5563;
+            --text-muted: #6b7280;
+            --border-color: #ebe5db;
+            --border-input: #dcd6cb;
+            --badge-bg: #e2ede6;
+            --badge-text: #0f3d2c;
+            --search-bg: #f0ece2;
+            --shadow-card: 0 2px 12px rgba(7, 53, 37, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+            --amber-bg: #fffbeb;
+            --amber-border: #fde68a;
+            --amber-text: #b45309;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* ================= Left Navigation Sidebar ================= */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem 1.25rem 1.75rem;
+            z-index: 100;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            padding: 0 0.5rem 2rem;
+            text-decoration: none;
+            display: block;
+        }
+
+        .brand-title {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-sub {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--sidebar-text-muted);
+            margin-top: 3px;
+            letter-spacing: 0.01em;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .nav-item-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0.78rem 1.1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.94rem;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item-link i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item-link:hover {
+            color: #ffffff;
+            background-color: var(--sidebar-hover);
+        }
+
+        .nav-item-link.active {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+        }
+
+        .sidebar-footer {
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.75rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.94rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            color: #ffffff;
+            background-color: rgba(239, 68, 68, 0.15);
+        }
+
+        /* ================= Main Container ================= */
+        .main-wrapper {
+            margin-left: 260px;
+            flex: 1;
+            min-width: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-page);
+        }
+
+        /* Top Header Navigation */
+        .top-header {
+            height: 80px;
+            padding: 0 2.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--bg-page);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--brand-green);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        /* Worker Profile Badge */
+        .worker-profile-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .worker-info {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .worker-name {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            line-height: 1.2;
+        }
+
+        .worker-id {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            justify-content: flex-end;
+        }
+
+        .worker-avatar-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background-color: #dbe8e1;
+            flex-shrink: 0;
+        }
+
+        .worker-avatar-badge {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background-color: #dbe8e1;
+            color: var(--brand-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.95rem;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        /* Content Body */
+        .content-body {
+            padding: 2rem 2.25rem 3.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 1320px;
+            width: 100%;
+        }
+
+        /* Breadcrumb Navigation */
+        .page-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.86rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .page-breadcrumb a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .page-breadcrumb a:hover {
+            color: var(--brand-green);
+        }
+
+        .page-breadcrumb span.current {
+            font-weight: 700;
+            color: var(--text-heading);
+        }
+
+        /* Flash Messages */
+        .alert-box {
+            padding: 0.85rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .alert-success {
+            background-color: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+        }
+
+        .alert-warning {
+            background-color: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #b45309;
+        }
+
+        .alert-close {
+            background: none;
+            border: none;
+            color: inherit;
+            opacity: 0.6;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        /* Header Title Banner */
+        .page-header-title-box {
+            background: linear-gradient(135deg, #073525 0%, #104e38 100%);
+            color: #ffffff;
+            border-radius: 20px;
+            padding: 1.75rem 2.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.25rem;
+            box-shadow: 0 6px 20px rgba(7, 53, 37, 0.12);
+        }
+
+        .page-main-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-subtitle {
+            font-size: 0.88rem;
+            color: #b2d5c5;
+            margin-top: 4px;
+        }
+
+        /* 2-Column Grid Layout */
+        .records-layout-grid {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .main-form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        /* Step Card */
+        .form-step-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 1.6rem 1.85rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.15rem;
+            box-shadow: var(--shadow-card);
+            transition: all 0.2s ease;
+        }
+
+        .step-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .step-number-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            font-size: 0.82rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .step-card-title {
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: var(--brand-green);
+            letter-spacing: -0.01em;
+        }
+
+        .form-section-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #374151;
+            letter-spacing: 0.01em;
+        }
+
+        .form-select,
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-input);
+            background-color: #ffffff;
+            font-size: 0.9rem;
+            color: var(--text-heading);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-select:focus,
+        .form-input:focus,
+        .form-textarea:focus {
+            border-color: var(--brand-green);
+            box-shadow: 0 0 0 3px rgba(12, 56, 41, 0.08);
+        }
+
+        .form-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.15rem;
+        }
+
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.15rem;
+        }
+
+        .gender-options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .gender-radio-label {
+            cursor: pointer;
+        }
+
+        .gender-radio-label input[type="radio"] {
+            display: none;
+        }
+
+        .gender-box-chip {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0.72rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-input);
+            background-color: #ffffff;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #4b5563;
+            transition: all 0.2s ease;
+        }
+
+        .gender-radio-label input[type="radio"]:checked+.gender-box-chip {
+            border-color: var(--brand-green);
+            background-color: #f0f7f3;
+            color: var(--brand-green);
+            box-shadow: 0 2px 6px rgba(12, 56, 41, 0.08);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 90px;
+            line-height: 1.5;
+        }
+
+        .btn-submit-newborn {
+            width: 100%;
+            padding: 0.9rem 1.75rem;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border: none;
+            border-radius: 14px;
+            font-size: 0.96rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(12, 56, 41, 0.2);
+        }
+
+        .btn-submit-newborn:hover {
+            background-color: var(--brand-green-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(12, 56, 41, 0.28);
+        }
+
+        /* Widgets */
+        .side-widgets-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .guide-card {
+            background-color: #e5f0ea;
+            border: 1px solid #cbe3d5;
+            border-radius: 18px;
+            padding: 1.5rem;
+        }
+
+        .guide-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .guide-icon-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .guide-title {
+            font-size: 0.96rem;
+            font-weight: 800;
+            color: var(--brand-green);
+        }
+
+        .guide-bullets {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            font-size: 0.84rem;
+            color: #2d4538;
+        }
+
+        .guide-bullets li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .guide-bullets li::before {
+            content: '•';
+            color: var(--brand-green);
+            font-weight: 800;
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+
+        .postnatal-tip-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 1.5rem;
+        }
+
+        .tip-header-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 0.75rem;
+        }
+
+        .tip-icon-box {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background-color: #fef3c7;
+            color: #b45309;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+        }
+
+        .tip-title {
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: var(--text-heading);
+        }
+
+        .tip-quote {
+            font-size: 0.85rem;
+            color: var(--text-body);
+            font-style: italic;
+            line-height: 1.5;
+            background-color: #faf8f4;
+            padding: 0.85rem 1rem;
+            border-radius: 12px;
+            border-left: 3px solid var(--brand-green);
+        }
+
+        .milestone-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 1.5rem;
+        }
+
+        .milestone-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .milestone-title-lbl {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-heading);
+        }
+
+        .milestone-badge-upcoming {
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .milestone-content-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .milestone-icon-box {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background-color: #faf8f3;
+            border: 1px solid var(--border-color);
+            color: var(--brand-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .milestone-vaccine-name {
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: var(--text-heading);
+        }
+
+        .milestone-due-text {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .portal-footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            padding: 1.25rem 0 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 1024px) {
+            .records-layout-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-wrapper {
+                margin-left: 0;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-body {
+                padding: 1.5rem 1.25rem;
+            }
+
+            .form-grid-3,
+            .form-grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    {% include 'ashawoker/sidebar.html' %}
+
+    <main class="main-wrapper">
+        <header class="top-header">
+            <div class="header-left">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()" aria-label="Toggle Sidebar Menu"><i
+                        class="fa-solid fa-bars"></i></button>
+            </div>
+            <div class="header-actions">
+                <a href="/myapp/ashaworker_profile/" class="worker-profile-card">
+                    <div class="worker-info">
+                        <span class="worker-name">{{ worker.Full_name|default:'ASHA Worker' }}</span>
+                        <span class="worker-id">
+                            <i class="fa-solid fa-location-dot"></i>
+                            {{ worker.Area_assigned|default:'Assigned Area' }}
+                        </span>
+                    </div>
+                    {% if worker.image %}
+                    <img src="{{ worker.image.url }}" alt="Profile Avatar" class="worker-avatar-img">
+                    {% else %}
+                    <img src="{% static 'images/asha_avatar.png' %}" alt="Profile Avatar" class="worker-avatar-img"
+                        onerror="this.src='/static/images/mother_child_logo.png'">
+                    {% endif %}
+                </a>
+            </div>
+        </header>
+
+        <div class="content-body">
+            <nav class="page-breadcrumb">
+                <a href="/myapp/ashaworker_home/">Dashboard</a>
+                <i class="fa-solid fa-chevron-right" style="font-size: 0.72rem;"></i>
+                <a href="/myapp/manage_pregnancy/">Pregnancy Records</a>
+                <i class="fa-solid fa-chevron-right" style="font-size: 0.72rem;"></i>
+                <span class="current">Newborn Registration</span>
+            </nav>
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert-box alert-{{ message.tags|default:'info' }}">
+                <span>{{ message }}</span>
+                <button class="alert-close" onclick="this.parentElement.remove()">&times;</button>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <div class="page-header-title-box">
+                <div>
+                    <h1 class="page-main-title"><i class="fa-solid fa-baby-carriage"></i> Register Newborn Child</h1>
+                    <p class="page-subtitle">Initiate official clinical tracking and postnatal health screening for
+                        newborns.</p>
+                </div>
+                <div
+                    style="background: rgba(255,255,255,0.15); padding: 0.45rem 1rem; border-radius: 50px; font-weight: 600; font-size: 0.8rem;">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    {{ assigned_area|default:worker.Area_assigned|default:"Area Register" }}
+                </div>
+            </div>
+
+            <div class="records-layout-grid">
+                <div class="form-card">
+                    <form method="POST" action="/myapp/register_newborn/">
+                        {% csrf_token %}
+
+                        <!-- Select Mother (Filtered to 6+ Months Pregnancy Completed) -->
+                        <div class="form-section-group" style="margin-bottom: 1.25rem;">
+                            <label class="form-label">Select Registered Mother (6+ Months Pregnancy Completed) *</label>
+                            <select name="mother_id" id="motherSelect" class="form-select" required>
+                                <option value="">-- Choose mother from area register --</option>
+                                {% for m in mothers %}
+                                <option value="{{ m.id }}" data-edd="{{ m.expected_delivery_date|date:'Y-m-d' }}">
+                                    {{ m.name }} (Spouse: {{ m.husband_name }} | Phone: {{ m.phone }})
+                                    {% if m.expected_delivery_date %}
+                                    — Pregnant: Month {{ m.gestation_month }}
+                                    {% endif %}
+                                </option>
+                                {% empty %}
+                                <option value="" disabled>No mother with 6+ months pregnancy record available in area
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 1.25rem 0;">
+
+                        <!-- Child Name & Gender -->
+                        <div class="form-grid-2" style="margin-bottom: 1.25rem;">
+                            <div class="form-section-group">
+                                <label class="form-label">Child Name</label>
+                                <input type="text" name="child_name" class="form-input"
+                                    placeholder="e.g. Enter child name (or Baby of Mother)">
+                            </div>
+                            <div class="form-section-group">
+                                <label class="form-label">Gender *</label>
+                                <div class="gender-options-grid">
+                                    <label class="gender-radio-label">
+                                        <input type="radio" name="gender" value="Male" checked>
+                                        <div class="gender-box-chip">
+                                            <i class="fa-solid fa-mars" style="color: #3b82f6;"></i>
+                                            <span>Male</span>
+                                        </div>
+                                    </label>
+                                    <label class="gender-radio-label">
+                                        <input type="radio" name="gender" value="Female">
+                                        <div class="gender-box-chip">
+                                            <i class="fa-solid fa-venus" style="color: #ec4899;"></i>
+                                            <span>Female</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Date of Birth & Birth Weight -->
+                        <div class="form-grid-2" style="margin-bottom: 1.25rem;">
+                            <div class="form-section-group">
+                                <label class="form-label">Date of Birth *</label>
+                                <input type="date" name="dob" id="dobInput" class="form-input" value="{{ today_date }}"
+                                    required>
+                            </div>
+                            <div class="form-section-group">
+                                <label class="form-label">Birth Weight (kg) *</label>
+                                <input type="number" step="0.01" name="birth_weight" class="form-input"
+                                    placeholder="e.g. 3.10" required min="0.5" max="8.0">
+                            </div>
+                        </div>
+
+                        <!-- Blood Group & Hospital of Birth -->
+                        <div class="form-grid-2" style="margin-bottom: 1.25rem; gap: 1rem;">
+                            <div class="form-section-group">
+                                <label class="form-label">Blood Group *</label>
+                                <select name="blood_group" class="form-select" required>
+                                    <option value="">Select Blood Group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="O+" selected>O+</option>
+                                    <option value="O-">O-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                </select>
+                            </div>
+                            <div class="form-section-group">
+                                <label class="form-label">Hospital of Birth *</label>
+                                <input type="text" name="hospital" class="form-input" placeholder="e.g. City Hospital"
+                                    required>
+                            </div>
+                        </div>
+
+                        <!-- Clinical Observations -->
+                        <div class="form-section-group" style="margin-bottom: 1.25rem;">
+                            <label class="form-label">Clinical Observations</label>
+                            <textarea name="observations" class="form-textarea"
+                                placeholder="Facility name or delivery notes..."></textarea>
+                        </div>
+
+                        <!-- Submit Button with spacing -->
+                        <div class="form-section-group" style="margin-top: 2rem;">
+                            <button type="submit" class="btn-submit-newborn">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>Register Newborn Child</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="side-widgets-column">
+                    <div class="guide-card">
+                        <div class="guide-header">
+                            <div class="guide-icon-badge"><i class="fa-regular fa-lightbulb"></i></div>
+                            <h3 class="guide-title">Registration Protocol</h3>
+                        </div>
+                        <ul class="guide-bullets">
+                            <li>Birth weight should be recorded immediately.</li>
+                            <li>Mother dropdown lists mothers with 6+ months completed.</li>
+                            <li>Registration triggers postnatal care.</li>
+                        </ul>
+                    </div>
+                    <div class="postnatal-tip-card">
+                        <div class="tip-header-row">
+                            <div class="tip-icon-box"><i class="fa-solid fa-heart-pulse"></i></div>
+                            <h4 class="tip-title">Postnatal Best Practices</h4>
+                        </div>
+                        <div class="tip-quote">"Initiate skin-to-skin contact and promote exclusive breastfeeding."
+                        </div>
+                    </div>
+                    <div class="milestone-card">
+                        <div class="milestone-header-row"><span class="milestone-title-lbl">Next Follow-Up</span><span
+                                class="milestone-badge-upcoming">UPCOMING</span></div>
+                        <div class="milestone-content-row">
+                            <div class="milestone-icon-box"><i class="fa-solid fa-notes-medical"></i></div>
+                            <div class="milestone-info">
+                                <div class="milestone-vaccine-name">First Postnatal Visit</div>
+                                <div class="milestone-due-text">Due: Within 48 Hours</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="portal-footer">
+                <p>&copy; 2024 MaatriCare Health Systems &bull; Confidential ASHA Portal</p>
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // DOB validation based on selected mother
+        (function () {
+            const motherSelect = document.getElementById('motherSelect');
+            const dobInput = document.getElementById('dobInput');
+            const today = new Date().toISOString().split('T')[0];
+            dobInput.max = today;
+            function updateDobLimits() {
+                if (!motherSelect || !dobInput) return;
+                const selected = motherSelect.options[motherSelect.selectedIndex];
+                const edd = selected ? selected.getAttribute('data-edd') : null;
+                if (edd) {
+                    const eddDate = new Date(edd);
+                    if (!isNaN(eddDate.getTime())) {
+                        const minDate = new Date(eddDate.getTime() - 280 * 24 * 60 * 60 * 1000); // 280 days (~40 weeks)
+                        dobInput.min = minDate.toISOString().split('T')[0];
+                        return;
+                    }
+                }
+                dobInput.min = '';
+            }
+            motherSelect.addEventListener('change', updateDobLimits);
+            // initial call
+            updateDobLimits();
+        })();
+    </script>

@@ -1,0 +1,1798 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maternal Pregnancy Records - ASHA Portal | MaatriCare</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #073525;
+            --sidebar-hover: #0d4432;
+            --sidebar-active: #134d38;
+            --sidebar-text-muted: #97baa9;
+            --brand-green: #0c3829;
+            --brand-green-hover: #07261b;
+            --brand-green-light: #e8f5ef;
+            --brand-green-accent: #10b981;
+            --bg-page: #fbf9f4;
+            --card-bg: #ffffff;
+            --text-heading: #111827;
+            --text-body: #4b5563;
+            --text-muted: #6b7280;
+            --border-color: #ebe5db;
+            --border-input: #dcd6cb;
+            --search-bg: #f0ece2;
+            --shadow-card: 0 2px 12px rgba(7, 53, 37, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+            --amber-bg: #fffbeb;
+            --amber-border: #fde68a;
+            --amber-text: #b45309;
+            --rose-bg: #fef2f2;
+            --rose-text: #dc2626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* ================= Sidebar Navigation ================= */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem 1.25rem 1.75rem;
+            z-index: 100;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            padding: 0 0.5rem 2rem;
+            text-decoration: none;
+            display: block;
+        }
+
+        .brand-title {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-sub {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--sidebar-text-muted);
+            margin-top: 3px;
+            letter-spacing: 0.01em;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .nav-item-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0.78rem 1.1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.94rem;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item-link i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item-link:hover {
+            color: #ffffff;
+            background-color: var(--sidebar-hover);
+        }
+
+        .nav-item-link.active {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+        }
+
+        .sidebar-footer {
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.75rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.94rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            color: #ffffff;
+            background-color: rgba(239, 68, 68, 0.15);
+        }
+
+        /* ================= Main Container ================= */
+        .main-wrapper {
+            margin-left: 260px;
+            flex: 1;
+            min-width: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-page);
+        }
+
+        /* Top Header */
+        .top-header {
+            height: 80px;
+            padding: 0 2.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--bg-page);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--brand-green);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 360px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 0.88rem;
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.62rem 1rem 0.62rem 2.5rem;
+            background-color: var(--search-bg);
+            border: 1px solid transparent;
+            border-radius: 50px;
+            font-size: 0.88rem;
+            color: var(--text-heading);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            background-color: #ffffff;
+            border-color: var(--border-color);
+            box-shadow: 0 0 0 3px rgba(12, 56, 41, 0.08);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .worker-profile-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .worker-info {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .worker-name {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            line-height: 1.2;
+        }
+
+        .worker-id {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            justify-content: flex-end;
+        }
+
+        .worker-avatar-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background-color: #dbe8e1;
+            flex-shrink: 0;
+        }
+
+        .worker-avatar-badge {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #073525, #14593f);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+
+        /* ================= Content Body ================= */
+        .content-body {
+            padding: 1.75rem 2.25rem 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            width: 100%;
+        }
+
+        /* Flash Messages */
+        .alert-box {
+            padding: 0.85rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .alert-success {
+            background-color: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+        }
+
+        .alert-warning {
+            background-color: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #b45309;
+        }
+
+        .alert-close {
+            background: none;
+            border: none;
+            color: inherit;
+            opacity: 0.6;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        /* Header Card */
+        .page-header-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 1.25rem 1.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .page-title-group h1 {
+            font-size: 1.55rem;
+            font-weight: 800;
+            color: var(--brand-green);
+            letter-spacing: -0.02em;
+        }
+
+        .page-title-group p {
+            font-size: 0.86rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .header-controls-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .view-mode-tabs {
+            display: flex;
+            align-items: center;
+            background-color: #f0ece2;
+            padding: 4px;
+            border-radius: 12px;
+            gap: 4px;
+        }
+
+        .mode-tab-btn {
+            padding: 0.5rem 1.1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: #4b5563;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .mode-tab-btn.active {
+            background-color: #ffffff;
+            color: var(--brand-green);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+
+        /* Filter Pills */
+        .status-filters-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-pill {
+            padding: 0.42rem 0.95rem;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: #4b5563;
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .filter-pill:hover {
+            border-color: var(--brand-green);
+            color: var(--brand-green);
+        }
+
+        .filter-pill.active {
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border-color: var(--brand-green);
+        }
+
+        /* ================= Table View Layout ================= */
+        .table-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .custom-table th {
+            background-color: #f7f5ef;
+            padding: 0.9rem 1.25rem;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #374151;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .custom-table td {
+            padding: 1rem 1.25rem;
+            font-size: 0.88rem;
+            border-bottom: 1px solid #f3efe6;
+            vertical-align: middle;
+        }
+
+        .custom-table tr:hover td {
+            background-color: #fbf9f4;
+        }
+
+        .table-avatar-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .table-avatar-badge {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background-color: #e5f0ea;
+            color: var(--brand-green);
+            font-weight: 800;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .table-user-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .table-user-name {
+            font-weight: 700;
+            color: var(--text-heading);
+        }
+
+        .table-user-sub {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 0.25rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.76rem;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            letter-spacing: 0.02em;
+        }
+
+        .status-badge.pregnant {
+            background-color: #fef3c7;
+            color: #b45309;
+        }
+
+        .status-badge.delivered {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .records-counter-pill {
+            padding: 0.22rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            background-color: #f3f4f6;
+            color: #374151;
+            display: inline-block;
+        }
+
+        .table-actions-cell {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-table-action {
+            padding: 0.45rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-action-view-records {
+            background-color: var(--brand-green);
+            color: #ffffff;
+        }
+
+        .btn-action-view-records:hover {
+            background-color: var(--brand-green-hover);
+        }
+
+        .btn-action-add-checkup {
+            background-color: #e5f0ea;
+            color: var(--brand-green);
+        }
+
+        .btn-action-add-checkup:hover {
+            background-color: #cbe3d5;
+        }
+
+        /* ================= 2-Column Entry Form ================= */
+        .records-layout-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .form-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem 2.25rem;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-section-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .form-select, .form-input, .form-textarea {
+            width: 100%;
+            padding: 0.72rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-input);
+            background-color: #ffffff;
+            font-size: 0.9rem;
+            color: var(--text-heading);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-select:focus, .form-input:focus, .form-textarea:focus {
+            border-color: var(--brand-green);
+            box-shadow: 0 0 0 3px rgba(12, 56, 41, 0.08);
+        }
+
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+            line-height: 1.5;
+        }
+
+        .status-pills-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .status-radio-label input[type="radio"] {
+            display: none;
+        }
+
+        .status-pill-chip {
+            padding: 0.55rem 1.25rem;
+            border-radius: 50px;
+            border: 1px solid var(--border-input);
+            background-color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #4b5563;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+
+        .status-radio-label input[type="radio"]:checked + .status-pill-chip {
+            background-color: var(--brand-green);
+            border-color: var(--brand-green);
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(12, 56, 41, 0.2);
+        }
+
+        .btn-save-record {
+            padding: 0.75rem 1.6rem;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(12, 56, 41, 0.2);
+        }
+
+        .btn-save-record:hover {
+            background-color: var(--brand-green-hover);
+        }
+
+        /* Overview & Logs */
+        .side-widgets-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .overview-card, .recent-logs-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.75rem;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .patient-header-box {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid #f0ece2;
+        }
+
+        .patient-icon-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background-color: #d1fae5;
+            color: #065f46;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+        }
+
+        .overview-details-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        .overview-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.88rem;
+        }
+
+        .timeline-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            position: relative;
+            padding-left: 1.25rem;
+        }
+
+        .timeline-list::before {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 6px;
+            bottom: 6px;
+            width: 2px;
+            background-color: #e5e7eb;
+        }
+
+        .timeline-item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.25rem;
+            top: 4px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--brand-green);
+            border: 2px solid #ffffff;
+        }
+
+        /* ================= Detailed History Modal ================= */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(7, 53, 37, 0.45);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .modal-backdrop.show {
+            display: flex;
+        }
+
+        .modal-card-large {
+            background-color: #ffffff;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 750px;
+            max-height: 88vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.18);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 1.25rem 1.75rem;
+            background-color: #faf8f3;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-body {
+            padding: 1.5rem 1.75rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.75rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #faf8f3;
+        }
+
+        .checkup-history-card {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: box-shadow 0.2s;
+        }
+
+        .checkup-history-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .checkup-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #f0ece2;
+            padding-bottom: 6px;
+        }
+
+        .checkup-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            font-size: 0.84rem;
+            background-color: #fbf9f4;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 1024px) {
+            .records-layout-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-wrapper {
+                margin-left: 0;
+            }
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .search-container {
+                width: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= Left Sidebar ================= -->
+    {% include 'ashawoker/sidebar.html' %}
+
+    <!-- ================= Main Container ================= -->
+    <main class="main-wrapper">
+
+        <!-- Top Header Navigation -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()" aria-label="Toggle Sidebar Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <!-- Search Mother Records (only shown on Mothers Registry list) -->
+                {% if active_tab != 'add' %}
+                <form method="GET" action="/myapp/manage_pregnancy/" class="search-container">
+                    <input type="hidden" name="tab" value="list">
+                    {% if status_filter and status_filter != 'all' %}
+                        <input type="hidden" name="status" value="{{ status_filter }}">
+                    {% endif %}
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" name="q" class="search-input" placeholder="Search mother name, spouse, phone..." value="{{ search_query|default:'' }}">
+                </form>
+                {% endif %}
+            </div>
+
+            <!-- Profile Badge -->
+            <div class="header-actions">
+                <a href="/myapp/ashaworker_profile/" class="worker-profile-card">
+                    <div class="worker-info">
+                        <span class="worker-name">{{ worker.Full_name|default:'ASHA Worker' }}</span>
+                        <span class="worker-id"><i class="fa-solid fa-location-dot"></i> {{ worker.Area_assigned|default:'Assigned Area' }}</span>
+                    </div>
+                    {% if worker.image %}
+                        <img src="{{ worker.image.url }}" alt="Profile Avatar" class="worker-avatar-img">
+                    {% else %}
+                        <img src="{% static 'images/asha_avatar.png' %}" alt="Profile Avatar" class="worker-avatar-img" onerror="this.src='/static/images/mother_child_logo.png'">
+                    {% endif %}
+                </a>
+            </div>
+        </header>
+
+        <!-- Body Content -->
+        <div class="content-body">
+
+            <!-- System Flash Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-box alert-{{ message.tags|default:'info' }}">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fa-solid {% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-triangle-exclamation{% else %}fa-circle-info{% endif %}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button class="alert-close" onclick="this.parentElement.remove()">&times;</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Header Card with View Mode Switcher -->
+            <div class="page-header-card">
+                <div class="page-title-group">
+                    <h1>Maternal Pregnancy Records</h1>
+                    <p>Track mother clinical checkup history and record new health metrics.</p>
+                </div>
+
+                <div class="header-controls-wrap">
+                    <div class="view-mode-tabs">
+                        <a href="/myapp/manage_pregnancy/?tab=list" class="mode-tab-btn {% if active_tab != 'add' %}active{% endif %}">
+                            <i class="fa-solid fa-users"></i>
+                            <span>Mothers Registry ({{ total_count }})</span>
+                        </a>
+                        <a href="/myapp/manage_pregnancy/?tab=add" class="mode-tab-btn {% if active_tab == 'add' %}active{% endif %}">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Log Checkup</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 1: LIST OF MOTHERS (STATUS: PREGNANT / DELIVERED) -->
+            {% if active_tab != 'add' %}
+
+                <!-- Status Filter Pills -->
+                <div class="status-filters-row">
+                    <a href="/myapp/manage_pregnancy/?tab=list&status=all{% if search_query %}&q={{ search_query }}{% endif %}" class="filter-pill {% if status_filter == 'all' or not status_filter %}active{% endif %}">
+                        All Mothers ({{ total_count }})
+                    </a>
+                    <a href="/myapp/manage_pregnancy/?tab=list&status=pregnant{% if search_query %}&q={{ search_query }}{% endif %}" class="filter-pill {% if status_filter == 'pregnant' %}active{% endif %}">
+                        <i class="fa-solid fa-person-pregnant" style="margin-right: 4px;"></i> Pregnant ({{ pregnant_count }})
+                    </a>
+                    <a href="/myapp/manage_pregnancy/?tab=list&status=delivered{% if search_query %}&q={{ search_query }}{% endif %}" class="filter-pill {% if status_filter == 'delivered' %}active{% endif %}">
+                        <i class="fa-solid fa-baby" style="margin-right: 4px;"></i> Delivered ({{ delivered_count }})
+                    </a>
+                </div>
+
+                <!-- Mothers Table -->
+                <div class="table-card">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Mother Name & Age</th>
+                                <th>Spouse & Contact</th>
+                                <th>Maternal Status</th>
+                                <th>Blood & Address</th>
+                                <th>Checkup History</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for m in mothers_list %}
+                                <tr>
+                                    <td>
+                                        <div class="table-avatar-cell">
+                                            <div class="table-avatar-badge">
+                                                {{ m.obj.name|slice:":1"|upper }}
+                                            </div>
+                                            <div class="table-user-info">
+                                                <span class="table-user-name">{{ m.obj.name }}</span>
+                                                <span class="table-user-sub">Age: {{ m.obj.age }} Yrs</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <strong>{{ m.obj.husband_name }}</strong>
+                                        <div style="font-size: 0.78rem; color: var(--text-muted);">Ph: {{ m.obj.phone }}</div>
+                                    </td>
+                                    <td>
+                                        {% if m.status == 'Pregnant' %}
+                                            <span class="status-badge pregnant">
+                                                <i class="fa-solid fa-person-pregnant"></i> Pregnant
+                                            </span>
+                                        {% else %}
+                                            <span class="status-badge delivered">
+                                                <i class="fa-solid fa-baby"></i> Delivered
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 0.84rem;"><strong>{{ m.obj.blood_group|default:"O+" }}</strong></div>
+                                        <div style="font-size: 0.76rem; color: var(--text-muted);">{{ m.obj.Address|truncatechars:25|default:"Registered" }}</div>
+                                    </td>
+                                    <td>
+                                        <span class="records-counter-pill">
+                                            <i class="fa-regular fa-clipboard"></i> {{ m.records_count }} Checkup Logs
+                                        </span>
+                                        {% if m.latest_rec %}
+                                            <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">
+                                                Last: {{ m.latest_rec.checkup_date|date:"M d, Y" }}
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="table-actions-cell">
+                                            <button 
+                                                type="button" 
+                                                class="btn-table-action btn-action-view-records" 
+                                                onclick="openMotherRecordsModal('{{ m.obj.id }}')"
+                                                title="View checkup records added in each month"
+                                            >
+                                                <i class="fa-regular fa-eye"></i> View Records
+                                            </button>
+                                            {% if m.obj.is_currently_pregnant %}
+                                            <a 
+                                                href="/myapp/manage_pregnancy/?tab=add&selected_mother={{ m.obj.id }}" 
+                                                class="btn-table-action btn-action-add-checkup"
+                                                title="Add a new checkup for this pregnancy"
+                                            >
+                                                <i class="fa-solid fa-plus"></i> Add
+                                            </a>
+                                            {% elif m.obj.has_delivered %}
+                                            <a 
+                                                href="/myapp/manage_pregnancy/?tab=add&selected_mother={{ m.obj.id }}" 
+                                                class="btn-table-action btn-action-add-checkup"
+                                                style="background: #e0f2fe; color: #0369a1; border-color: #bae6fd;"
+                                                title="Record new pregnancy for this mother"
+                                            >
+                                                <i class="fa-solid fa-plus"></i> New Pregnancy
+                                            </a>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+                                        <i class="fa-solid fa-person-breastfeeding" style="font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.4;"></i>
+                                        <p>No mother record added or found matching the criteria.</p>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            {% else %}
+
+            <!-- TAB 2: LOG CHECKUP ENTRY FORM -->
+            <div class="records-layout-grid">
+
+                <!-- Left Column: Form Card -->
+                <div class="form-card">
+                    <form method="POST" action="/myapp/manage_pregnancy/" id="pregnancyCheckupForm" onsubmit="return handleFormSubmit(event)">
+                        {% csrf_token %}
+
+                        <!-- Inline Warning Box for 30-Day Constraint -->
+                        <div id="inlineIntervalWarning" class="alert-box alert-warning" style="display: none; margin-bottom: 1.25rem; border-color: #fde68a; background-color: #fffbeb; color: #b45309;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.2rem; flex-shrink: 0;"></i>
+                                <div>
+                                    <strong style="display: block; font-size: 0.9rem;">Record Logged For This Month</strong>
+                                    <span id="inlineWarningMessageText" style="font-size: 0.85rem;">Record for this month is recorded so it will take 30 days to enter the next record.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Select Mother Dropdown -->
+                        <div class="form-section-group" style="margin-bottom: 1.5rem;">
+                            <label class="form-label">Select Mother</label>
+                            <select name="mother_id" class="form-select" id="motherSelect" onchange="onMotherSelectChange(this.value)" required>
+                                <option value="">Choose patient from register...</option>
+                                {% for m in all_mothers %}
+                                    <option value="{{ m.id }}" {% if selected_mother and selected_mother.id == m.id %}selected{% endif %} data-pregnant="{% if m.is_currently_pregnant %}yes{% else %}no{% endif %}" data-delivered="{% if m.has_delivered %}yes{% else %}no{% endif %}">
+                                        {{ m.name }} (Spouse: {{ m.husband_name }} | {{ m.blood_group|default:'O+' }}) 
+                                        {% if m.is_currently_pregnant %}
+                                            — Pregnant: Month {{ m.gestation_month }} ({{ m.gestation_week_display }})
+                                        {% elif m.has_delivered %}
+                                            — Delivered (Select to record new pregnancy)
+                                        {% endif %}
+                                    </option>
+                                {% empty %}
+                                    <option value="" disabled>No eligible mother available</option>
+                                {% endfor %}
+                            </select>
+
+                            <!-- Dynamic Pregnancy Status & Month Info Box -->
+                            <div id="managePregnancyStatusBadge" style="margin-top: 0.65rem; padding: 0.75rem 1rem; border-radius: 12px; background: #f8fafc; border: 1px solid var(--border-color); color: #64748b; font-weight: 700; font-size: 0.92rem; display: flex; align-items: center; gap: 8px;">
+                                <i class="fa-solid fa-person-pregnant" style="font-size: 1.15rem; color: #10b981;"></i>
+                                <span id="managePregStatusText">Select a mother to view pregnancy status & month</span>
+                            </div>
+
+                            <!-- New Pregnancy EDD Field (Shown when starting a new pregnancy for delivered mother) -->
+                            <div id="newEddInputGroup" style="display: none; margin-top: 0.85rem; padding: 0.85rem 1rem; border-radius: 12px; background: #e0f2fe; border: 1.5px solid #bae6fd;">
+                                <label class="form-label" style="color: #0369a1; font-weight: 700; margin-bottom: 4px; display: block;">
+                                    <i class="fa-solid fa-calendar-plus"></i> New Pregnancy Expected Delivery Date (EDD) *
+                                </label>
+                                <input type="date" name="expected_delivery_date" id="newPregnancyEddInput" class="form-input" style="background: #ffffff; border-color: #7dd3fc;">
+                                <small style="display: block; color: #0284c7; margin-top: 4px; font-weight: 600;">
+                                    This mother delivered previously. Entering the new EDD records a new pregnancy and updates her profile to Active Pregnant.
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Checkup Date & Weight -->
+                        <div class="form-row-2" style="margin-bottom: 1.25rem;">
+                            <div class="form-section-group">
+                                <label class="form-label">Checkup Date</label>
+                                <input type="date" name="checkup_date" id="checkupDateInput" class="form-input" value="{{ today_date }}" onchange="validateCheckupInterval(true)" required>
+                            </div>
+                            <div class="form-section-group">
+                                <label class="form-label">Weight (kg)</label>
+                                <input type="number" step="0.1" name="weight" class="form-input" placeholder="e.g. 62.5" required>
+                            </div>
+                        </div>
+
+                        <!-- Height & Blood Pressure -->
+                        <div class="form-row-2" style="margin-bottom: 1.25rem;">
+                            <div class="form-section-group">
+                                <label class="form-label">Height (cm)</label>
+                                <input type="number" step="0.1" name="height" class="form-input" placeholder="e.g. 160" value="160">
+                            </div>
+                            <div class="form-section-group">
+                                <label class="form-label">Blood Pressure (mmHg)</label>
+                                <input type="text" name="blood_pressure" class="form-input" placeholder="120/80" value="120/80" required>
+                            </div>
+                        </div>
+
+                        <!-- Hemoglobin -->
+                        <div class="form-row-2" style="margin-bottom: 1.25rem;">
+                            <div class="form-section-group">
+                                <label class="form-label">Hemoglobin (g/dL)</label>
+                                <input type="number" step="0.1" name="hemoglobin" class="form-input" placeholder="e.g. 11.2" value="11.2">
+                            </div>
+                            <div></div>
+                        </div>
+
+                        <!-- Health Status Radio Pills -->
+                        <div class="form-section-group" style="margin-bottom: 1.25rem;">
+                            <label class="form-label">Health Status</label>
+                            <div class="status-pills-selector">
+                                <label class="status-radio-label">
+                                    <input type="radio" name="health_status" value="Normal" checked>
+                                    <span class="status-pill-chip">Normal</span>
+                                </label>
+                                <label class="status-radio-label">
+                                    <input type="radio" name="health_status" value="Observation">
+                                    <span class="status-pill-chip">Observation</span>
+                                </label>
+                                <label class="status-radio-label">
+                                    <input type="radio" name="health_status" value="High Risk">
+                                    <span class="status-pill-chip">High Risk</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Remarks -->
+                        <div class="form-section-group" style="margin-bottom: 1.5rem;">
+                            <label class="form-label">Remarks</label>
+                            <textarea name="remarks" class="form-textarea" placeholder="Enter clinical notes, prescribed vitamins, or symptoms..."></textarea>
+                        </div>
+
+                        <!-- Save Button -->
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <a href="/myapp/manage_pregnancy/?tab=list" style="color: var(--text-muted); font-size: 0.88rem; text-decoration: none; font-weight: 600;">
+                                <i class="fa-solid fa-arrow-left"></i> Back to Mothers Registry
+                            </a>
+                            <button type="submit" class="btn-save-record">
+                                <i class="fa-regular fa-floppy-disk"></i>
+                                <span>Save Record</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Right Column: Patient Overview & Recent Logs -->
+                <div class="side-widgets-column">
+                    <div class="overview-card">
+                        <div class="patient-header-box">
+                            <div class="patient-icon-avatar">
+                                <i class="fa-solid fa-hospital-user"></i>
+                            </div>
+                            <div class="patient-info-wrap">
+                                <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-heading);">Patient Overview</h3>
+                                <p style="font-size: 0.88rem; color: var(--text-muted); font-weight: 500;" id="overviewPatientName">
+                                    {{ selected_mother.name|default:"Select a Mother" }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="overview-details-list">
+                            <div class="overview-row">
+                                <span style="color: var(--text-muted); font-weight: 500;">Gestational Age</span>
+                                <span style="color: var(--text-heading); font-weight: 700;" id="overviewGestAge">
+                                    {% if selected_mother %}
+                                        {% if selected_mother.has_delivered %}
+                                            Delivered
+                                        {% elif selected_mother.expected_delivery_date %}
+                                            Month {{ selected_mother.gestation_month }} ({{ selected_mother.gestation_week_display }})
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    {% else %}
+                                        --
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="overview-row">
+                                <span style="color: var(--text-muted); font-weight: 500;">Last Checkup</span>
+                                <span style="color: var(--text-heading); font-weight: 700;" id="overviewLastCheckup">
+                                    {% if selected_mother %}{% if recent_logs %}{{ recent_logs.0.checkup_date|date:"M d, Y" }}{% else %}Initial Visit{% endif %}{% else %}--{% endif %}
+                                </span>
+                            </div>
+                            <div class="overview-row">
+                                <span style="color: var(--text-muted); font-weight: 500;">Blood Group</span>
+                                <span style="color: var(--text-heading); font-weight: 700;" id="overviewBloodGroup">
+                                    {% if selected_mother %}{{ selected_mother.blood_group|default:"O Positive" }}{% else %}--{% endif %}
+                                </span>
+                            </div>
+                            <div class="overview-row">
+                                <span style="color: var(--text-muted); font-weight: 500;">Risk Profile</span>
+                                <span class="status-badge delivered" id="overviewRiskProfile">{% if selected_mother %}LOW RISK{% else %}--{% endif %}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-logs-card">
+                        <h4 style="font-size: 0.78rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted);">RECENT LOGS</h4>
+                        <div class="timeline-list" id="timelineLogsList">
+                            {% if selected_mother %}
+                                {% if recent_logs %}
+                                    {% for lg in recent_logs %}
+                                        <div class="timeline-item">
+                                            <div style="font-size: 0.88rem; font-weight: 700; color: var(--text-heading);">{{ lg.checkup_date|date:"M d, Y" }}</div>
+                                            <div style="font-size: 0.8rem; color: var(--text-muted);">Weight: {{ lg.weight }}kg | BP: {{ lg.blood_pressure }}</div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="timeline-item">
+                                        <div style="font-size: 0.88rem; font-weight: 700; color: var(--text-heading);">Initial Checkup</div>
+                                        <div style="font-size: 0.8rem; color: var(--text-muted);">No checkup record added yet for this mother</div>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div class="timeline-item">
+                                    <div style="font-size: 0.88rem; font-weight: 700; color: var(--text-heading);">No Mother Selected</div>
+                                    <div style="font-size: 0.8rem; color: var(--text-muted);">Select a mother from the dropdown to view previous checkup history</div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {% endif %}
+
+        </div>
+    </main>
+
+    <!-- ================= VIEW MOTHER CHECKUP RECORDS MODAL ================= -->
+    <div class="modal-backdrop" id="motherRecordsModal">
+        <div class="modal-card-large">
+            <div class="modal-header">
+                <div>
+                    <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--brand-green);" id="modalMotherName">Mother Checkup History</h3>
+                    <p style="font-size: 0.8rem; color: #6b7280; margin-top: 2px;" id="modalMotherMeta">Monthly maternal health logs</p>
+                </div>
+                <button onclick="closeMotherRecordsModal()" style="background:none; border:none; font-size:1.3rem; cursor:pointer; color:#6b7280;">&times;</button>
+            </div>
+
+            <div class="modal-body" id="modalRecordsBody">
+                <!-- Injected by JavaScript for each mother -->
+            </div>
+
+            <div class="modal-footer">
+                <a href="#" id="modalAddCheckupLink" class="btn-table-action btn-action-view-records" style="padding: 0.6rem 1.2rem;">
+                    <i class="fa-solid fa-plus"></i> Add New Checkup for this Mother
+                </a>
+                <button type="button" onclick="closeMotherRecordsModal()" class="btn-table-action" style="padding: 0.6rem 1.2rem; background: #e5e7eb; color: #374151;">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Record Modal -->
+    <div class="modal-backdrop" id="deleteModal">
+        <div class="modal-card-large" style="max-width: 480px;">
+            <div class="modal-header" style="background-color: #fef2f2;">
+                <h3 style="font-size: 1.1rem; font-weight: 800; color: #dc2626;"><i class="fa-solid fa-triangle-exclamation"></i> Delete Record</h3>
+                <button onclick="closeDeleteModal()" style="background:none; border:none; font-size:1.3rem; cursor:pointer; color:#6b7280;">&times;</button>
+            </div>
+            <form method="POST" action="/myapp/manage_pregnancy/">
+                {% csrf_token %}
+                <input type="hidden" name="action_type" value="delete_pregnancy_record">
+                <input type="hidden" name="record_id" id="deleteRecordId">
+                <div class="modal-body">
+                    <p style="font-size: 0.95rem; color: #374151;" id="deleteConfirmText">Are you sure you want to delete this checkup record?</p>
+                </div>
+                <div class="modal-footer" style="justify-content: flex-end; gap: 10px;">
+                    <button type="button" onclick="closeDeleteModal()" class="btn-table-action" style="padding: 0.6rem 1rem; background:#e5e7eb; color:#374151;">Cancel</button>
+                    <button type="submit" class="btn-table-action" style="padding: 0.6rem 1.2rem; background: #dc2626; color: #ffffff;">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 30-Day Checkup Interval Restriction Pop-up Modal -->
+    <div class="modal-backdrop" id="intervalWarningModal">
+        <div class="modal-card-large" style="max-width: 480px;">
+            <div class="modal-header" style="background-color: #fffbeb; border-bottom: 1px solid #fde68a;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #b45309; font-size: 1.3rem;"></i>
+                    <h3 style="font-size: 1.1rem; font-weight: 800; color: #b45309;">Checkup Record Notice</h3>
+                </div>
+                <button type="button" onclick="closeIntervalWarningModal()" style="background:none; border:none; font-size:1.3rem; cursor:pointer; color:#6b7280;">&times;</button>
+            </div>
+            <div class="modal-body" style="text-align: center; padding: 1.75rem 1.5rem;">
+                <div style="width: 64px; height: 64px; border-radius: 50%; background-color: #fef3c7; color: #b45309; display: flex; align-items: center; justify-content: center; font-size: 1.9rem; margin: 0 auto 1.25rem; box-shadow: 0 4px 12px rgba(180, 83, 9, 0.12);">
+                    <i class="fa-solid fa-calendar-xmark"></i>
+                </div>
+                <h4 style="font-size: 1.1rem; font-weight: 800; color: #111827; margin-bottom: 0.6rem;" id="intervalModalMotherName">Notice</h4>
+                <p style="font-size: 0.95rem; color: #374151; line-height: 1.5; font-weight: 600; background-color: #fffbeb; padding: 12px 14px; border-radius: 12px; border: 1px dashed #fcd34d;" id="intervalModalMessageText">
+                    Record for this month is recorded so it will take 30 days to enter the next record.
+                </p>
+                <p style="font-size: 0.8rem; color: #6b7280; margin-top: 12px;" id="intervalModalLastCheckupSub">
+                    Last Recorded Checkup Date: <strong id="modalLastDateVal">-</strong>
+                </p>
+            </div>
+            <div class="modal-footer" style="justify-content: center; background-color: #fffbeb;">
+                <button type="button" onclick="closeIntervalWarningModal()" class="btn-save-record" style="background-color: #b45309; padding: 0.65rem 2rem; border-radius: 50px;">
+                    <i class="fa-solid fa-check"></i> Understood
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client-side Dynamic Data -->
+    <script id="mothersModalDataScript" type="application/json">
+        {{ mothers_modal_data_json|safe }}
+    </script>
+
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        const mothersModalDataRaw = document.getElementById('mothersModalDataScript').textContent;
+        let mothersModalData = {};
+        try {
+            mothersModalData = JSON.parse(mothersModalDataRaw);
+        } catch (e) {
+            console.error("Could not parse mothers JSON data", e);
+        }
+
+        // Open Mother Detailed Checkup Records Modal
+        function openMotherRecordsModal(motherId) {
+            if (!motherId) return;
+            const key = String(motherId);
+            const m = mothersModalData[key] || mothersModalData[motherId];
+            if (!m) {
+                console.warn("No mother data found for ID:", motherId);
+                return;
+            }
+
+            const isDelivered = (!m.is_pregnant && (m.status === 'Delivered' || m.has_delivered));
+            const gestInfo = isDelivered ? 'Delivered' : (m.gestational_age || 'N/A');
+            document.getElementById('modalMotherName').textContent = `${m.name} — Pregnancy Checkup History`;
+            document.getElementById('modalMotherMeta').textContent = `Spouse: ${m.spouse} | Phone: ${m.phone} | Status: ${m.status_display || m.status} | Gestational Age: ${gestInfo} | Blood Group: ${m.blood_group}`;
+            
+            const addLink = document.getElementById('modalAddCheckupLink');
+            if (addLink) {
+                addLink.style.display = 'inline-flex';
+                addLink.href = `/myapp/manage_pregnancy/?tab=add&selected_mother=${m.id}`;
+                addLink.innerHTML = m.is_pregnant ? '<i class="fa-solid fa-plus"></i> Add Checkup' : '<i class="fa-solid fa-plus"></i> New Pregnancy';
+            }
+
+            const container = document.getElementById('modalRecordsBody');
+            
+            function renderCard(log) {
+                const statusClass = (log.status === 'High Risk') ? 'background: #fee2e2; color: #dc2626;' : 
+                                    (log.status === 'Observation') ? 'background: #fef3c7; color: #b45309;' : 
+                                    'background: #d1fae5; color: #065f46;';
+                
+                return `
+                    <div class="checkup-history-card" style="margin-bottom: 10px;">
+                        <div class="checkup-card-header">
+                            <div>
+                                <strong style="color: #111827; font-size: 0.95rem;">Checkup Date: ${log.date}</strong>
+                                <span style="margin-left: 10px; padding: 2px 8px; border-radius: 50px; font-size: 0.72rem; font-weight: 800; ${statusClass}">${log.status || 'Normal'}</span>
+                            </div>
+                            <button type="button" onclick="confirmDeleteRecord(${log.id}, '${m.name}', '${log.date}')" style="background: none; border: none; color: #dc2626; cursor: pointer; font-size: 0.85rem;" title="Delete this checkup entry">
+                                <i class="fa-regular fa-trash-can"></i> Delete
+                            </button>
+                        </div>
+                        <div class="checkup-metrics-grid">
+                            <div><strong>Gestational Age:</strong> <span style="color: #047857; font-weight: 700;">${log.gestation_week || 'N/A'}</span></div>
+                            <div><strong>Weight:</strong> ${log.weight}</div>
+                            <div><strong>Height:</strong> ${log.height}</div>
+                            <div><strong>BP:</strong> ${log.bp}</div>
+                            <div><strong>Hb:</strong> ${log.hb}</div>
+                        </div>
+                        <div style="font-size: 0.82rem; color: #4b5563;">
+                            <strong>Clinical Notes:</strong> ${log.notes}
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (m.has_previous_pregnancy) {
+                let html = '';
+
+                // SECTION 1: CURRENT ACTIVE PREGNANCY (if currently pregnant or has current pregnancy logs)
+                if (m.is_pregnant || (m.current_logs && m.current_logs.length > 0)) {
+                    const currentLogs = m.current_logs || [];
+                    html += `
+                        <div style="background: #f0f9ff; border: 1.5px solid #bae6fd; border-radius: 12px; padding: 12px 16px; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="background: #0284c7; color: #fff; font-size: 0.74rem; font-weight: 800; padding: 3px 8px; border-radius: 6px;">PREGNANCY #${m.current_pregnancy_number || 2}</span>
+                                    <strong style="color: #0369a1; font-size: 1rem;">Current Active Pregnancy</strong>
+                                </div>
+                                <span style="font-size: 0.82rem; font-weight: 700; color: #0284c7;">
+                                    <i class="fa-solid fa-calendar-day"></i> EDD: ${m.active_edd || 'Active'} &bull; ${currentLogs.length} Checkup Log(s)
+                                </span>
+                            </div>
+                        </div>
+                    `;
+
+                    if (currentLogs.length > 0) {
+                        currentLogs.forEach(log => {
+                            html += renderCard(log);
+                        });
+                    } else {
+                        html += `
+                            <div style="background: #ffffff; border: 1px dashed #93c5fd; border-radius: 10px; padding: 1.2rem; text-align: center; color: #0369a1; margin-bottom: 16px;">
+                                <i class="fa-solid fa-baby" style="font-size: 1.5rem; margin-bottom: 6px; color: #38bdf8;"></i>
+                                <p style="font-weight: 700; font-size: 0.9rem;">New Pregnancy Active</p>
+                                <p style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">No checkup records logged yet for this pregnancy. Click '+ Add Checkup' below to log the first visit.</p>
+                            </div>
+                        `;
+                    }
+                }
+
+                // SECTION 2: PREVIOUS PREGNANCY RESULT & DELIVERED CHILD HISTORY
+                const prevLogs = m.previous_logs || [];
+                const childObj = (m.delivered_children && m.delivered_children.length > 0) ? m.delivered_children[0] : null;
+
+                html += `
+                    <div style="background: #ecfdf5; border: 1.5px solid #a7f3d0; border-radius: 12px; padding: 14px 16px; margin-top: 16px; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="background: #059669; color: #fff; font-size: 0.74rem; font-weight: 800; padding: 3px 8px; border-radius: 6px;">PREGNANCY #1 RESULT</span>
+                                <strong style="color: #047857; font-size: 1rem;">Previous Pregnancy Result & Delivered Child</strong>
+                            </div>
+                            <span style="font-size: 0.82rem; font-weight: 700; color: #059669;">
+                                <i class="fa-solid fa-clock-rotate-left"></i> ${prevLogs.length} Completed Checkup(s)
+                            </span>
+                        </div>
+                `;
+
+                if (childObj) {
+                    html += `
+                        <div style="background: #ffffff; border: 1.5px solid #86efac; border-radius: 10px; padding: 10px 14px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; font-size: 0.84rem; color: #065f46;">
+                            <div><i class="fa-solid fa-child" style="color: #10b981; margin-right: 4px;"></i><strong>Child:</strong> ${childObj.name}</div>
+                            <div><i class="fa-solid fa-cake-candles" style="color: #10b981; margin-right: 4px;"></i><strong>Born:</strong> ${childObj.dob}</div>
+                            <div><i class="fa-solid fa-weight-scale" style="color: #10b981; margin-right: 4px;"></i><strong>Birth Weight:</strong> ${childObj.weight}</div>
+                            <div><i class="fa-solid fa-venus-mars" style="color: #10b981; margin-right: 4px;"></i><strong>Gender:</strong> ${childObj.gender}</div>
+                            <div><i class="fa-solid fa-hospital" style="color: #10b981; margin-right: 4px;"></i><strong>Hospital:</strong> ${childObj.hospital}</div>
+                            <div><span style="background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 12px; font-weight: 700; font-size: 0.75rem;"><i class="fa-solid fa-check"></i> ${childObj.health_status}</span></div>
+                        </div>
+                    `;
+                }
+
+                html += `</div>`;
+
+                if (prevLogs.length > 0) {
+                    html += `
+                        <div style="font-size: 0.82rem; font-weight: 800; color: #047857; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px;">
+                            <i class="fa-solid fa-list-check" style="margin-right: 5px;"></i>Previous Pregnancy Checkup Records:
+                        </div>
+                    `;
+                    prevLogs.forEach(log => {
+                        html += renderCard(log);
+                    });
+                } else {
+                    html += `
+                        <div style="text-align: center; padding: 1rem; color: #6b7280; font-size: 0.85rem;">
+                            No archived antenatal records found for the previous pregnancy.
+                        </div>
+                    `;
+                }
+
+                container.innerHTML = html;
+            } else if (m.logs && m.logs.length > 0) {
+                let html = `
+                    <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+                        <span style="font-weight: 800; color: #166534; font-size: 0.92rem;"><i class="fa-solid fa-person-pregnant" style="margin-right: 6px;"></i>PREGNANCY #1 &bull; Active Antenatal Logs</span>
+                        <span style="font-size: 0.8rem; font-weight: 700; color: #16a34a;">${m.logs.length} Checkup Record(s)</span>
+                    </div>
+                `;
+                m.logs.forEach(log => {
+                    html += renderCard(log);
+                });
+                container.innerHTML = html;
+            } else {
+                const emptyNotice = isDelivered ? 'This mother has delivered. Antenatal checkup period completed.' : 'Click the button below to add the first checkup record.';
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2.5rem 1rem; color: #6b7280;">
+                        <i class="fa-regular fa-clipboard" style="font-size: 2.2rem; margin-bottom: 0.5rem; opacity: 0.4;"></i>
+                        <p style="font-weight: 600;">No checkup record added yet for ${m.name}.</p>
+                        <p style="font-size: 0.82rem; margin-top: 4px;">${emptyNotice}</p>
+                    </div>
+                `;
+            }
+
+            document.getElementById('motherRecordsModal').classList.add('show');
+        }
+
+        function closeMotherRecordsModal() {
+            document.getElementById('motherRecordsModal').classList.remove('show');
+        }
+
+        function confirmDeleteRecord(recId, motherName, date) {
+            document.getElementById('deleteRecordId').value = recId;
+            document.getElementById('deleteConfirmText').textContent = `Are you sure you want to delete the checkup record of "${motherName}" dated ${date}?`;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('show');
+        }
+
+        function getCheckupIntervalStatus(motherId, checkupDateStr) {
+            if (!motherId) {
+                return { allowed: true };
+            }
+            const m = mothersModalData[String(motherId)] || mothersModalData[motherId];
+            if (!m || !m.last_checkup_iso) {
+                return { allowed: true };
+            }
+
+            const parts = m.last_checkup_iso.split('-');
+            if (parts.length !== 3) return { allowed: true };
+            const lastDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+
+            let selectedDate = new Date();
+            if (checkupDateStr) {
+                const cParts = checkupDateStr.split('-');
+                if (cParts.length === 3) {
+                    selectedDate = new Date(parseInt(cParts[0]), parseInt(cParts[1]) - 1, parseInt(cParts[2]));
+                }
+            }
+
+            const diffTime = selectedDate.getTime() - lastDate.getTime();
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays < 30) {
+                const daysRemaining = 30 - (diffDays > 0 ? diffDays : 0);
+                const daysStr = (daysRemaining === 1) ? "1 day" : `${daysRemaining} days`;
+                return {
+                    allowed: false,
+                    daysPassed: diffDays,
+                    daysRemaining: daysRemaining,
+                    daysStr: daysStr,
+                    motherName: m.name,
+                    lastCheckupDate: m.last_checkup
+                };
+            }
+            return { allowed: true };
+        }
+
+        function validateCheckupInterval(shouldPopup = false) {
+            const motherSelect = document.getElementById('motherSelect');
+            const dateInput = document.getElementById('checkupDateInput');
+            const inlineBox = document.getElementById('inlineIntervalWarning');
+            const inlineText = document.getElementById('inlineWarningMessageText');
+
+            if (!motherSelect || !dateInput) return true;
+
+            const motherId = motherSelect.value;
+            const dateStr = dateInput.value;
+            const status = getCheckupIntervalStatus(motherId, dateStr);
+
+            if (!status.allowed) {
+                const msg = `Record for this month is recorded so it will take ${status.daysStr} to enter the next record.`;
+                if (inlineBox && inlineText) {
+                    inlineText.textContent = msg;
+                    inlineBox.style.display = 'block';
+                }
+                if (shouldPopup) {
+                    document.getElementById('intervalModalMotherName').textContent = status.motherName ? `Notice for ${status.motherName}` : 'Checkup Entry Notice';
+                    document.getElementById('intervalModalMessageText').textContent = msg;
+                    document.getElementById('modalLastDateVal').textContent = status.lastCheckupDate || 'Recently';
+                    document.getElementById('intervalWarningModal').classList.add('show');
+                }
+                return false;
+            } else {
+                if (inlineBox) {
+                    inlineBox.style.display = 'none';
+                }
+                return true;
+            }
+        }
+
+        function closeIntervalWarningModal() {
+            document.getElementById('intervalWarningModal').classList.remove('show');
+        }
+
+        function handleFormSubmit(e) {
+            const isAllowed = validateCheckupInterval(true);
+            if (!isAllowed) {
+                e.preventDefault();
+                return false;
+            }
+            return true;
+        }
+
+        function onMotherSelectChange(motherId, shouldPopup = true) {
+            const badge = document.getElementById('managePregnancyStatusBadge');
+            const text = document.getElementById('managePregStatusText');
+            const nameEl = document.getElementById('overviewPatientName');
+            const gestEl = document.getElementById('overviewGestAge');
+            const lastCheckupEl = document.getElementById('overviewLastCheckup');
+            const bloodEl = document.getElementById('overviewBloodGroup');
+            const riskEl = document.getElementById('overviewRiskProfile');
+            const timelineEl = document.getElementById('timelineLogsList');
+            const inlineWarning = document.getElementById('inlineIntervalWarning');
+
+            if (!motherId) {
+                if (badge && text) {
+                    badge.style.backgroundColor = '#f8fafc';
+                    badge.style.borderColor = 'var(--border-color)';
+                    badge.style.color = '#64748b';
+                    text.innerHTML = 'Select a mother to view pregnancy status & month';
+                }
+                if (nameEl) nameEl.textContent = 'Select a Mother';
+                if (gestEl) gestEl.textContent = '--';
+                if (lastCheckupEl) lastCheckupEl.textContent = '--';
+                if (bloodEl) bloodEl.textContent = '--';
+                if (riskEl) {
+                    riskEl.textContent = '--';
+                    riskEl.className = 'status-badge delivered';
+                    riskEl.style.backgroundColor = '';
+                    riskEl.style.color = '';
+                }
+                if (timelineEl) {
+                    timelineEl.innerHTML = `
+                        <div class="timeline-item">
+                            <div style="font-size: 0.88rem; font-weight: 700; color: var(--text-heading);">No Mother Selected</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Select a mother from the dropdown to view previous checkup history</div>
+                        </div>
+                    `;
+                }
+                if (inlineWarning) inlineWarning.style.display = 'none';
+                return;
+            }
+
+            const m = mothersModalData[String(motherId)] || mothersModalData[motherId];
+            if (!m) return;
+
+            if (nameEl) nameEl.textContent = m.name || '-';
+            if (gestEl) {
+                if (m.status === 'Delivered') {
+                    gestEl.textContent = 'Delivered';
+                } else if (m.is_pregnant && m.gestational_age && m.gestational_age !== 'N/A') {
+                    gestEl.textContent = m.pregnancy_month ? `Month ${m.pregnancy_month} (${m.gestational_age})` : m.gestational_age;
+                } else {
+                    gestEl.textContent = m.gestational_age || 'N/A';
+                }
+            }
+            if (lastCheckupEl) lastCheckupEl.textContent = m.last_checkup || 'Initial Visit';
+            if (bloodEl) bloodEl.textContent = m.blood_group || 'O Positive';
+
+            // Risk profile tag update
+            if (riskEl) {
+                const latestLog = (m.logs && m.logs.length > 0) ? m.logs[0] : null;
+                const status = latestLog ? (latestLog.status || 'Normal') : 'Normal';
+                riskEl.textContent = status.toUpperCase();
+                if (status === 'High Risk') {
+                    riskEl.className = 'status-badge';
+                    riskEl.style.backgroundColor = '#fee2e2';
+                    riskEl.style.color = '#dc2626';
+                } else if (status === 'Observation') {
+                    riskEl.className = 'status-badge';
+                    riskEl.style.backgroundColor = '#fef3c7';
+                    riskEl.style.color = '#b45309';
+                } else {
+                    riskEl.className = 'status-badge delivered';
+                    riskEl.style.backgroundColor = '';
+                    riskEl.style.color = '';
+                }
+            }
+
+            // Populate recent logs timeline
+            if (timelineEl) {
+                if (m.logs && m.logs.length > 0) {
+                    let html = '';
+                    m.logs.slice(0, 5).forEach(log => {
+                        html += `
+                            <div class="timeline-item">
+                                <div style="font-size: 0.88rem; font-weight: 700; color: var(--text-heading);">${log.date}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">Weight: ${log.weight} | BP: ${log.bp}</div>
+                            </div>
+                        `;
+                    });
+                    timelineEl.innerHTML = html;
+                } else {
+                    timelineEl.innerHTML = `
+                        <div class="timeline-item">
+                            <div style="font-size: 0.88rem; font-weight: 700; color: var(--text-heading);">Initial Checkup</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">No checkup record added yet for this mother</div>
+                        </div>
+                    `;
+                }
+            }
+
+            const newEddGroup = document.getElementById('newEddInputGroup');
+            const newEddInput = document.getElementById('newPregnancyEddInput');
+            if (newEddGroup) {
+                if (!m.is_pregnant && (m.status === 'Delivered' || m.has_delivered)) {
+                    newEddGroup.style.display = 'block';
+                    if (newEddInput) newEddInput.required = true;
+                } else {
+                    newEddGroup.style.display = 'none';
+                    if (newEddInput) newEddInput.required = false;
+                }
+            }
+
+            if (badge && text) {
+                if (m.is_pregnant) {
+                    badge.style.backgroundColor = '#ecfdf5';
+                    badge.style.borderColor = '#a7f3d0';
+                    badge.style.color = '#047857';
+                    const mInfo = m.pregnancy_month ? ` &mdash; Month ${m.pregnancy_month}` : '';
+                    text.innerHTML = `<i class="fa-solid fa-person-pregnant" style="font-size:1.2rem; color:#10b981;"></i> <strong>Status: Pregnant${mInfo}</strong> (${m.gestational_age || 'Active Pregnancy'})`;
+                } else if (m.status === 'Delivered' || m.has_delivered) {
+                    badge.style.backgroundColor = '#f1f5f9';
+                    badge.style.borderColor = '#cbd5e1';
+                    badge.style.color = '#475569';
+                    text.innerHTML = `<i class="fa-solid fa-baby" style="font-size:1.15rem; color:#6366f1;"></i> <strong>Status: Delivered (Previous Delivery)</strong> &bull; Fill new EDD below to start new pregnancy checkup`;
+                } else {
+                    badge.style.backgroundColor = '#f1f5f9';
+                    badge.style.borderColor = '#cbd5e1';
+                    badge.style.color = '#475569';
+                    text.innerHTML = `<i class="fa-solid fa-user-check" style="color:#64748b;"></i> <strong>Status: ${m.status_display || 'Registered Mother'}</strong>`;
+                }
+            }
+
+            validateCheckupInterval(shouldPopup);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const motherSelect = document.getElementById('motherSelect');
+            if (motherSelect && motherSelect.value) {
+                onMotherSelectChange(motherSelect.value, false);
+            }
+        });
+    </script>
+</body>
+</html>

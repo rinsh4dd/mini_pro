@@ -1,0 +1,1592 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Healthcare Workforce Directory | MaatriCare</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js 4.4 Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <style>
+        :root {
+            --sidebar-bg: #073423;
+            --sidebar-active: #154d37;
+            --sidebar-hover: #0e3d29;
+            --main-bg: #f9f6f0;
+            --card-bg: #ffffff;
+            --text-dark: #111827;
+            --text-muted: #6b7280;
+            --brand-green: #0f4a33;
+            --brand-green-hover: #0a3523;
+            --brand-green-light: #e6f4ee;
+            --brand-teal: #0d9488;
+            --brand-indigo: #4f46e5;
+            --brand-blue: #2563eb;
+            --border-color: #ede7dc;
+            --border-subtle: #f0ebe1;
+            --input-bg: #faf8f4;
+            --input-border: #e2ddd3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--main-bg);
+            display: flex;
+            color: var(--text-dark);
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.75rem 1rem;
+            min-height: 100vh;
+            flex-shrink: 0;
+        }
+
+        .brand-header {
+            padding: 0 0.75rem 1.75rem 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #a8d5be;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .brand-icon-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .brand-text-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-subtitle {
+            font-size: 0.80rem;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.8rem 1rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item a:hover {
+            background-color: var(--sidebar-hover);
+            color: #ffffff;
+        }
+
+        .nav-item.active a {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .nav-item a i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .logout-wrapper {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.8rem 1rem;
+            color: #ef4444;
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+        }
+
+        /* ================= MAIN CONTENT ================= */
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .topbar {
+            height: 72px;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2.25rem;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 20px;
+            padding: 0.55rem 1.15rem;
+            width: 440px;
+            gap: 0.65rem;
+            transition: all 0.2s;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--brand-green);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(15, 74, 51, 0.1);
+        }
+
+        .search-box i {
+            color: #9ca3af;
+            font-size: 0.95rem;
+        }
+
+        .search-input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            font-size: 0.88rem;
+            color: var(--text-dark);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .avatar-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #e2ede7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .content-container {
+            padding: 2.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+        }
+
+        .page-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-main-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+        }
+
+        .page-subtitle {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-header {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.86rem;
+            font-weight: 600;
+            padding: 0.62rem 1.15rem;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-header-primary {
+            background-color: var(--brand-green);
+            color: #ffffff;
+        }
+
+        .btn-header-primary:hover {
+            background-color: var(--brand-green-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-header-secondary {
+            background-color: #ffffff;
+            color: var(--brand-green);
+            border: 1.5px solid var(--brand-green);
+        }
+
+        .btn-header-secondary:hover {
+            background-color: var(--brand-green-light);
+            transform: translateY(-1px);
+        }
+
+        .btn-header-teal {
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+        }
+
+        .btn-header-teal:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        /* ================= STAT CARDS ================= */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            border-radius: 14px;
+            padding: 1.35rem 1.45rem;
+            display: flex;
+            align-items: center;
+            gap: 1.15rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.025);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .stat-label {
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .stat-number {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            line-height: 1.15;
+            margin-top: 3px;
+        }
+
+        .stat-meta {
+            font-size: 0.77rem;
+            color: #64748b;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* ================= CHARTS SECTION ================= */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .chart-card {
+            background-color: var(--card-bg);
+            border-radius: 14px;
+            padding: 1.4rem 1.6rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.1rem;
+        }
+
+        .chart-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-subtitle {
+            font-size: 0.78rem;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        /* ================= DIRECTORY FILTER CONTROLS ================= */
+        .filter-card {
+            background-color: var(--card-bg);
+            border-radius: 14px;
+            padding: 1.15rem 1.5rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .filter-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .ward-pills-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .ward-pill-btn {
+            background-color: #faf8f4;
+            color: #4b5563;
+            border: 1px solid var(--input-border);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.83rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ward-pill-btn:hover {
+            background-color: #f1ede4;
+            color: var(--text-dark);
+        }
+
+        .ward-pill-btn.active {
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border-color: var(--brand-green);
+            box-shadow: 0 2px 6px rgba(15, 74, 51, 0.25);
+        }
+
+        .role-filters-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #faf8f4;
+            padding: 3px;
+            border-radius: 10px;
+            border: 1px solid var(--input-border);
+        }
+
+        .role-filter-btn {
+            background: transparent;
+            border: none;
+            padding: 0.42rem 0.85rem;
+            border-radius: 7px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .role-filter-btn.active {
+            background: #ffffff;
+            color: var(--brand-green);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+
+        .filter-search-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .filter-search-input {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 10px;
+            padding: 0.65rem 1rem 0.65rem 2.6rem;
+            font-size: 0.88rem;
+            outline: none;
+            color: var(--text-dark);
+            transition: all 0.2s;
+        }
+
+        .filter-search-input:focus {
+            background-color: #ffffff;
+            border-color: var(--brand-green);
+            box-shadow: 0 0 0 3px rgba(15, 74, 51, 0.1);
+        }
+
+        .filter-search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* ================= WARD CARD & WORKER TABLES ================= */
+        .ward-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .ward-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.025);
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .ward-card.hidden {
+            display: none !important;
+        }
+
+        /* Ward Card Header Banner */
+        .ward-header {
+            background: linear-gradient(135deg, #073423 0%, #0f4a33 100%);
+            color: #ffffff;
+            padding: 1.25rem 1.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .ward-title-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ward-code-badge {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 0.35rem 0.75rem;
+            border-radius: 8px;
+            letter-spacing: 0.04em;
+        }
+
+        .ward-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .ward-pills-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .ward-stat-pill {
+            background-color: rgba(255, 255, 255, 0.12);
+            color: #e2f1e9;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .ward-quick-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-ward-action {
+            background-color: rgba(255, 255, 255, 0.18);
+            color: #ffffff;
+            font-size: 0.76rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-ward-action:hover {
+            background-color: #ffffff;
+            color: var(--brand-green);
+        }
+
+        /* Ward Body - Subsections */
+        .ward-body {
+            padding: 1.5rem 1.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+        }
+
+        .worker-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        .worker-section.hidden-by-role {
+            display: none !important;
+        }
+
+        .section-subhead {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 0.5rem;
+            border-bottom: 1.5px solid var(--border-subtle);
+        }
+
+        .section-subhead-title {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-count-badge {
+            font-size: 0.74rem;
+            font-weight: 700;
+            padding: 0.25rem 0.65rem;
+            border-radius: 12px;
+        }
+
+        .badge-asha {
+            background-color: #ecfdf5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+        }
+
+        .badge-teacher {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
+
+        /* Worker Tables */
+        .worker-table-wrap {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .worker-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.86rem;
+        }
+
+        .worker-table th {
+            background-color: #faf8f4;
+            color: #475569;
+            font-weight: 700;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+            white-space: nowrap;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .worker-table td {
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid #f8f6f0;
+            color: var(--text-dark);
+            vertical-align: middle;
+        }
+
+        .worker-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .worker-table tr:hover td {
+            background-color: #fbf9f5;
+        }
+
+        .worker-profile-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .worker-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .avatar-asha {
+            background-color: #e6f4ee;
+            color: var(--brand-green);
+            border: 1.5px solid #a8d5be;
+        }
+
+        .avatar-teacher {
+            background-color: #e0e7ff;
+            color: #3730a3;
+            border: 1.5px solid #c7d2fe;
+        }
+
+        .worker-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .worker-name {
+            font-weight: 700;
+            color: var(--text-dark);
+            font-size: 0.91rem;
+            line-height: 1.25;
+        }
+
+        .worker-subtext {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .contact-link {
+            color: var(--brand-green);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.84rem;
+        }
+
+        .contact-link:hover {
+            text-decoration: underline;
+        }
+
+        .qual-pill {
+            background-color: #f1f5f9;
+            color: #334155;
+            padding: 0.3rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.76rem;
+            font-weight: 600;
+            display: inline-block;
+            max-width: 180px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            border: 1px solid #e2e8f0;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        .status-pill.active {
+            background-color: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-pill.inactive {
+            background-color: #f1f5f9;
+            color: #64748b;
+        }
+
+        .action-btns {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+
+        .btn-tbl-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.38rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.76rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+
+        .btn-tbl-edit {
+            background-color: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .btn-tbl-edit:hover {
+            background-color: #dcfce7;
+        }
+
+        .btn-tbl-del {
+            background-color: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .btn-tbl-del:hover {
+            background-color: #fee2e2;
+        }
+
+        /* Empty State */
+        .empty-worker-state {
+            padding: 2rem 1.5rem;
+            text-align: center;
+            background-color: #faf8f4;
+            border-radius: 10px;
+            border: 1px dashed var(--input-border);
+            color: var(--text-muted);
+            font-size: 0.88rem;
+        }
+
+        .empty-worker-state i {
+            font-size: 1.8rem;
+            color: #cbd5e1;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .no-results-box {
+            background-color: var(--card-bg);
+            border-radius: 14px;
+            padding: 3rem 2rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+            }
+            .content-container {
+                padding: 1.25rem;
+            }
+            .topbar {
+                padding: 0 1.25rem;
+            }
+            .search-box {
+                width: 100%;
+                max-width: 260px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .ward-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= ADMIN SIDEBAR ================= -->
+    {% include 'admin/sidebar.html' %}
+
+    <!-- ================= MAIN SECTION ================= -->
+    <div class="main-wrapper">
+        
+        <!-- Top Profile Bar -->
+        <header class="topbar" style="justify-content: flex-end;">
+            <div class="topbar-right">
+                <div class="profile-pill">
+                    <div class="avatar-box">
+                        <img src="{% static 'images/mother_child_logo.png' %}" alt="Admin Avatar" onerror="this.onerror=null; this.src='/static/images/mother_child_logo.png';">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <main class="content-container">
+            
+            <!-- Page Header -->
+            <div class="page-header-row">
+                <div>
+                    <h1 class="page-main-title">Admin Dashboard</h1>
+                    <p class="page-subtitle">Panchayath Ward Healthcare Workforce Directory & Field Operations Monitoring</p>
+                </div>
+            </div>
+
+            <!-- 4 Summary KPI Cards for Field Workforce -->
+            <div class="stats-grid">
+                
+                <!-- Card 1: Total Administrative Wards -->
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #eff6ff; color: #2563eb;">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                    </div>
+                    <div>
+                        <div class="stat-label">JURISDICTION WARDS</div>
+                        <div class="stat-number">{{ total_wards }}</div>
+                        <div class="stat-meta"><i class="fa-solid fa-check-double" style="color: #2563eb;"></i> 100% Ward Coverage</div>
+                    </div>
+                </div>
+
+
+                <!-- Card 2: ASHA Healthcare Workers -->
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #ecfdf5; color: #059669;">
+                        <i class="fa-solid fa-user-nurse"></i>
+                    </div>
+                    <div>
+                        <div class="stat-label">ASHA HEALTH WORKERS</div>
+                        <div class="stat-number" style="color: #059669;">{{ total_ashas }}</div>
+                        <div class="stat-meta">
+                            <span style="color: #10b981; font-weight: 700;">{{ active_ashas }} Active</span>
+                            {% if inactive_ashas %} • <span style="color: #94a3b8;">{{ inactive_ashas }} Inactive</span>{% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Anganwadi Teachers -->
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #f5f3ff; color: #6366f1;">
+                        <i class="fa-solid fa-chalkboard-user"></i>
+                    </div>
+                    <div>
+                        <div class="stat-label">ANGANWADI TEACHERS</div>
+                        <div class="stat-number" style="color: #6366f1;">{{ total_teachers }}</div>
+                        <div class="stat-meta">
+                            <span style="color: #6366f1; font-weight: 700;">{{ active_teachers }} Active Centers</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Total Healthcare Workforce -->
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #fffbeb; color: #d97706;">
+                        <i class="fa-solid fa-users-gear"></i>
+                    </div>
+                    <div>
+                        <div class="stat-label">TOTAL FIELD STAFF</div>
+                        <div class="stat-number">{{ total_workers }}</div>
+                        <div class="stat-meta">
+                            <span style="color: #059669; font-weight: 700;">{{ total_active_workers }} Active Personnel</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 4 Maternal & Child Healthcare Metrics KPI Cards -->
+            <div class="stats-grid" style="margin-top: 1.25rem;">
+                
+                <!-- Card 5: Registered Mothers -->
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #fdf2f8; color: #db2777;">
+                        <i class="fa-solid fa-person-breastfeeding"></i>
+                    </div>
+                    <div>
+                        <div class="stat-label">REGISTERED MOTHERS</div>
+                        <div class="stat-number" style="color: #db2777;">{{ total_mothers|default:0 }}</div>
+                        <div class="stat-meta">
+                            <span style="color: #db2777; font-weight: 700;">{{ total_pregnant|default:0 }} Pregnant</span> • 
+                            <span style="color: #64748b; font-weight: 600;">{{ total_delivered|default:0 }} Delivered</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 6: Registered Children -->
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #f0fdf4; color: #16a34a;">
+                        <i class="fa-solid fa-baby-carriage"></i>
+                    </div>
+                    <div>
+                        <div class="stat-label">CHILDREN REGISTERED</div>
+                        <div class="stat-number" style="color: #16a34a;">{{ total_children|default:0 }}</div>
+                        <div class="stat-meta">
+                            <span style="color: #16a34a; font-weight: 700;"><i class="fa-solid fa-heart-pulse"></i> Pediatric Registry</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 7: Total Vaccinations -->
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #eff6ff; color: #0284c7;">
+                        <i class="fa-solid fa-syringe"></i>
+                    </div>
+                    <div>
+                        <div class="stat-label">TOTAL VACCINATIONS</div>
+                        <div class="stat-number" style="color: #0284c7;">{{ total_vaccinations|default:0 }}</div>
+                        <div class="stat-meta">
+                            <span style="color: #059669; font-weight: 700;">{{ total_vaccinations_taken|default:0 }} Taken</span> • 
+                            <span style="color: #d97706; font-weight: 600;">{{ total_vaccinations_pending|default:0 }} Pending</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 8: Nutrition Kits Distributed -->
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #fefce8; color: #ca8a04;">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                    </div>
+                    <div>
+                        <div class="stat-label">NUTRITION KITS ISSUED</div>
+                        <div class="stat-number" style="color: #ca8a04;">{{ total_kits_distributed|default:0 }}</div>
+                        <div class="stat-meta">
+                            <span style="color: #ca8a04; font-weight: 700;">Distributed to Beneficiaries</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Visual Staff Analytics Section -->
+            <div class="charts-grid">
+                
+                <!-- Chart 1: Ward-wise Staff Deployment -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div>
+                            <h3 class="chart-title">
+                                <i class="fa-solid fa-chart-column" style="color: var(--brand-green);"></i>
+                                Ward-wise Healthcare Staff Deployment
+                            </h3>
+                            <p class="chart-subtitle">Field staff distribution: ASHA Workers & Anganwadi Teachers across all wards</p>
+                        </div>
+                        <span class="ward-code-badge" style="background-color: #e2ede7; color: var(--brand-green); border: none;">Ward Comparison</span>
+                    </div>
+                    <div style="position: relative; width: 100%; height: 260px;">
+                        <canvas id="wardStaffChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Workforce Role Composition -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div>
+                            <h3 class="chart-title">
+                                <i class="fa-solid fa-chart-pie" style="color: #6366f1;"></i>
+                                Workforce Composition
+                            </h3>
+                            <p class="chart-subtitle">Active staffing by professional designation</p>
+                        </div>
+                    </div>
+                    <div style="position: relative; width: 100%; height: 260px; display: flex; align-items: center; justify-content: center;">
+                        <canvas id="staffRoleChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Directory Filter Bar -->
+            <div class="filter-card">
+                <div class="filter-top-row">
+                    <!-- Ward Selector Tabs -->
+                    <div class="ward-pills-nav" id="wardPillsNav">
+                        <button class="ward-pill-btn active" data-ward="all">
+                            <i class="fa-solid fa-layer-group"></i> All Wards ({{ total_wards }})
+                        </button>
+                        {% for ward in ward_data %}
+                        <button class="ward-pill-btn" data-ward="{{ ward.ward_code }}">
+                            {{ ward.ward_code }}: {{ ward.ward_title|truncatechars:18 }}
+                        </button>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Role Toggle -->
+                    <div class="role-filters-group">
+                        <button class="role-filter-btn active" data-role="all">All Personnel</button>
+                        <button class="role-filter-btn" data-role="asha">ASHA Workers</button>
+                        <button class="role-filter-btn" data-role="teacher">Teachers</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WARD-BY-WARD WORKER DIRECTORY -->
+            <div class="ward-container" id="wardContainer">
+                
+                {% for ward in ward_data %}
+                <div class="ward-card" data-ward="{{ ward.ward_code }}">
+                    
+                    <!-- Ward Header Banner -->
+                    <div class="ward-header">
+                        <div class="ward-title-group">
+                            <span class="ward-code-badge">{{ ward.ward_code|upper }}</span>
+                            <div>
+                                <h2 class="ward-title">{{ ward.ward_title }}</h2>
+                                <div style="font-size: 0.78rem; opacity: 0.85; margin-top: 2px;">{{ ward.ward_full_name }}</div>
+                            </div>
+                        </div>
+
+                        <div class="ward-pills-row">
+                            <span class="ward-stat-pill">
+                                <i class="fa-solid fa-user-nurse"></i> {{ ward.asha_count }} ASHA Worker{{ ward.asha_count|pluralize }}
+                            </span>
+                            <span class="ward-stat-pill">
+                                <i class="fa-solid fa-chalkboard-user"></i> {{ ward.teacher_count }} Anganwadi Teacher{{ ward.teacher_count|pluralize }}
+                            </span>
+                            <span class="ward-stat-pill" style="background-color: rgba(255, 255, 255, 0.22); font-weight: 700;">
+                                <i class="fa-solid fa-users"></i> {{ ward.total_workers }} Total Personnel
+                            </span>
+                        </div>
+
+                        <div class="ward-quick-actions">
+                            <a href="/myapp/add_asha/?area_assigned={{ ward.ward_full_name|urlencode }}" class="btn-ward-action" title="Add ASHA worker to this ward">
+                                <i class="fa-solid fa-plus"></i> ASHA
+                            </a>
+                            <a href="/myapp/add_anganwadi/?center_name={{ ward.ward_full_name|urlencode }}" class="btn-ward-action" title="Add Anganwadi teacher to this ward">
+                                <i class="fa-solid fa-plus"></i> Teacher
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Ward Content Body -->
+                    <div class="ward-body">
+                        
+                        <!-- 1. ASHA WORKERS SECTION -->
+                        <div class="worker-section" data-role="asha">
+                            <div class="section-subhead">
+                                <h3 class="section-subhead-title">
+                                    <i class="fa-solid fa-user-nurse" style="color: #059669;"></i>
+                                    ASHA Healthcare Workers
+                                </h3>
+                                <span class="section-count-badge badge-asha">{{ ward.asha_count }} Assigned</span>
+                            </div>
+
+                            {% if ward.ashas %}
+                            <div class="worker-table-wrap">
+                                <table class="worker-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 40px;">#</th>
+                                            <th>Worker Name & Profile</th>
+                                            <th>Contact Details</th>
+                                            <th>Assigned Area & Address</th>
+                                            <th>Qualifications</th>
+                                            <th>Status</th>
+                                            <th>Joined Date</th>
+                                            <th style="text-align: right;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for worker in ward.ashas %}
+                                        <tr class="worker-row" data-search="{{ worker.Full_name|lower }} {{ worker.Phone }} {{ worker.Email|lower }} {{ worker.Qualification|lower }} {{ worker.Address|lower }} {{ worker.Area_assigned|lower }}">
+                                            <td style="color: #94a3b8; font-weight: 600;">{{ forloop.counter }}</td>
+                                            <td>
+                                                <div class="worker-profile-cell">
+                                                    <div class="worker-avatar avatar-asha">
+                                                        {% if worker.image %}
+                                                            <img src="{{ worker.image.url }}" alt="{{ worker.Full_name }}" onerror="this.onerror=null; this.parentNode.innerHTML='<i class=\"fa-solid fa-user-nurse\"></i>';">
+                                                        {% else %}
+                                                            <i class="fa-solid fa-user-nurse"></i>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div>
+                                                        <div class="worker-name">{{ worker.Full_name }}</div>
+                                                        <div class="worker-subtext">Age: {{ worker.Age }} yrs {% if worker.dob %}• DOB: {{ worker.dob|date:"d M Y" }}{% endif %}</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <a href="tel:+91{{ worker.Phone }}" class="contact-link">
+                                                        <i class="fa-solid fa-phone"></i> +91 {{ worker.Phone }}
+                                                    </a>
+                                                </div>
+                                                <div style="font-size: 0.76rem; color: #64748b; margin-top: 3px;">
+                                                    <a href="mailto:{{ worker.Email }}" style="color: #64748b; text-decoration: none;">
+                                                        <i class="fa-regular fa-envelope"></i> {{ worker.Email }}
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="font-weight: 600; color: #1e293b; font-size: 0.83rem;">{{ worker.Area_assigned }}</div>
+                                                <div style="font-size: 0.76rem; color: #64748b; margin-top: 2px; max-width: 220px;" title="{{ worker.Address }}">
+                                                    <i class="fa-solid fa-location-dot" style="color: #94a3b8;"></i> {{ worker.Address|default:"Jurisdiction resident" }}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="qual-pill" title="{{ worker.Qualification }}">
+                                                    <i class="fa-solid fa-user-graduate" style="color: #059669; margin-right: 3px;"></i>
+                                                    {{ worker.Qualification|default:"Certified Health Worker" }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="status-pill {% if worker.Current_status == 'Active' %}active{% else %}inactive{% endif %}">
+                                                    <i class="fa-solid fa-circle" style="font-size: 6px;"></i>
+                                                    {{ worker.Current_status|default:'Active' }}
+                                                </span>
+                                            </td>
+                                            <td style="color: #64748b; font-size: 0.82rem;">
+                                                {{ worker.Joining_date|date:"d M, Y"|default:"-" }}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <div class="action-btns">
+                                                    <a href="/myapp/edit_asha/{{ worker.id }}/" class="btn-tbl-action btn-tbl-edit" title="Edit ASHA Worker">
+                                                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                                                    </a>
+                                                    <a href="/myapp/delete_asha/{{ worker.id }}/" class="btn-tbl-action btn-tbl-del" title="Delete Worker" onclick="return confirm('Are you sure you want to remove ASHA worker {{ worker.Full_name }}?');">
+                                                        <i class="fa-solid fa-trash-can"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <div class="empty-worker-state">
+                                <i class="fa-solid fa-user-nurse"></i>
+                                <p style="font-weight: 600; color: #4b5563;">No ASHA Worker Assigned</p>
+                                <p style="font-size: 0.8rem; margin-top: 3px;">There is currently no designated ASHA worker allocated to this ward.</p>
+                                <a href="/myapp/add_asha/?area_assigned={{ ward.ward_full_name|urlencode }}" class="btn-header btn-header-primary" style="margin-top: 10px; font-size: 0.8rem; padding: 0.45rem 0.95rem;">
+                                    <i class="fa-solid fa-plus"></i> Assign ASHA Worker
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- 2. ANGANWADI TEACHERS SECTION -->
+                        <div class="worker-section" data-role="teacher">
+                            <div class="section-subhead">
+                                <h3 class="section-subhead-title">
+                                    <i class="fa-solid fa-chalkboard-user" style="color: #2563eb;"></i>
+                                    Anganwadi Center Teachers
+                                </h3>
+                                <span class="section-count-badge badge-teacher">{{ ward.teacher_count }} Assigned</span>
+                            </div>
+
+                            {% if ward.teachers %}
+                            <div class="worker-table-wrap">
+                                <table class="worker-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 40px;">#</th>
+                                            <th>Teacher Name & Center</th>
+                                            <th>Contact Details</th>
+                                            <th>Center Name & Address</th>
+                                            <th>Qualifications</th>
+                                            <th>Status</th>
+                                            <th>Joined Date</th>
+                                            <th style="text-align: right;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for teacher in ward.teachers %}
+                                        <tr class="worker-row" data-search="{{ teacher.Name|lower }} {{ teacher.Phone }} {{ teacher.Email|lower }} {{ teacher.Qualification|lower }} {{ teacher.Address|lower }} {{ teacher.center_name|lower }}">
+                                            <td style="color: #94a3b8; font-weight: 600;">{{ forloop.counter }}</td>
+                                            <td>
+                                                <div class="worker-profile-cell">
+                                                    <div class="worker-avatar avatar-teacher">
+                                                        {% if teacher.image %}
+                                                            <img src="{{ teacher.image.url }}" alt="{{ teacher.Name }}" onerror="this.onerror=null; this.parentNode.innerHTML='<i class=\"fa-solid fa-chalkboard-user\"></i>';">
+                                                        {% else %}
+                                                            <i class="fa-solid fa-chalkboard-user"></i>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div>
+                                                        <div class="worker-name">{{ teacher.Name }}</div>
+                                                        <div class="worker-subtext">Age: {{ teacher.Age }} yrs {% if teacher.dob %}• DOB: {{ teacher.dob|date:"d M Y" }}{% endif %} • {{ teacher.Gender|default:"Female" }}</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <a href="tel:+91{{ teacher.Phone }}" class="contact-link">
+                                                        <i class="fa-solid fa-phone"></i> +91 {{ teacher.Phone }}
+                                                    </a>
+                                                </div>
+                                                <div style="font-size: 0.76rem; color: #64748b; margin-top: 3px;">
+                                                    <a href="mailto:{{ teacher.Email }}" style="color: #64748b; text-decoration: none;">
+                                                        <i class="fa-regular fa-envelope"></i> {{ teacher.Email }}
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="font-weight: 600; color: #1e293b; font-size: 0.83rem;">
+                                                    <i class="fa-solid fa-school" style="color: #2563eb; margin-right: 4px;"></i>{{ teacher.center_name }}
+                                                </div>
+                                                {% if teacher.Address %}
+                                                <div style="font-size: 0.76rem; color: #64748b; margin-top: 2px; max-width: 220px;" title="{{ teacher.Address }}">
+                                                    <i class="fa-solid fa-location-dot" style="color: #94a3b8;"></i> {{ teacher.Address }}
+                                                </div>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <span class="qual-pill" title="{{ teacher.Qualification }}">
+                                                    <i class="fa-solid fa-certificate" style="color: #2563eb; margin-right: 3px;"></i>
+                                                    {{ teacher.Qualification|default:"Certified ECCE Teacher" }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="status-pill {% if teacher.Current_status == 'Active' %}active{% else %}inactive{% endif %}">
+                                                    <i class="fa-solid fa-circle" style="font-size: 6px;"></i>
+                                                    {{ teacher.Current_status|default:'Active' }}
+                                                </span>
+                                            </td>
+                                            <td style="color: #64748b; font-size: 0.82rem;">
+                                                {{ teacher.joining_date|date:"d M, Y"|default:"-" }}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <div class="action-btns">
+                                                    <a href="/myapp/edit_anganwadi/{{ teacher.id }}/" class="btn-tbl-action btn-tbl-edit" title="Edit Teacher">
+                                                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                                                    </a>
+                                                    <a href="/myapp/delete_anganwadi/{{ teacher.id }}/" class="btn-tbl-action btn-tbl-del" title="Delete Teacher" onclick="return confirm('Are you sure you want to remove Anganwadi teacher {{ teacher.Name }}?');">
+                                                        <i class="fa-solid fa-trash-can"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <div class="empty-worker-state">
+                                <i class="fa-solid fa-chalkboard-user"></i>
+                                <p style="font-weight: 600; color: #4b5563;">No Anganwadi Teacher Assigned</p>
+                                <p style="font-size: 0.8rem; margin-top: 3px;">There is currently no designated teacher allocated to this ward center.</p>
+                                <a href="/myapp/add_anganwadi/?center_name={{ ward.ward_full_name|urlencode }}" class="btn-header btn-header-teal" style="margin-top: 10px; font-size: 0.8rem; padding: 0.45rem 0.95rem;">
+                                    <i class="fa-solid fa-plus"></i> Assign Anganwadi Teacher
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+                {% empty %}
+                <div class="empty-worker-state" style="background-color: #ffffff; padding: 3.5rem;">
+                    <i class="fa-regular fa-folder-open" style="font-size: 2.5rem; color: #cbd5e1;"></i>
+                    <h3 style="font-size: 1.1rem; color: var(--text-dark); margin-top: 0.5rem;">No Ward Data Found</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">No health workers or teachers have been assigned to any Panchayath wards yet.</p>
+                </div>
+                {% endfor %}
+
+
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Client-side Interactive Filter Script & Chart.js -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // 1. CHART.JS INITIALIZATION
+            try {
+                const chartsData = {{ worker_charts_json|safe }};
+                
+                // Chart 1: Ward-wise Staff Deployment (Grouped Bar Chart)
+                const wardCtx = document.getElementById('wardStaffChart');
+                if (wardCtx && chartsData.labels) {
+                    new Chart(wardCtx.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: chartsData.labels,
+                            datasets: [
+                                {
+                                    label: 'ASHA Workers',
+                                    data: chartsData.asha_counts,
+                                    backgroundColor: '#059669',
+                                    borderRadius: 6,
+                                    barPercentage: 0.65,
+                                    categoryPercentage: 0.7
+                                },
+                                {
+                                    label: 'Anganwadi Teachers',
+                                    data: chartsData.teacher_counts,
+                                    backgroundColor: '#3b82f6',
+                                    borderRadius: 6,
+                                    barPercentage: 0.65,
+                                    categoryPercentage: 0.7
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    labels: {
+                                        boxWidth: 12,
+                                        font: { size: 11, weight: '600' },
+                                        padding: 14
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return ' ' + context.dataset.label + ': ' + context.parsed.y + ' personnel';
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: { stepSize: 1, precision: 0 },
+                                    grid: { color: 'rgba(0,0,0,0.04)' }
+                                },
+                                x: {
+                                    grid: { display: false }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Chart 2: Staffing Role Composition (Doughnut Chart)
+                const roleCtx = document.getElementById('staffRoleChart');
+                if (roleCtx && chartsData.breakdown) {
+                    new Chart(roleCtx.getContext('2d'), {
+                        type: 'doughnut',
+                        data: {
+                            labels: chartsData.breakdown.labels,
+                            datasets: [
+                                {
+                                    data: chartsData.breakdown.data,
+                                    backgroundColor: ['#059669', '#a7f3d0', '#2563eb', '#bfdbfe'],
+                                    borderWidth: 2,
+                                    borderColor: '#ffffff',
+                                    hoverOffset: 4
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            cutout: '68%',
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        boxWidth: 10,
+                                        font: { size: 10.5, weight: '500' },
+                                        padding: 8
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+            } catch (err) {
+                console.error("Worker charts init error:", err);
+            }
+
+            // 2. INTERACTIVE FILTERING SYSTEM (Ward & Role Tabs)
+            const wardPillBtns = document.querySelectorAll('.ward-pill-btn');
+            const roleFilterBtns = document.querySelectorAll('.role-filter-btn');
+            const wardCards = document.querySelectorAll('.ward-card');
+
+            let currentWardFilter = 'all';
+            let currentRoleFilter = 'all';
+
+            function applyFilters() {
+                wardCards.forEach(card => {
+                    const cardWard = card.getAttribute('data-ward');
+                    const wardMatches = (currentWardFilter === 'all' || cardWard.toLowerCase() === currentWardFilter.toLowerCase());
+
+                    if (!wardMatches) {
+                        card.classList.add('hidden');
+                        return;
+                    }
+
+                    card.classList.remove('hidden');
+
+                    // Check role sections inside this ward
+                    const ashaSection = card.querySelector('.worker-section[data-role="asha"]');
+                    const teacherSection = card.querySelector('.worker-section[data-role="teacher"]');
+
+                    let showAsha = (currentRoleFilter === 'all' || currentRoleFilter === 'asha');
+                    let showTeacher = (currentRoleFilter === 'all' || currentRoleFilter === 'teacher');
+
+                    if (ashaSection) {
+                        if (showAsha) ashaSection.classList.remove('hidden-by-role');
+                        else ashaSection.classList.add('hidden-by-role');
+                    }
+                    if (teacherSection) {
+                        if (showTeacher) teacherSection.classList.remove('hidden-by-role');
+                        else teacherSection.classList.add('hidden-by-role');
+                    }
+                });
+            }
+
+            // Ward pill tabs
+            wardPillBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    wardPillBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentWardFilter = this.getAttribute('data-ward');
+                    applyFilters();
+                });
+            });
+
+            // Role toggle buttons
+            roleFilterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    roleFilterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentRoleFilter = this.getAttribute('data-role');
+                    applyFilters();
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>

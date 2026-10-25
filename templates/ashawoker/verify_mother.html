@@ -1,0 +1,2083 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Mothers - ASHA Worker Portal | MaatriCare</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #073525;
+            --sidebar-hover: #0d4432;
+            --sidebar-active: #134d38;
+            --sidebar-text-muted: #97baa9;
+            --brand-green: #0c3829;
+            --brand-green-hover: #07261b;
+            --brand-green-light: #e8f5ef;
+            --brand-green-accent: #10b981;
+            --bg-page: #fbf9f4;
+            --card-bg: #ffffff;
+            --text-heading: #111827;
+            --text-body: #4b5563;
+            --text-muted: #6b7280;
+            --border-color: #e9e4da;
+            --border-subtle: #f0ebe1;
+            --badge-bg: #e2ede6;
+            --badge-text: #0f3d2c;
+            --search-bg: #f0ece2;
+            --shadow-card: 0 2px 12px rgba(7, 53, 37, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+            --shadow-float: 0 12px 32px rgba(7, 53, 37, 0.12);
+            --amber-bg: #fffbeb;
+            --amber-border: #fde68a;
+            --amber-text: #b45309;
+            --rose-bg: #fef2f2;
+            --rose-border: #fecaca;
+            --rose-text: #dc2626;
+            --blue-bg: #eff6ff;
+            --blue-border: #bfdbfe;
+            --blue-text: #1d4ed8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* ================= Left Navigation Sidebar ================= */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem 1.25rem 1.75rem;
+            z-index: 100;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            padding: 0 0.5rem 2rem;
+            text-decoration: none;
+            display: block;
+        }
+
+        .brand-title {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-sub {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--sidebar-text-muted);
+            margin-top: 3px;
+            letter-spacing: 0.01em;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .nav-item-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0.78rem 1.1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.94rem;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item-link i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item-link:hover {
+            color: #ffffff;
+            background-color: var(--sidebar-hover);
+        }
+
+        .nav-item-link.active {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+        }
+
+        .sidebar-footer {
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.75rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.94rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            color: #ffffff;
+            background-color: rgba(239, 68, 68, 0.15);
+        }
+
+        /* ================= Main Content Container ================= */
+        .main-wrapper {
+            margin-left: 260px;
+            flex: 1;
+            min-width: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-page);
+        }
+
+        /* Top Header Bar */
+        .top-header {
+            height: 80px;
+            padding: 0 2.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--bg-page);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--brand-green);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .header-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.86rem;
+            color: var(--text-muted);
+        }
+
+        .header-breadcrumb a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .header-breadcrumb a:hover {
+            color: var(--brand-green);
+        }
+
+        .header-breadcrumb span.current {
+            font-weight: 700;
+            color: var(--text-heading);
+        }
+
+        .search-container {
+            position: relative;
+            width: 320px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 0.88rem;
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.62rem 1rem 0.62rem 2.5rem;
+            background-color: var(--search-bg);
+            border: 1px solid transparent;
+            border-radius: 50px;
+            font-size: 0.88rem;
+            color: var(--text-heading);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            background-color: #ffffff;
+            border-color: var(--border-color);
+            box-shadow: 0 0 0 3px rgba(12, 56, 41, 0.08);
+        }
+
+        /* Top Right Actions */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .btn-add-mother {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            padding: 0.6rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 3px 10px rgba(12, 56, 41, 0.15);
+            white-space: nowrap;
+        }
+
+        .btn-add-mother:hover {
+            background-color: var(--brand-green-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 14px rgba(12, 56, 41, 0.22);
+        }
+
+        .worker-profile-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .worker-info {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .worker-name {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            line-height: 1.2;
+        }
+
+        .worker-id {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            justify-content: flex-end;
+        }
+
+        .worker-avatar-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background-color: #dbe8e1;
+            flex-shrink: 0;
+        }
+
+        .worker-avatar-badge {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #073525, #14593f);
+            color: #ffffff;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        /* ================= Page Content Body ================= */
+        .content-body {
+            padding: 1.5rem 2rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Flash Messages */
+        .alert-box {
+            padding: 0.85rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .alert-success {
+            background-color: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+        }
+
+        .alert-warning {
+            background-color: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #b45309;
+        }
+
+        .alert-info {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1d4ed8;
+        }
+
+        .alert-close {
+            background: none;
+            border: none;
+            color: inherit;
+            opacity: 0.6;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .alert-close:hover {
+            opacity: 1;
+        }
+
+        /* ================= Clean Page Header Bar ================= */
+        .page-header-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 1.15rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .page-title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .page-main-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-heading);
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-main-title i {
+            color: var(--brand-green);
+            font-size: 1.2rem;
+        }
+
+        .page-subtitle {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+        }
+
+        /* Status Tab Filter Pills */
+        .status-actions-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .status-pills-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--search-bg);
+            padding: 4px;
+            border-radius: 12px;
+            flex-wrap: wrap;
+        }
+
+        .status-pill-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.45rem 0.85rem;
+            border-radius: 9px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-body);
+            text-decoration: none;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .status-pill-btn .pill-count {
+            padding: 0.1rem 0.45rem;
+            border-radius: 16px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            background-color: rgba(0, 0, 0, 0.06);
+        }
+
+        .status-pill-btn.active {
+            background-color: #ffffff;
+            color: var(--brand-green);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        }
+
+        .status-pill-btn.active .pill-count {
+            background-color: var(--brand-green-light);
+            color: var(--brand-green);
+        }
+
+        .status-pill-btn.pill-pending.active {
+            color: var(--amber-text);
+        }
+
+        .status-pill-btn.pill-pending.active .pill-count {
+            background-color: var(--amber-bg);
+            color: var(--amber-text);
+        }
+
+        .status-pill-btn.pill-verified.active {
+            color: #047857;
+        }
+
+        .status-pill-btn.pill-verified.active .pill-count {
+            background-color: #ecfdf5;
+            color: #047857;
+        }
+
+        .status-pill-btn:hover:not(.active) {
+            color: var(--text-heading);
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .btn-reset-filter {
+            padding: 0.48rem 0.85rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background-color: #faf8f3;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-reset-filter:hover {
+            background-color: #f0ece2;
+            color: var(--text-heading);
+        }
+
+        /* ================= Table Styling & Fit ================= */
+        .records-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 1.25rem 1.5rem;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            background-color: #ffffff;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .custom-table th {
+            font-size: 0.74rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            padding: 0.85rem 1rem;
+            background-color: #faf8f3;
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        .custom-table td {
+            font-size: 0.87rem;
+            color: var(--text-heading);
+            padding: 0.88rem 1rem;
+            border-bottom: 1px solid #f5f1e9;
+            vertical-align: middle;
+        }
+
+        .custom-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .custom-table tr:hover td {
+            background-color: #faf8f4;
+        }
+
+        /* Mother Profile Cell */
+        .mother-profile-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 170px;
+        }
+
+        .mother-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e8f5ef, #d0eadb);
+            color: var(--brand-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.88rem;
+            flex-shrink: 0;
+            border: 1.5px solid #ffffff;
+            box-shadow: 0 2px 5px rgba(12, 56, 41, 0.06);
+        }
+
+        .mother-name-wrap {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mother-name-link {
+            font-size: 0.91rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            text-decoration: none;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .mother-name-link:hover {
+            color: var(--brand-green);
+        }
+
+        .mother-meta {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 1px;
+        }
+
+        /* Status & Blood Badges */
+        .badge-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 0.28rem 0.65rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .badge-pending {
+            background-color: var(--amber-bg);
+            border: 1px solid var(--amber-border);
+            color: var(--amber-text);
+        }
+
+        .badge-verified {
+            background-color: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+        }
+
+        .blood-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.22rem 0.55rem;
+            border-radius: 6px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            background-color: #f3f4f6;
+            color: #374151;
+            white-space: nowrap;
+        }
+
+        /* Action Buttons */
+        .actions-cell {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .btn-action {
+            padding: 0.4rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-verify-primary {
+            background-color: var(--brand-green);
+            color: #ffffff;
+            box-shadow: 0 2px 5px rgba(12, 56, 41, 0.16);
+        }
+
+        .btn-verify-primary:hover {
+            background-color: var(--brand-green-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-action-view {
+            background-color: #f1f6f2;
+            color: var(--brand-green);
+        }
+
+        .btn-action-view:hover {
+            background-color: var(--brand-green-light);
+        }
+
+        .btn-action-edit {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-action-edit:hover {
+            background-color: #e5e7eb;
+        }
+
+        .btn-action-delete {
+            background-color: var(--rose-bg);
+            color: var(--rose-text);
+        }
+
+        .btn-action-delete:hover {
+            background-color: #fee2e2;
+        }
+
+        /* Empty State */
+        .empty-state-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 3rem 1.5rem;
+        }
+
+        .empty-state-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #f0ece2;
+            color: #8c9b92;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            margin-bottom: 0.3rem;
+        }
+
+        .empty-state-desc {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            max-width: 400px;
+            margin-bottom: 1.25rem;
+        }
+
+        /* ================= MODALS ================= */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(7, 53, 37, 0.45);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            padding: 1.5rem;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 2rem 2.25rem;
+            width: 100%;
+            max-width: 650px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: var(--shadow-float);
+            animation: modalSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-card.modal-lg {
+            max-width: 720px;
+        }
+
+        .modal-card.modal-sm {
+            max-width: 460px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #f3f4f6;
+            border: none;
+            font-size: 0.95rem;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background-color: #e5e7eb;
+            color: #111827;
+        }
+
+        .modal-header-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-icon-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background-color: var(--brand-green-light);
+            color: var(--brand-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .modal-header-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-heading);
+            letter-spacing: -0.01em;
+        }
+
+        .modal-header-subtitle {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Modal Form Grid */
+        .modal-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .modal-form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .modal-form-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #374151;
+            letter-spacing: 0.01em;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 0.68rem 0.9rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background-color: #faf8f4;
+            font-size: 0.88rem;
+            color: var(--text-heading);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .modal-input:focus {
+            background-color: #ffffff;
+            border-color: var(--brand-green);
+            box-shadow: 0 0 0 3px rgba(12, 56, 41, 0.08);
+        }
+
+        /* Detail dossier modal layout */
+        .detail-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .detail-card-box {
+            background-color: #faf8f4;
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.15rem 1.25rem;
+        }
+
+        .detail-card-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--brand-green);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem 1.25rem;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .detail-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            margin-top: 2px;
+        }
+
+        .verification-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 0.5rem;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .check-item i {
+            color: #059669;
+            font-size: 0.92rem;
+        }
+
+        .modal-btn-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .modal-btn-cancel {
+            padding: 0.65rem 1.35rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background-color: #ffffff;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-body);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-btn-cancel:hover {
+            background-color: #f3f4f6;
+        }
+
+        .modal-btn-submit {
+            padding: 0.65rem 1.45rem;
+            border-radius: 10px;
+            border: none;
+            background-color: var(--brand-green);
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #ffffff;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(12, 56, 41, 0.18);
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .modal-btn-submit:hover {
+            background-color: var(--brand-green-hover);
+            transform: translateY(-1px);
+        }
+
+        .modal-btn-danger {
+            background-color: #dc2626;
+        }
+
+        .modal-btn-danger:hover {
+            background-color: #b91c1c;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes modalSlide {
+            from {
+                opacity: 0;
+                transform: translateY(16px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* ================= Responsive Styles ================= */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-wrapper {
+                margin-left: 0;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .search-container {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-header {
+                padding: 0 1.25rem;
+            }
+
+            .content-body {
+                padding: 1.25rem 1rem;
+            }
+
+            .page-header-card {
+                padding: 1rem;
+            }
+
+            .search-container {
+                display: none;
+            }
+
+            .worker-info {
+                display: none;
+            }
+
+            .modal-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= Left Navigation Sidebar ================= -->
+    {% include 'ashawoker/sidebar.html' %}
+
+    <!-- ================= Main Content Area ================= -->
+    <main class="main-wrapper">
+
+        <!-- Top Header Navigation -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()" aria-label="Toggle Sidebar Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <div class="header-breadcrumb">
+                    <a href="/myapp/ashaworker_home/"><i class="fa-solid fa-house" style="margin-right: 4px;"></i>
+                        Home</a>
+                    <i class="fa-solid fa-chevron-right" style="font-size: 0.72rem;"></i>
+                    <span class="current">Verify Mothers</span>
+                </div>
+            </div>
+
+            <!-- Search Form -->
+            <form method="GET" action="/myapp/verify_mother/" class="search-container">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" name="q" class="search-input" placeholder="Search mother, spouse, phone..."
+                    value="{{ search_query|default:'' }}" id="liveSearchInput">
+                {% if status_filter and status_filter != 'all' %}
+                <input type="hidden" name="status" value="{{ status_filter }}">
+                {% endif %}
+            </form>
+
+            <!-- Header Right Actions -->
+            <div class="header-actions">
+                <button type="button" class="btn-add-mother" onclick="openAddModal()">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span>Register Mother</span>
+                </button>
+
+                <!-- ASHA Worker Badge -->
+                <a href="/myapp/ashaworker_profile/" class="worker-profile-card">
+                    <div class="worker-info">
+                        <span class="worker-name">{{ worker.Full_name|default:'ASHA Worker' }}</span>
+                        <span class="worker-id"><i class="fa-solid fa-location-dot"></i> {{ worker.Area_assigned|default:'Assigned Area' }}</span>
+                    </div>
+                    {% if worker.image %}
+                    <img src="{{ worker.image.url }}" alt="Profile Avatar" class="worker-avatar-img">
+                    {% else %}
+                    <img src="{% static 'images/asha_avatar.png' %}" alt="Profile Avatar" class="worker-avatar-img"
+                        onerror="this.src='/static/images/mother_child_logo.png'">
+                    {% endif %}
+                </a>
+            </div>
+        </header>
+
+        <!-- Body Content Container -->
+        <div class="content-body">
+
+            <!-- System Flash Messages -->
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert-box alert-{{ message.tags|default:'info' }}">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i
+                        class="fa-solid {% if 'success' in message.tags %}fa-circle-check{% elif 'warning' in message.tags %}fa-triangle-exclamation{% else %}fa-circle-info{% endif %}"></i>
+                    <span>{{ message }}</span>
+                </div>
+                <button class="alert-close" onclick="this.parentElement.remove()">&times;</button>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <!-- Pending Mother Verification Alert Box -->
+            {% if pending_count > 0 %}
+            <div class="alert-box alert-warning" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 1.25rem; background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 0.9rem 1.25rem;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-bell" style="color: #d97706; font-size: 1.2rem;"></i>
+                    <span style="color: #92400e; font-size: 0.92rem; font-weight: 600;">
+                        Action Required: {% if pending_count == 1 %}<strong>1 new mother registration</strong> is{% else %}<strong>{{ pending_count }} new mother registrations</strong> are{% endif %} awaiting verification in <strong>{{ assigned_area|default:worker.Area_assigned }}</strong>.
+                    </span>
+                </div>
+                {% if status_filter != 'pending' %}
+                <a href="/myapp/verify_mother/?status=pending{% if search_query %}&q={{ search_query }}{% endif %}" style="background: #d97706; color: #ffffff; padding: 0.45rem 1rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; text-decoration: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-clock"></i> View Pending ({{ pending_count }})
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Header Bar with Status Filter Tabs -->
+            <section class="page-header-card">
+                <div class="page-title-group">
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <h2 class="page-main-title" style="margin-bottom: 0;">
+                            <i class="fa-solid fa-user-check"></i>
+                            <span>Mother Verification</span>
+                        </h2>
+                        <span
+                            style="background-color: #e6f4ee; color: #144d37; padding: 0.35rem 0.85rem; border-radius: 50px; font-size: 0.82rem; font-weight: 700; border: 1px solid #c9e6d7; display: inline-flex; align-items: center; gap: 6px;">
+                            <i class="fa-solid fa-location-dot"></i> Assigned Area: {{ assigned_area|default:worker.Area_assigned }}
+                        </span>
+                    </div>
+                    <p class="page-subtitle" style="margin-top: 4px;">Review and verify mother registrations strictly
+                        within your assigned area. Cross-area data is isolated for privacy.</p>
+                </div>
+
+                <!-- Status Filter Pills & Actions -->
+                <div class="status-actions-group">
+                    <div class="status-pills-bar">
+                        <a href="/myapp/verify_mother/?status=all{% if search_query %}&q={{ search_query }}{% endif %}"
+                            class="status-pill-btn {% if status_filter == 'all' or not status_filter %}active{% endif %}">
+                            <i class="fa-solid fa-list-ul"></i>
+                            <span>All</span>
+                            <span class="pill-count">{{ total_count }}</span>
+                        </a>
+
+                        <a href="/myapp/verify_mother/?status=pending{% if search_query %}&q={{ search_query }}{% endif %}"
+                            class="status-pill-btn pill-pending {% if status_filter == 'pending' %}active{% endif %}">
+                            <i class="fa-solid fa-clock"></i>
+                            <span>Pending</span>
+                            <span class="pill-count">{{ pending_count }}</span>
+                        </a>
+
+                        <a href="/myapp/verify_mother/?status=verified{% if search_query %}&q={{ search_query }}{% endif %}"
+                            class="status-pill-btn pill-verified {% if status_filter == 'verified' %}active{% endif %}">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Verified</span>
+                            <span class="pill-count">{{ verified_count }}</span>
+                        </a>
+                    </div>
+
+                    {% if search_query or status_filter != 'all' %}
+                    <a href="/myapp/verify_mother/" class="btn-reset-filter" title="Clear search & reset filters">
+                        <i class="fa-solid fa-rotate-left"></i> Reset
+                    </a>
+                    {% endif %}
+                </div>
+            </section>
+
+            <!-- ================= Records Table ================= -->
+            <section class="records-card">
+                {% if mothers %}
+                <div class="table-responsive">
+                    <table class="custom-table" id="mothersTable">
+                        <thead>
+                            <tr>
+                                <th>Mother Name & Age</th>
+                                <th>Spouse / Guardian</th>
+                                <th>Blood Group</th>
+                                <th>EDD & Gestation</th>
+                                <th>Contact & Address</th>
+                                <th>Verification Status</th>
+                                <th style="text-align: right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for mother in mothers %}
+                            <tr id="mother-row-{{ mother.id }}">
+                                <!-- Mother Identity -->
+                                <td>
+                                    <div class="mother-profile-cell">
+                                        <div class="mother-avatar">
+                                            {{ mother.name|slice:":1"|upper }}
+                                        </div>
+                                        <div class="mother-name-wrap">
+                                            <span class="mother-name-link"
+                                                onclick="viewMotherDetails('{{ mother.id }}', '{{ mother.name|escapejs }}', '{{ mother.husband_name|escapejs }}', '{{ mother.age }}', '{{ mother.dob|date:'Y-m-d'|default:'' }}', '{{ mother.blood_group|escapejs }}', '{{ mother.phone }}', '{{ mother.Email|escapejs }}', '{{ mother.panchayath|escapejs }}', '{{ mother.Address|escapejs }}', '{{ mother.district|escapejs }}', '{{ mother.state|escapejs }}', '{{ mother.pincode|escapejs }}', '{{ mother.ASHA.Full_name|default:''|escapejs }}', '{% if mother.ASHA %}Verified{% else %}Pending{% endif %}', '{{ mother.expected_delivery_date|date:'Y-m-d'|default:'' }}', '{{ mother.gestation_week_display|escapejs }}')">
+                                                {{ mother.name }}
+                                            </span>
+                                            <span class="mother-meta">
+                                                <span>{{ mother.age }} yrs</span>
+                                                <span>&bull;</span>
+                                                <span>DOB: {{ mother.dob|date:"M d, Y"|default:"N/A" }}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <!-- Husband / Family -->
+                                <td>
+                                    <div style="font-weight: 600; color: var(--text-heading);">{{ mother.husband_name }}
+                                    </div>
+                                    <div style="font-size: 0.74rem; color: var(--text-muted);">Spouse / Guardian</div>
+                                </td>
+
+                                <!-- Blood Group -->
+                                <td>
+                                    <span class="blood-badge">
+                                        <i class="fa-solid fa-droplet"></i>
+                                        {{ mother.blood_group }}
+                                    </span>
+                                </td>
+
+                                <!-- Expecting Delivery Date & Gestation Week -->
+                                <td>
+                                    {% if mother.is_currently_pregnant %}
+                                    <div
+                                        style="font-weight: 700; color: #047857; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">
+                                        <i class="fa-solid fa-calendar-day" style="font-size: 0.76rem;"></i>
+                                        {{ mother.expected_delivery_date|date:"M d, Y" }}
+                                    </div>
+                                    <div style="margin-top: 3px; display: flex; flex-wrap: wrap; gap: 4px;">
+                                        <span
+                                            style="background-color: #e6f4ee; color: #073525; padding: 2px 8px; border-radius: 12px; font-weight: 700; font-size: 0.74rem; display: inline-flex; align-items: center; gap: 4px;">
+                                            <i class="fa-solid fa-person-pregnant" style="font-size: 0.7rem;"></i> {{ mother.gestation_week_display }}
+                                        </span>
+                                        {% if mother.has_delivered_child %}
+                                        <span
+                                            style="background-color: #e0f2fe; color: #0369a1; padding: 2px 7px; border-radius: 12px; font-weight: 800; font-size: 0.7rem;">
+                                            Pregnancy #{{ mother.current_pregnancy_number }}
+                                        </span>
+                                        {% endif %}
+                                    </div>
+                                    {% elif mother.has_delivered %}
+                                    <span
+                                        style="background-color: #f1f5f9; color: #475569; padding: 3px 8px; border-radius: 12px; font-weight: 700; font-size: 0.74rem; display: inline-flex; align-items: center; gap: 4px;">
+                                        <i class="fa-solid fa-baby" style="font-size: 0.7rem;"></i> Delivered{% if mother.delivered_children_count > 1 %} ({{ mother.delivered_children_count }} Children){% endif %}
+                                    </span>
+                                    {% elif mother.expected_delivery_date %}
+                                    <div
+                                        style="font-weight: 700; color: #047857; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">
+                                        <i class="fa-solid fa-calendar-day" style="font-size: 0.76rem;"></i>
+                                        {{ mother.expected_delivery_date|date:"M d, Y" }}
+                                    </div>
+                                    <div style="margin-top: 3px;">
+                                        <span
+                                            style="background-color: #e6f4ee; color: #073525; padding: 2px 8px; border-radius: 12px; font-weight: 700; font-size: 0.74rem; display: inline-flex; align-items: center; gap: 4px;">
+                                            <i class="fa-solid fa-person-pregnant" style="font-size: 0.7rem;"></i> {{ mother.gestation_week_display }}
+                                        </span>
+                                    </div>
+                                    {% else %}
+                                    <span style="color: var(--text-muted); font-size: 0.82rem;">N/A</span>
+                                    {% endif %}
+                                </td>
+
+                                <!-- Contact & Phone -->
+                                <td>
+                                    <div style="font-weight: 600;">
+                                        <a href="tel:{{ mother.phone }}"
+                                            style="color: var(--brand-green); text-decoration: none;">
+                                            <i class="fa-solid fa-phone"
+                                                style="font-size: 0.74rem; margin-right: 4px;"></i> {{ mother.phone }}
+                                        </a>
+                                    </div>
+                                    <div style="font-size: 0.76rem; color: var(--text-muted); max-width: 260px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                        title="{{ mother.Address }}">
+                                        {{ mother.Address }}
+                                    </div>
+                                </td>
+
+                                <!-- Verification Status -->
+                                <td>
+                                    {% if mother.ASHA %}
+                                    <span class="badge-status badge-verified"
+                                        title="Assigned to {{ mother.ASHA.Full_name }}">
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        Verified ({{ mother.ASHA.Full_name|truncatechars:12 }})
+                                    </span>
+                                    {% else %}
+                                    <span class="badge-status badge-pending"
+                                        title="Awaiting verification and assignment">
+                                        <i class="fa-solid fa-clock"></i>
+                                        Pending Review
+                                    </span>
+                                    {% endif %}
+                                </td>
+
+                                <!-- Action Buttons -->
+                                <td style="text-align: right;">
+                                    <div class="actions-cell" style="justify-content: flex-end;">
+                                        {% if not mother.ASHA %}
+                                        <!-- One-click verify button -->
+                                        <form method="POST" action="/myapp/verify_mother/" style="display: inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action_type" value="verify_mother">
+                                            <input type="hidden" name="mother_id" value="{{ mother.id }}">
+                                            {% if worker %}
+                                            <input type="hidden" name="asha_id" value="{{ worker.id }}">
+                                            {% endif %}
+                                            <button type="submit" class="btn-action btn-verify-primary"
+                                                title="Verify and assign mother to your care">
+                                                <i class="fa-solid fa-check"></i> Verify
+                                            </button>
+                                        </form>
+                                        {% endif %}
+
+                                        <!-- View Details Modal Trigger -->
+                                        <button type="button" class="btn-action btn-action-view"
+                                            onclick="viewMotherDetails('{{ mother.id }}', '{{ mother.name|escapejs }}', '{{ mother.husband_name|escapejs }}', '{{ mother.age }}', '{{ mother.dob|date:'Y-m-d'|default:'' }}', '{{ mother.blood_group|escapejs }}', '{{ mother.phone }}', '{{ mother.Email|escapejs }}', '{{ mother.panchayath|escapejs }}', '{{ mother.Address|escapejs }}', '{{ mother.district|escapejs }}', '{{ mother.state|escapejs }}', '{{ mother.pincode|escapejs }}', '{{ mother.ASHA.Full_name|default:''|escapejs }}', '{% if mother.ASHA %}Verified{% else %}Pending{% endif %}', '{{ mother.expected_delivery_date|date:'Y-m-d'|default:'' }}', '{{ mother.gestation_week_display|escapejs }}')"
+                                            title="View comprehensive medical dossier">
+                                            <i class="fa-regular fa-eye"></i> View
+                                        </button>
+
+                                        <!-- Edit Mother Trigger -->
+                                        <button type="button" class="btn-action btn-action-edit"
+                                            onclick="openEditModal('{{ mother.id }}', '{{ mother.name|escapejs }}', '{{ mother.husband_name|escapejs }}', '{{ mother.age }}', '{{ mother.dob|date:'Y-m-d'|default:'' }}', '{{ mother.blood_group|escapejs }}', '{{ mother.phone }}', '{{ mother.Email|escapejs }}', '{{ mother.panchayath|escapejs }}', '{{ mother.Address|escapejs }}', '{{ mother.district|escapejs }}', '{{ mother.state|escapejs }}', '{{ mother.pincode|escapejs }}', '{{ mother.ASHA.id|default:'' }}', '{{ mother.expected_delivery_date|date:'Y-m-d'|default:'' }}')"
+                                            title="Edit mother information">
+                                            <i class="fa-regular fa-pen-to-square"></i>
+                                        </button>
+
+                                        <!-- Delete / Reject Trigger -->
+                                        <button type="button" class="btn-action btn-action-delete"
+                                            onclick="openDeleteModal('{{ mother.id }}', '{{ mother.name|escapejs }}')"
+                                            title="Remove registration">
+                                            <i class="fa-regular fa-trash-can"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <!-- Empty State -->
+                <div class="empty-state-box">
+                    <div class="empty-state-icon">
+                        <i class="fa-regular fa-folder-open"></i>
+                    </div>
+                    <h3 class="empty-state-title">No mother record added</h3>
+                    <p class="empty-state-desc">
+                        {% if search_query or status_filter != 'all' %}
+                        No mother records match the current filter or search criteria. Try resetting filters.
+                        {% else %}
+                        There is no mother record added in the portal yet. Register a new mother to begin.
+                        {% endif %}
+                    </p>
+                    {% if search_query or status_filter != 'all' %}
+                    <a href="/myapp/verify_mother/" class="btn-action btn-verify-primary">
+                        <i class="fa-solid fa-rotate-left"></i> Reset Filters
+                    </a>
+                    {% else %}
+                    <button type="button" class="btn-action btn-verify-primary" onclick="openAddModal()">
+                        <i class="fa-solid fa-user-plus"></i> Register First Mother
+                    </button>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </section>
+
+        </div>
+    </main>
+
+    <!-- ================= MODAL 1: VIEW MOTHER DOSSIER ================= -->
+    <div class="modal-overlay" id="viewDetailsModal" onclick="closeDetailsModal(event)">
+        <div class="modal-card modal-lg" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeDetailsModal()" aria-label="Close modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="modal-header-box">
+                <div class="modal-icon-badge">
+                    <i class="fa-solid fa-id-card"></i>
+                </div>
+                <div>
+                    <h3 class="modal-header-title" id="dossierName">Mother Profile Dossier</h3>
+                    <p class="modal-header-subtitle">Official Maternal Verification & Medical Summary</p>
+                </div>
+            </div>
+
+            <div class="detail-sections">
+                <!-- Section 1: Demographics & Identity -->
+                <div class="detail-card-box">
+                    <div class="detail-card-title">
+                        <i class="fa-solid fa-user"></i> Primary Demographics & Health Profile
+                    </div>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Full Name</span>
+                            <span class="detail-value" id="dossierFullName">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Husband / Spouse Name</span>
+                            <span class="detail-value" id="dossierSpouseName">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Age & Date of Birth</span>
+                            <span class="detail-value" id="dossierAgeDob">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Blood Group</span>
+                            <span class="detail-value" id="dossierBloodGroup">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Expecting Delivery Date (EDD)</span>
+                            <span class="detail-value" id="dossierEdd">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Gestational Age</span>
+                            <span class="detail-value" id="dossierGestation">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Contact & Residential Location -->
+                <div class="detail-card-box">
+                    <div class="detail-card-title">
+                        <i class="fa-solid fa-location-dot"></i> Contact & Residential Information
+                    </div>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Phone Number</span>
+                            <span class="detail-value" id="dossierPhone">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Email Address</span>
+                            <span class="detail-value" id="dossierEmail">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">District & State</span>
+                            <span class="detail-value" id="dossierDistrictState">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Panchayath / Sector</span>
+                            <span class="detail-value" id="dossierPanchayath">-</span>
+                        </div>
+                        <div class="detail-item" style="grid-column: span 2;">
+                            <span class="detail-label">Residential Address</span>
+                            <span class="detail-value" id="dossierAddress">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Verification & Supervision Checklist -->
+                <div class="detail-card-box">
+                    <div class="detail-card-title">
+                        <i class="fa-solid fa-clipboard-check"></i> Verification & Supervision Status
+                    </div>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Current Verification Status</span>
+                            <span class="detail-value" id="dossierStatusBadge">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Assigned ASHA Worker</span>
+                            <span class="detail-value" id="dossierAshaName">-</span>
+                        </div>
+                    </div>
+
+                    <div class="verification-checklist">
+                        <div class="check-item">
+                            <i class="fa-solid fa-circle-check"></i> Identity & Residence Address Verified
+                        </div>
+                        <div class="check-item">
+                            <i class="fa-solid fa-circle-check"></i> Primary Contact & Emergency Line Confirmed
+                        </div>
+                        <div class="check-item">
+                            <i class="fa-solid fa-circle-check"></i> Eligible for Nutrition Kit & Immunization Tracking
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-btn-row">
+                <button type="button" class="modal-btn-cancel" onclick="closeDetailsModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL 2: REGISTER & VERIFY MOTHER ================= -->
+    <div class="modal-overlay" id="addMotherModal" onclick="closeAddModal(event)">
+        <div class="modal-card modal-lg" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeAddModal()" aria-label="Close modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="modal-header-box">
+                <div class="modal-icon-badge">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <div>
+                    <h3 class="modal-header-title">Register & Verify New Mother</h3>
+                    <p class="modal-header-subtitle">Direct Enrolment into ASHA Healthcare Caseload</p>
+                </div>
+            </div>
+
+            <form method="POST" action="/myapp/verify_mother/">
+                {% csrf_token %}
+                <input type="hidden" name="action_type" value="add_mother">
+                <input type="hidden" name="panchayath" value="{{ worker.Area_assigned|default:'General Ward' }}">
+
+                <div class="modal-form-grid">
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Full Name *</label>
+                        <input type="text" name="name" class="modal-input" placeholder="e.g. Fatima Beevi" required>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Husband's Name *</label>
+                        <input type="text" name="husband_name" class="modal-input" placeholder="e.g. Rashid Khan"
+                            required>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Date of Birth *</label>
+                        <input type="date" name="dob" class="modal-input" required id="addDobInput"
+                            onchange="calculateAgeFromDob(this.value, 'addAgeInput')">
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Age (Years) *</label>
+                        <input type="number" name="age" id="addAgeInput" class="modal-input" placeholder="e.g. 24"
+                            required min="18" max="55">
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Mobile Phone Number *</label>
+                        <input type="tel" name="phone" class="modal-input" placeholder="10-digit mobile number" required
+                            pattern="[0-9]{10}">
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Blood Group *</label>
+                        <select name="blood_group" class="modal-input" required>
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Email Address</label>
+                        <input type="email" name="email" class="modal-input" placeholder="e.g. mother@gmail.com"
+                            pattern="[a-zA-Z0-9._%+-]+@[gG][mM][aA][iI][lL]\.[cC][oO][mM]"
+                            title="Please enter a valid @gmail.com email address"
+                            oninput="if(this.value.trim() && !/^[a-zA-Z0-9._%+-]+@gmail\.com$/i.test(this.value.trim())){this.setCustomValidity('Please enter a valid @gmail.com email address (e.g., example@gmail.com)');}else{this.setCustomValidity('');}"
+                            oninvalid="this.setCustomValidity('Please enter a valid @gmail.com email address (e.g., example@gmail.com)')">
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Expecting Delivery Date (EDD)</label>
+                        <input type="date" name="expected_delivery_date" id="addEddInput" class="modal-input"
+                            onchange="calculateModalGestation('addEddInput', 'addGestNotice')">
+                        <small id="addGestNotice"
+                            style="color: #047857; font-size: 0.78rem; margin-top: 4px; display: none; font-weight: 600;"></small>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">District *</label>
+                        <input type="text" name="district" class="modal-input" placeholder="e.g. Kozhikode"
+                            value="Kozhikode" required>
+                    </div>
+
+                    <div class="modal-form-group full-width">
+                        <label class="modal-form-label">Residential Address *</label>
+                        <input type="text" name="address" class="modal-input"
+                            placeholder="House No / Name, Street, Landmark" required>
+                    </div>
+
+                    <div class="modal-form-group full-width" style="margin-top: 4px;">
+                        <label
+                            style="display: flex; align-items: center; gap: 10px; font-size: 0.88rem; font-weight: 600; cursor: pointer;">
+                            <input type="checkbox" name="auto_verify" value="yes" checked
+                                style="width: 17px; height: 17px; accent-color: var(--brand-green);">
+                            <span>Instantly verify and assign this mother to my active caseload</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-btn-row">
+                    <button type="button" class="modal-btn-cancel" onclick="closeAddModal()">Cancel</button>
+                    <button type="submit" class="modal-btn-submit">
+                        <i class="fa-solid fa-user-check"></i> Register & Enrol Mother
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= MODAL 3: EDIT MOTHER DETAILS ================= -->
+    <div class="modal-overlay" id="editMotherModal" onclick="closeEditModal(event)">
+        <div class="modal-card modal-lg" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeEditModal()" aria-label="Close modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="modal-header-box">
+                <div class="modal-icon-badge">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </div>
+                <div>
+                    <h3 class="modal-header-title">Edit Mother Profile</h3>
+                    <p class="modal-header-subtitle">Update Demographics & Verification Assignment</p>
+                </div>
+            </div>
+
+            <form method="POST" action="/myapp/verify_mother/">
+                {% csrf_token %}
+                <input type="hidden" name="action_type" value="edit_mother">
+                <input type="hidden" name="mother_id" id="editMotherId">
+                <input type="hidden" name="panchayath" id="editPanchayath" value="General Ward">
+
+                <div class="modal-form-grid">
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Full Name *</label>
+                        <input type="text" name="name" id="editName" class="modal-input" required>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Husband's Name *</label>
+                        <input type="text" name="husband_name" id="editHusband" class="modal-input" required>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Date of Birth *</label>
+                        <input type="date" name="dob" id="editDob" class="modal-input" required
+                            onchange="calculateAgeFromDob(this.value, 'editAge')">
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Age (Years) *</label>
+                        <input type="number" name="age" id="editAge" class="modal-input" required min="18" max="55">
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Mobile Phone Number *</label>
+                        <input type="tel" name="phone" id="editPhone" class="modal-input" required pattern="[0-9]{10}">
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Blood Group *</label>
+                        <select name="blood_group" id="editBloodGroup" class="modal-input" required>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Email Address</label>
+                        <input type="email" name="email" id="editEmail" class="modal-input"
+                            placeholder="e.g. mother@gmail.com"
+                            pattern="[a-zA-Z0-9._%+-]+@[gG][mM][aA][iI][lL]\.[cC][oO][mM]"
+                            title="Please enter a valid @gmail.com email address"
+                            oninput="if(this.value.trim() && !/^[a-zA-Z0-9._%+-]+@gmail\.com$/i.test(this.value.trim())){this.setCustomValidity('Please enter a valid @gmail.com email address (e.g., example@gmail.com)');}else{this.setCustomValidity('');}"
+                            oninvalid="this.setCustomValidity('Please enter a valid @gmail.com email address (e.g., example@gmail.com)')">
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Expecting Delivery Date (EDD)</label>
+                        <input type="date" name="expected_delivery_date" id="editEdd" class="modal-input"
+                            onchange="calculateModalGestation('editEdd', 'editGestNotice')">
+                        <small id="editGestNotice"
+                            style="color: #047857; font-size: 0.78rem; margin-top: 4px; display: none; font-weight: 600;"></small>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">District</label>
+                        <input type="text" name="district" id="editDistrict" class="modal-input" required>
+                    </div>
+
+                    <div class="modal-form-group full-width">
+                        <label class="modal-form-label">Residential Address *</label>
+                        <input type="text" name="address" id="editAddress" class="modal-input" required>
+                    </div>
+
+                    <div class="modal-form-group full-width">
+                        <label class="modal-form-label">Assigned ASHA Worker (Verification Assignment)</label>
+                        <select name="asha_id" id="editAshaSelect" class="modal-input">
+                            <option value="unassigned">-- Unassigned (Pending Verification) --</option>
+                            {% for w in all_workers %}
+                            <option value="{{ w.id }}">{{ w.Full_name }} ({{ w.Area_assigned }})</option>
+                            {% empty %}
+                            <option value="" disabled>No ASHA worker record added yet</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-btn-row">
+                    <button type="button" class="modal-btn-cancel" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="modal-btn-submit">
+                        <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= MODAL 4: DELETE CONFIRMATION ================= -->
+    <div class="modal-overlay" id="deleteModal" onclick="closeDeleteModal(event)">
+        <div class="modal-card modal-sm" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeDeleteModal()" aria-label="Close modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="modal-header-box" style="margin-bottom: 1rem;">
+                <div class="modal-icon-badge" style="background-color: var(--rose-bg); color: var(--rose-text);">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div>
+                    <h3 class="modal-header-title" style="color: #991b1b;">Delete Mother Record</h3>
+                    <p class="modal-header-subtitle">Permanent Deletion Warning</p>
+                </div>
+            </div>
+
+            <p style="font-size: 0.9rem; color: #4b5563; line-height: 1.5; margin-bottom: 1.5rem;">
+                Are you sure you want to remove the registration record for <strong id="deleteMotherName"
+                    style="color: #111827;"></strong>? This action cannot be undone.
+            </p>
+
+            <form method="POST" action="/myapp/verify_mother/">
+                {% csrf_token %}
+                <input type="hidden" name="action_type" value="delete_mother">
+                <input type="hidden" name="mother_id" id="deleteMotherId">
+
+                <div class="modal-btn-row">
+                    <button type="button" class="modal-btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+                    <button type="submit" class="modal-btn-submit modal-btn-danger">
+                        <i class="fa-solid fa-trash"></i> Delete Record
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script>
+        // Sidebar Toggle for Mobile
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Auto calculate age from DOB
+        function calculateAgeFromDob(dobValue, ageInputId) {
+            if (!dobValue) return;
+            const dob = new Date(dobValue);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            if (age < 18) {
+                alert("Mother must be at least 18 years old to register.");
+                document.getElementById(ageInputId).value = "";
+                return;
+            }
+            if (age >= 18 && age <= 70) {
+                document.getElementById(ageInputId).value = age;
+            }
+        }
+
+        // Calculate Gestation in Modals
+        function calculateModalGestation(eddInputId, noticeId) {
+            const eddInput = document.getElementById(eddInputId);
+            const noticeEl = document.getElementById(noticeId);
+            if (!eddInput || !noticeEl) return;
+            const val = eddInput.value;
+            if (!val) {
+                noticeEl.style.display = 'none';
+                return;
+            }
+            const eddDate = new Date(val);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            eddDate.setHours(0, 0, 0, 0);
+
+            if (eddDate < today) {
+                noticeEl.style.display = 'block';
+                noticeEl.style.color = '#dc2626';
+                noticeEl.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Expecting delivery date must be today or in the future.`;
+                eddInput.value = '';
+                return;
+            }
+
+            noticeEl.style.color = '#047857';
+            const diffDays = Math.ceil((eddDate - today) / (1000 * 60 * 60 * 24));
+            const gestDays = 280 - diffDays;
+            let weeks = Math.floor(gestDays / 7);
+            if (weeks < 0) weeks = 0;
+            noticeEl.style.display = 'block';
+            if (weeks > 40) {
+                noticeEl.innerHTML = `<i class="fa-solid fa-calculator"></i> Gestational Age: <strong>${weeks} Weeks (Post-term)</strong>`;
+            } else {
+                noticeEl.innerHTML = `<i class="fa-solid fa-calculator"></i> Gestational Age: <strong>${weeks} Weeks</strong>`;
+            }
+        }
+
+        // View Details Modal
+        function viewMotherDetails(id, name, spouse, age, dob, blood, phone, email, panchayath, address, district, state, pincode, asha, status, edd, gestDisplay) {
+            document.getElementById('dossierName').textContent = `${name}'s Health Dossier`;
+            document.getElementById('dossierFullName').textContent = name || '-';
+            document.getElementById('dossierSpouseName').textContent = spouse || '-';
+            document.getElementById('dossierAgeDob').textContent = `${age} years (DOB: ${dob || 'Not recorded'})`;
+
+            const bloodEl = document.getElementById('dossierBloodGroup');
+            bloodEl.innerHTML = `<span class="blood-badge"><i class="fa-solid fa-droplet"></i> ${blood}</span>`;
+
+            document.getElementById('dossierEdd').textContent = edd || 'Not recorded';
+            document.getElementById('dossierGestation').textContent = gestDisplay || 'N/A';
+
+            document.getElementById('dossierPhone').innerHTML = `<a href="tel:${phone}" style="color: var(--brand-green); text-decoration: none;"><i class="fa-solid fa-phone"></i> ${phone}</a>`;
+            document.getElementById('dossierEmail').textContent = email || 'No email provided';
+            document.getElementById('dossierPanchayath').textContent = panchayath || 'General Ward';
+            document.getElementById('dossierDistrictState').textContent = `${district || 'District'}, ${state || 'Kerala'}`;
+            document.getElementById('dossierAddress').textContent = address || '-';
+
+            const statusBadgeEl = document.getElementById('dossierStatusBadge');
+            if (status === 'Verified') {
+                statusBadgeEl.innerHTML = `<span class="badge-status badge-verified"><i class="fa-solid fa-circle-check"></i> Verified Record</span>`;
+                document.getElementById('dossierAshaName').textContent = asha ? `${asha} (Assigned Caregiver)` : 'General Health Wing';
+            } else {
+                statusBadgeEl.innerHTML = `<span class="badge-status badge-pending"><i class="fa-solid fa-clock"></i> Pending Verification</span>`;
+                document.getElementById('dossierAshaName').textContent = 'Unassigned (Action Required)';
+            }
+
+            document.getElementById('viewDetailsModal').classList.add('active');
+        }
+
+        function closeDetailsModal(e) {
+            document.getElementById('viewDetailsModal').classList.remove('active');
+        }
+
+        // Add Modal
+        function openAddModal() {
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+            const maxDobYear = today.getFullYear() - 18;
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const maxDobStr = `${maxDobYear}-${month}-${day}`;
+
+            const addEdd = document.getElementById('addEddInput');
+            if (addEdd) addEdd.setAttribute('min', todayStr);
+
+            const addDob = document.getElementById('addDobInput');
+            if (addDob) addDob.setAttribute('max', maxDobStr);
+
+            document.getElementById('addMotherModal').classList.add('active');
+        }
+
+        function closeAddModal(e) {
+            document.getElementById('addMotherModal').classList.remove('active');
+        }
+
+        // Edit Modal
+        function openEditModal(id, name, spouse, age, dob, blood, phone, email, panchayath, address, district, state, pincode, ashaId, edd) {
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+            const maxDobYear = today.getFullYear() - 18;
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const maxDobStr = `${maxDobYear}-${month}-${day}`;
+
+            const editEdd = document.getElementById('editEdd');
+            if (editEdd) editEdd.setAttribute('min', todayStr);
+
+            const editDob = document.getElementById('editDob');
+            if (editDob) editDob.setAttribute('max', maxDobStr);
+
+            document.getElementById('editMotherId').value = id;
+            document.getElementById('editName').value = name;
+            document.getElementById('editHusband').value = spouse;
+            document.getElementById('editAge').value = age;
+            document.getElementById('editDob').value = dob;
+            document.getElementById('editBloodGroup').value = blood;
+            document.getElementById('editPhone').value = phone;
+            document.getElementById('editEmail').value = email;
+            document.getElementById('editPanchayath').value = panchayath || 'General Ward';
+            document.getElementById('editAddress').value = address;
+            document.getElementById('editDistrict').value = district || 'Kozhikode';
+            document.getElementById('editEdd').value = edd || '';
+            calculateModalGestation('editEdd', 'editGestNotice');
+
+            const ashaSelect = document.getElementById('editAshaSelect');
+            if (ashaId) {
+                ashaSelect.value = ashaId;
+            } else {
+                ashaSelect.value = "unassigned";
+            }
+
+            document.getElementById('editMotherModal').classList.add('active');
+        }
+
+        function closeEditModal(e) {
+            document.getElementById('editMotherModal').classList.remove('active');
+        }
+
+        // Delete Modal
+        function openDeleteModal(id, name) {
+            document.getElementById('deleteMotherId').value = id;
+            document.getElementById('deleteMotherName').textContent = name;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        function closeDeleteModal(e) {
+            document.getElementById('deleteModal').classList.remove('active');
+        }
+
+        // Live Table Search Filtering
+        const liveSearch = document.getElementById('liveSearchInput');
+        if (liveSearch) {
+            liveSearch.addEventListener('input', function (e) {
+                const term = e.target.value.toLowerCase().trim();
+                const rows = document.querySelectorAll('#mothersTable tbody tr');
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    if (text.includes(term)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Keyboard Escape listener
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeDetailsModal();
+                closeAddModal();
+                closeEditModal();
+                closeDeleteModal();
+            }
+            // Email @gmail.com Form Submit Check
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('form').forEach(function (form) {
+                    form.addEventListener('submit', function (e) {
+                        const emailInput = form.querySelector('input[name="email"]');
+                        if (emailInput && emailInput.value.trim()) {
+                            const val = emailInput.value.trim();
+                            if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/i.test(val)) {
+                                e.preventDefault();
+                                emailInput.setCustomValidity('Please enter a valid @gmail.com email address (e.g., example@gmail.com)');
+                                emailInput.reportValidity();
+                                emailInput.focus();
+                                return false;
+                            } else {
+                                emailInput.setCustomValidity('');
+                            }
+                        }
+                    });
+                });
+            });
+    </script>
+</body>
+
+</html>

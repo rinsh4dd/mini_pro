@@ -1,0 +1,916 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications & Alerts - MaatriCare</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #062e20;
+            --sidebar-hover: rgba(255, 255, 255, 0.08);
+            --sidebar-active: #d7e6dc;
+            --sidebar-active-text: #062e20;
+            --sidebar-text: #e2e8e5;
+            --sidebar-muted: #8da89d;
+            --page-bg: #faf7f0;
+            --card-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --subcard-bg: #ede8dc;
+            --subcard-warm: #f6f3ed;
+            --border-color: #ede8dc;
+            --border-light: #e5e0d4;
+            --accent-green: #062e20;
+            --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--page-bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 240px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 100;
+            padding: 1.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-brand {
+            padding: 0.5rem 0.75rem 1.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--sidebar-bg);
+            font-size: 1.2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .sidebar-brand h2 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.01em;
+            line-height: 1.15;
+        }
+
+        .sidebar-brand p {
+            font-size: 0.68rem;
+            color: var(--sidebar-muted);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            width: 100%;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0.7rem 1rem;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+        }
+
+        .nav-link i {
+            font-size: 1.05rem;
+            width: 20px;
+            text-align: center;
+            color: #a4c2b5;
+        }
+
+        .nav-link:hover {
+            background-color: var(--sidebar-hover);
+            color: #ffffff;
+        }
+
+        .nav-link.active {
+            background-color: var(--sidebar-active);
+            color: var(--sidebar-active-text);
+            font-weight: 700;
+        }
+
+        .nav-link.active i {
+            color: var(--sidebar-active-text);
+        }
+
+        .sidebar-bottom {
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-sidebar-logout {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.7rem 1rem;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .btn-sidebar-logout i {
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+            color: #a4c2b5;
+        }
+
+        .btn-sidebar-logout:hover {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+        }
+
+        /* ================= MAIN WRAPPER ================= */
+        .main-wrapper {
+            margin-left: 240px;
+            flex-grow: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--page-bg);
+            position: relative;
+        }
+
+        .top-header {
+            padding: 1.1rem 2.5rem;
+            background-color: var(--page-bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .breadcrumb-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb-wrap a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb-wrap a:hover {
+            color: var(--accent-green);
+        }
+
+        .breadcrumb-sep {
+            color: #9ca3af;
+        }
+
+        .breadcrumb-current {
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        .user-pill-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--card-bg);
+            padding: 5px 12px 5px 6px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .user-avatar-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--subcard-bg);
+            color: var(--accent-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .user-pill-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .content-container {
+            padding: 1.5rem 2.5rem 4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Title Bar */
+        .notif-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .notif-title-group h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+        }
+
+        .notif-title-group p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            background: var(--card-bg);
+            padding: 8px 12px;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+        }
+
+        .filter-tab-link {
+            padding: 0.6rem 1.25rem;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-tab-link:hover {
+            color: var(--text-main);
+            background-color: var(--subcard-warm);
+        }
+
+        .filter-tab-link.active {
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+        }
+
+        .tab-counter {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            background: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+        }
+
+        .filter-tab-link:not(.active) .tab-counter {
+            background: var(--subcard-bg);
+            color: var(--text-main);
+        }
+
+        /* Notifications Stream */
+        .notif-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .notif-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.35rem 1.75rem;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .notif-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .notif-icon-box {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .notif-content {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-grow: 1;
+        }
+
+        .notif-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .notif-card-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .notif-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .notif-message-body {
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .notif-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 6px;
+            padding-top: 8px;
+            border-top: 1px solid #f6f3ed;
+            flex-wrap: wrap;
+        }
+
+        .badge-category {
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 12px;
+        }
+
+        .chip-kit { background: #e0f2fe; color: #0369a1; }
+        .chip-vax { background: #fef3c7; color: #b45309; }
+        .chip-checkup { background: #d1fae5; color: #065f46; }
+        .chip-general { background: #f3f4f6; color: #4b5563; }
+        .chip-rescheduled { background: #fae8ff; color: #86198f; border: 1px solid #f0abfc; font-weight: 800; }
+
+        .sender-badge-tag {
+            font-size: 0.74rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .sender-angteacher {
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+        .sender-admin {
+            background: #fffbeb;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+        .sender-rescheduled {
+            background: #fdf4ff;
+            color: #701a75;
+            border: 1px solid #f5d0fe;
+        }
+
+        /* Rescheduled Notification Special Background Shade */
+        .notif-card.notif-rescheduled {
+            background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%) !important;
+            border: 1.5px solid #e879f9 !important;
+            border-left: 6px solid #c026d3 !important;
+            box-shadow: 0 6px 18px rgba(192, 38, 211, 0.1) !important;
+        }
+        .notif-card.notif-rescheduled .notif-card-title {
+            color: #701a75 !important;
+        }
+
+        .btn-notif-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--sidebar-bg);
+            text-decoration: none;
+            padding: 4px 10px;
+            border-radius: 8px;
+            background: var(--subcard-bg);
+            transition: background-color 0.2s;
+        }
+
+        .btn-notif-action:hover {
+            background-color: #dfd8c7;
+        }
+
+        /* Empty State */
+        .empty-notif-box {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 3.5rem 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .empty-notif-icon {
+            font-size: 3.5rem;
+            color: #cbd5e1;
+            margin-bottom: 4px;
+        }
+
+        /* Notification Sections (Active vs Past) */
+        .notif-section-block {
+            margin-bottom: 2.2rem;
+        }
+
+        .notif-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 1.5px solid var(--border-color);
+        }
+
+        .notif-section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .section-count-badge {
+            font-size: 0.76rem;
+            font-weight: 800;
+            padding: 3px 11px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge-active {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.15);
+        }
+
+        .badge-past {
+            background-color: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .section-desc-note {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .active-caught-up-box {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+            border: 1.5px solid #bbf7d0;
+            border-left: 6px solid #10b981;
+            border-radius: 16px;
+            padding: 1.35rem 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.08);
+            margin-bottom: 1rem;
+        }
+
+        .caught-up-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            background: #dcfce7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: #10b981;
+            flex-shrink: 0;
+        }
+
+        .caught-up-text h4 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #064e3b;
+            margin-bottom: 3px;
+        }
+
+        .caught-up-text p {
+            font-size: 0.85rem;
+            color: #475569;
+            line-height: 1.45;
+            margin: 0;
+        }
+
+        /* Past Notification Styling (Subtle & Distinct) */
+        .notif-card.notif-past-card {
+            background: #fafaf9;
+            border: 1px solid #e7e5e4;
+            opacity: 0.92;
+            transition: all 0.2s ease;
+        }
+
+        .notif-card.notif-past-card:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        }
+
+        .tag-past-status {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 2px 9px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .past-auto-clear-pill {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #94a3b8;
+            background: rgba(148, 163, 184, 0.12);
+            padding: 3px 10px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .main-wrapper { margin-left: 0; }
+            .top-header { padding: 1rem 1.25rem; }
+            .content-container { padding: 1rem 1.25rem 3rem; }
+            .notif-card { padding: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= LEFT SIDEBAR ================= -->
+    <aside class="sidebar">
+        <div>
+            <a href="/myapp/userhome/" class="sidebar-brand">
+                <div class="brand-logo-icon">
+                    <i class="fa-solid fa-person-breastfeeding"></i>
+                </div>
+                <div>
+                    <h2>MaatriCare</h2>
+                    <p>MATERNAL PORTAL</p>
+                </div>
+            </a>
+
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a href="/myapp/userhome/" class="nav-link">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_profile/" class="nav-link">
+                        <i class="fa-regular fa-user"></i>
+                        <span>My Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_pregnancy_record/" class="nav-link">
+                        <i class="fa-solid fa-person-pregnant"></i>
+                        <span>Pregnancy Record</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_child_profile/" class="nav-link">
+                        <i class="fa-regular fa-face-smile"></i>
+                        <span>Child Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_child_growth/" class="nav-link">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Child Growth</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_vaccination_schedule/" class="nav-link">
+                        <i class="fa-solid fa-syringe"></i>
+                        <span>Vaccination</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_kit_history/" class="nav-link">
+                        <i class="fa-solid fa-box-archive"></i>
+                        <span>Nutrition Kits</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_notifications/" class="nav-link active">
+                        <i class="fa-regular fa-bell"></i>
+                        <span>Notifications</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-bottom">
+            <a href="/myapp/logout/" class="btn-sidebar-logout">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN WRAPPER ================= -->
+    <div class="main-wrapper">
+        <header class="top-header">
+            <div class="breadcrumb-wrap">
+                <a href="/myapp/userhome/">Maternal Portal</a>
+                <span class="breadcrumb-sep">&rsaquo;</span>
+                <span class="breadcrumb-current">Notifications Center</span>
+            </div>
+
+            <div class="user-pill-profile">
+                <div class="user-avatar-circle">
+                    <i class="fa-regular fa-user"></i>
+                </div>
+                <span class="user-pill-name">{{ mother.name|default:"Registered Mother" }}</span>
+            </div>
+        </header>
+
+        <main class="content-container">
+
+            <!-- Title Bar -->
+            <div class="notif-header-bar">
+                <div class="notif-title-group">
+                    <h1>Notifications & Health Alerts</h1>
+                    <p>Official alerts for nutrition kit distributions from Anganwadi and child immunization schedules from Health Admin.</p>
+                </div>
+            </div>
+
+            <!-- Filter Tabs Row (Strictly 2 Categories: Kit & Vaccine) -->
+            <div class="filter-tabs-row">
+                <a href="/myapp/user_notifications/?category=all" class="filter-tab-link {% if active_category == 'all' %}active{% endif %}">
+                    <i class="fa-solid fa-bell"></i> All Alerts <span class="tab-counter">{{ total_count }}</span>
+                </a>
+                <a href="/myapp/user_notifications/?category=kit" class="filter-tab-link {% if active_category == 'kit' %}active{% endif %}">
+                    <i class="fa-solid fa-box-archive"></i> Nutrition Kits (Anganwadi) <span class="tab-counter">{{ kit_count }}</span>
+                </a>
+                <a href="/myapp/user_notifications/?category=vaccine" class="filter-tab-link {% if active_category == 'vaccine' %}active{% endif %}">
+                    <i class="fa-solid fa-syringe"></i> Vaccinations (Admin) <span class="tab-counter">{{ vax_count }}</span>
+                </a>
+            </div>
+
+            <!-- Section 1: Active & Upcoming Alerts -->
+            <div class="notif-section-block">
+                <div class="notif-section-header">
+                    <div class="notif-section-title">
+                        <i class="fa-solid fa-bell" style="color: #065f46;"></i>
+                        <span>Active & Upcoming Alerts</span>
+                        <span class="section-count-badge badge-active">{{ active_notifs|length }}</span>
+                    </div>
+                    <span class="section-desc-note">Current actionable alerts, new messages, and upcoming scheduled dates</span>
+                </div>
+
+                {% if active_notifs %}
+                <div class="notif-list">
+                    {% for n in active_notifs %}
+                    <div class="notif-card {{ n.card_class }}">
+                        <div class="notif-icon-box" style="background-color: {{ n.icon_bg }}; color: {{ n.icon_color }};">
+                            <i class="{{ n.icon }}"></i>
+                        </div>
+                        <div class="notif-content">
+                            <div class="notif-card-header">
+                                <div>
+                                    <h3 class="notif-card-title">{{ n.title }}</h3>
+                                    <div style="margin-top: 4px; display: flex; align-items: center; gap: 8px;">
+                                        <span class="sender-badge-tag {{ n.sender_class }}">
+                                            {% if n.is_rescheduled %}<i class="fa-solid fa-clock-rotate-left"></i>{% elif n.type == 'kit' %}<i class="fa-solid fa-chalkboard-user"></i>{% else %}<i class="fa-solid fa-shield-halved"></i>{% endif %}
+                                            {{ n.sender_badge }}
+                                        </span>
+                                        {% if n.is_new %}
+                                        <span style="background: #dc2626; color: #ffffff; font-size: 0.68rem; font-weight: 800; padding: 2px 7px; border-radius: 4px; letter-spacing: 0.5px;">NEW</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <span class="notif-time">
+                                    <i class="fa-regular fa-clock"></i> {{ n.date }}
+                                </span>
+                            </div>
+
+                            <p class="notif-message-body">{{ n.message }}</p>
+
+                            <div class="notif-footer">
+                                <span class="badge-category {{ n.badge_class }}">{{ n.badge }}</span>
+                                <a href="{{ n.link }}" class="btn-notif-action">
+                                    <span>{{ n.action_label }}</span>
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="active-caught-up-box">
+                    <div class="caught-up-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="caught-up-text">
+                        <h4>You are completely up to date!</h4>
+                        <p>No active or unread notifications for upcoming appointments. Past notifications whose scheduled day has passed are organized in the history section below.</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Section 2: Past Notifications History (Seen & Scheduled Day Passed) -->
+            {% if past_notifs %}
+            <div class="notif-section-block" style="margin-top: 2.5rem;">
+                <div class="notif-section-header">
+                    <div class="notif-section-title">
+                        <i class="fa-solid fa-clock-rotate-left" style="color: #64748b;"></i>
+                        <span>Past Notifications History</span>
+                        <span class="section-count-badge badge-past">{{ past_notifs|length }}</span>
+                        <span class="past-auto-clear-pill"><i class="fa-regular fa-clock"></i> Cleared after 1 day</span>
+                    </div>
+                    <span class="section-desc-note">Past alerts are kept for 24 hours after their scheduled date, then automatically cleared</span>
+                </div>
+
+                <div class="notif-list">
+                    {% for n in past_notifs %}
+                    <div class="notif-card notif-past-card {{ n.card_class }}">
+                        <div class="notif-icon-box" style="background-color: #f1f5f9; color: #64748b;">
+                            <i class="{{ n.icon }}"></i>
+                        </div>
+                        <div class="notif-content">
+                            <div class="notif-card-header">
+                                <div>
+                                    <h3 class="notif-card-title" style="color: #475569;">{{ n.title }}</h3>
+                                    <div style="margin-top: 4px; display: flex; align-items: center; gap: 8px;">
+                                        <span class="sender-badge-tag {{ n.sender_class }}" style="opacity: 0.9;">
+                                            {% if n.is_rescheduled %}<i class="fa-solid fa-clock-rotate-left"></i>{% elif n.type == 'kit' %}<i class="fa-solid fa-chalkboard-user"></i>{% else %}<i class="fa-solid fa-shield-halved"></i>{% endif %}
+                                            {{ n.sender_badge }}
+                                        </span>
+                                        <span class="tag-past-status">
+                                            <i class="fa-solid fa-check"></i> Past Event
+                                        </span>
+                                    </div>
+                                </div>
+                                <span class="notif-time">
+                                    <i class="fa-regular fa-clock"></i> {{ n.date }}
+                                </span>
+                            </div>
+
+                            <p class="notif-message-body" style="color: #64748b;">{{ n.message }}</p>
+
+                            <div class="notif-footer">
+                                <span class="badge-category {{ n.badge_class }}">{{ n.badge }}</span>
+                                <a href="{{ n.link }}" class="btn-notif-action">
+                                    <span>{{ n.action_label }}</span>
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if not active_notifs and not past_notifs %}
+            <div class="empty-notif-box">
+                <div class="empty-notif-icon">
+                    <i class="fa-regular fa-bell-slash"></i>
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">No Notifications in this Category</h3>
+                <p style="font-size: 0.9rem; color: var(--text-muted); max-width: 440px;">
+                    You have caught up with all current alerts. When new nutrition kit distribution dates or vaccination schedules are posted, they will appear here.
+                </p>
+                <div style="margin-top: 0.5rem;">
+                    <a href="/myapp/user_notifications/?category=all" class="btn-notif-action" style="padding: 0.6rem 1.25rem; background: var(--sidebar-bg); color: #ffffff;">
+                        View All Alerts
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+
+        </main>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!-- ================= Reusable Anganwadi Teacher Left Sidebar ================= -->
+<aside class="sidebar" id="sidebar">
+    <div>
+        <a href="/myapp/teacher_home/" class="sidebar-brand">
+            <h1 class="brand-title">MaatriCare</h1>
+            <p class="brand-sub">Anganwadi Portal</p>
+        </a>
+
+        <ul class="sidebar-menu">
+            <li>
+                <a href="/myapp/teacher_home/" class="nav-item-link {% if 'teacher_home' in request.path or active_page == 'dashboard' %}active{% endif %}">
+                    <i class="fa-solid fa-table-cells-large"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="/myapp/teacher_beneficiaries/" class="nav-item-link {% if 'teacher_beneficiaries' in request.path or active_page == 'beneficiaries' %}active{% endif %}">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Active Beneficiaries</span>
+                </a>
+            </li>
+            <li>
+                <a href="/myapp/manage_kit/" class="nav-item-link {% if 'manage_kit' in request.path or 'add_nutrition_kit' in request.path or active_page == 'kits' %}active{% endif %}">
+                    <i class="fa-solid fa-box-open"></i>
+                    <span>Nutrition Kits</span>
+                </a>
+            </li>
+            <li>
+                <a href="/myapp/kit_distribution/" class="nav-item-link {% if 'kit_distribution' in request.path or active_page == 'distribution' %}active{% endif %}">
+                    <i class="fa-solid fa-hand-holding-medical"></i>
+                    <span>Kit Distribution</span>
+                </a>
+            </li>
+            <li>
+                <a href="/myapp/kit_history/" class="nav-item-link {% if 'kit_history' in request.path or active_page == 'history' %}active{% endif %}">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>Distribution History</span>
+                </a>
+            </li>
+            <li>
+                <a href="/myapp/teacher_profile/" class="nav-item-link {% if 'teacher_profile' in request.path or active_page == 'profile' %}active{% endif %}">
+                    <i class="fa-regular fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="sidebar-footer">
+        <a href="/myapp/logout/" class="logout-link" title="Logout from Anganwadi Portal">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</aside>

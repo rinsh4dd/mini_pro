@@ -1,0 +1,1252 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Vaccination - MaatriCare Admin</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #073423;
+            --sidebar-active: #154d37;
+            --sidebar-hover: #0e3d29;
+            --main-bg: #f9f6f0;
+            --card-bg: #ffffff;
+            --form-card-bg: #fffdfa;
+            --text-dark: #111827;
+            --text-muted: #6b7280;
+            --brand-green: #062e20;
+            --brand-green-hover: #0c4a34;
+            --brand-green-light: #e6f4ee;
+            --border-color: #f0ebe1;
+            --input-bg: #fffdf9;
+            --input-border: #efeae1;
+            --input-focus: #062e20;
+            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--main-bg);
+            display: flex;
+            color: var(--text-dark);
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.75rem 1rem;
+            min-height: 100vh;
+            flex-shrink: 0;
+        }
+
+        .brand-header {
+            padding: 0 0.75rem 1.75rem 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #a8d5be;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .brand-icon-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .brand-text-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-subtitle {
+            font-size: 0.80rem;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.8rem 1rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item a:hover {
+            background-color: var(--sidebar-hover);
+            color: #ffffff;
+        }
+
+        .nav-item.active a {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .nav-item a i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .logout-wrapper {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.8rem 1rem;
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+        }
+
+        /* ================= MAIN WRAPPER ================= */
+        .main-wrapper {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        /* Top Header Bar */
+        .topbar {
+            height: 76px;
+            background-color: var(--main-bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #374151;
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background-color: #ede8dc;
+            color: var(--brand-green);
+        }
+
+        .topbar-page-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+        }
+
+        .topbar-breadcrumb {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: var(--brand-green-light);
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Content Container */
+        .content-container {
+            padding: 2.25rem 2.5rem 4rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Django Messages Alert */
+        .alert-message-bar {
+            padding: 0.9rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .alert-success {
+            background-color: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        .alert-warning {
+            background-color: #fffbeb;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+        .alert-info {
+            background-color: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+
+        /* ================= VACCINATION SCHEDULING FORM CARD ================= */
+        .schedule-form-card {
+            background-color: var(--form-card-bg);
+            border: 1px solid #eae5dc;
+            border-radius: 20px;
+            padding: 2.25rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        /* Mode Navigation Tabs */
+        .form-mode-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1.75rem;
+            border-bottom: 2px solid #efeae1;
+            padding-bottom: 0.75rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.65rem 1.25rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #6b7280;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: #f3efe6;
+            color: var(--brand-green);
+        }
+
+        .tab-btn.active {
+            background-color: var(--brand-green);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(6, 46, 32, 0.18);
+        }
+
+        /* 2-Column Grid Layout */
+        .form-grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        /* Input with Icon Wrapper */
+        .input-icon-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .input-icon-wrap i {
+            position: absolute;
+            left: 16px;
+            color: #8c867a;
+            font-size: 0.95rem;
+            pointer-events: none;
+        }
+
+        .form-input-with-icon {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            padding: 0.75rem 1rem 0.75rem 2.65rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-input-with-icon::placeholder {
+            color: #8c867a;
+            font-weight: 400;
+        }
+
+        .form-input-with-icon:focus {
+            border-color: var(--brand-green);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3.5px rgba(6, 46, 32, 0.07);
+        }
+
+        .form-select {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            padding: 0.75rem 2.5rem 0.75rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            outline: none;
+            transition: all 0.2s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%206b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            border-color: var(--brand-green);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3.5px rgba(6, 46, 32, 0.07);
+        }
+
+        .form-textarea {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 14px;
+            padding: 0.9rem 1.1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            outline: none;
+            transition: all 0.2s ease;
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        .form-textarea::placeholder {
+            color: #8c867a;
+            font-weight: 400;
+        }
+
+        .form-textarea:focus {
+            border-color: var(--brand-green);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3.5px rgba(6, 46, 32, 0.07);
+        }
+
+        /* Form Footer Actions */
+        .form-footer-actions {
+            margin-top: 1.75rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid #eae5dc;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 1.5rem;
+        }
+
+        .btn-discard {
+            background: none;
+            border: none;
+            color: #062e20;
+            font-size: 0.92rem;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 0.6rem 1rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-discard:hover {
+            color: #047857;
+            text-decoration: underline;
+        }
+
+        .btn-save-record {
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 0.75rem 1.75rem;
+            font-size: 0.92rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(6, 46, 32, 0.22);
+        }
+
+        .btn-save-record:hover {
+            background-color: var(--brand-green-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(6, 46, 32, 0.3);
+        }
+
+        /* ================= VACCINATION REGISTRY TABLE ================= */
+        .registry-card {
+            background-color: #ffffff;
+            border: 1px solid #eae5dc;
+            border-radius: 20px;
+            padding: 1.75rem 2rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .registry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .registry-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--brand-green);
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .custom-table th {
+            background-color: #faf8f5;
+            padding: 0.85rem 1rem;
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6b7280;
+            border-bottom: 1px solid #ede8dc;
+            text-align: left;
+        }
+
+        .custom-table td {
+            padding: 1rem;
+            font-size: 0.88rem;
+            border-bottom: 1px solid #f3efe6;
+            color: #111827;
+            vertical-align: middle;
+        }
+
+        .custom-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .vax-code-pill {
+            background-color: #e6f4ee;
+            color: #062e20;
+            font-weight: 800;
+            font-size: 0.78rem;
+            padding: 3px 10px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+
+        .btn-delete-row {
+            background: none;
+            border: none;
+            color: #dc2626;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-delete-row:hover {
+            background-color: #fee2e2;
+        }
+
+        /* Delete Modal Backdrop */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(6, 46, 32, 0.45);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .modal-backdrop.show {
+            display: flex;
+        }
+
+        .modal-card {
+            background-color: #ffffff;
+            border-radius: 18px;
+            width: 100%;
+            max-width: 440px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+            }
+            .topbar {
+                padding: 0 1.25rem;
+            }
+            .content-container {
+                padding: 1.5rem 1.25rem 3rem;
+            }
+            .form-grid-2col {
+                grid-template-columns: 1fr;
+            }
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= ADMIN SIDEBAR ================= -->
+    {% include 'admin/sidebar.html' %}
+
+    <!-- ================= MAIN WRAPPER ================= -->
+    <div class="main-wrapper">
+        
+        <header class="topbar">
+            <div class="topbar-left">
+                <a href="/myapp/adminhome/" class="back-btn" title="Back to Dashboard">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <div class="header-title-block">
+                    <h2 class="topbar-page-title">Vaccination Scheduling & Log</h2>
+                    <span class="topbar-breadcrumb">Vaccination Management / Schedule Entry</span>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <div class="profile-pill">
+                    <div class="avatar-box">
+                        <img src="{% static 'images/mother_child_logo.png' %}" alt="Admin Avatar" onerror="this.onerror=null; this.src='/static/images/mother_child_logo.png';">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="content-container">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-message-bar {% if message.tags == 'success' %}alert-success{% elif message.tags == 'info' %}alert-info{% else %}alert-warning{% endif %}">
+                        <i class="fa-solid {% if message.tags == 'success' %}fa-circle-check{% elif message.tags == 'info' %}fa-circle-info{% else %}fa-triangle-exclamation{% endif %}"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- ================= VACCINATION SCHEDULING FORM CARD ================= -->
+            <div class="schedule-form-card">
+                
+                <!-- Form Mode Tabs -->
+                <div class="form-mode-tabs">
+                    <button type="button" class="tab-btn {% if active_tab != 'bulk' %}active{% endif %}" onclick="switchMode('single')">
+                        <i class="fa-solid fa-user"></i> Schedule Individual Child
+                    </button>
+                    <button type="button" class="tab-btn {% if active_tab == 'bulk' %}active{% endif %}" onclick="switchMode('bulk')">
+                        <i class="fa-solid fa-users"></i> Bulk Schedule & Notify by Child Month
+                    </button>
+                </div>
+
+                <!-- SINGLE CHILD SCHEDULING FORM (Matches Screenshot) -->
+                <div id="singleFormBlock" style="{% if active_tab == 'bulk' %}display: none;{% endif %}">
+                    <form method="POST" action="/myapp/schedule_vaccination/" id="vaccinationScheduleForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="action_type" value="schedule_single">
+
+                        <!-- Form 2-Column Grid -->
+                        <div class="form-grid-2col">
+
+                            <!-- Row 1, Col 1: Child's Name -->
+                            <div class="form-group">
+                                <label class="form-label" for="childSelect">Child's Name *</label>
+                                <div class="input-icon-wrap">
+                                    <i class="fa-regular fa-user"></i>
+                                    <select name="child_id" id="childSelect" class="form-select" style="padding-left: 2.65rem;" onchange="onChildSelectChange(this)" required>
+                                        <option value="" disabled selected>Search by name or UID...</option>
+                                        {% for ch in all_children %}
+                                            <option value="{{ ch.id }}" data-mother="{{ ch.USER.name|default:'' }}" data-age-str="{{ ch.child_age_str }}" data-months="{{ ch.child_age_months }}">
+                                                {{ ch.child_name }} (UID: CH-{{ ch.id|stringformat:"04d" }}) — {{ ch.child_age_str }}
+                                            </option>
+                                        {% empty %}
+                                            <option value="" disabled>No registered child record added yet</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Row 1, Col 2: Mother's Name -->
+                            <div class="form-group">
+                                <label class="form-label" for="motherNameInput">Mother's Name *</label>
+                                <div class="input-icon-wrap">
+                                    <i class="fa-regular fa-user"></i>
+                                    <input 
+                                        type="text" 
+                                        name="mother_name" 
+                                        id="motherNameInput" 
+                                        class="form-input-with-icon" 
+                                        placeholder="Enter mother's name..."
+                                        required
+                                    >
+                                </div>
+                            </div>
+
+                            <!-- Row 2, Col 1: Child Age / Month (Auto-Detected) -->
+                            <div class="form-group">
+                                <label class="form-label" for="childMonthDisplay">Child Checkup Month / Age (Auto-Assigned) *</label>
+                                <div class="input-icon-wrap">
+                                    <i class="fa-regular fa-clock"></i>
+                                    <input 
+                                        type="text" 
+                                        id="childMonthDisplay" 
+                                        class="form-input-with-icon" 
+                                        value="Select a child to auto-detect month" 
+                                        readonly 
+                                        style="background-color: #f8fafc; font-weight: 700; color: #047857; border: 1px solid #a7f3d0;"
+                                    >
+                                </div>
+                            </div>
+
+                            <!-- Row 2, Col 2: Date of Administration -->
+                            <div class="form-group">
+                                <label class="form-label" for="vaxDateInput">Date of Administration / Scheduled Date *</label>
+                                <div class="input-icon-wrap">
+                                    <i class="fa-regular fa-calendar-days"></i>
+                                    <input 
+                                        type="date" 
+                                        name="vaccination_date" 
+                                        id="vaxDateInput" 
+                                        class="form-input-with-icon" 
+                                        value="{{ today_date }}" 
+                                        onchange="onDateInputChange(this)"
+                                        required
+                                    >
+                                </div>
+                            </div>
+
+                            <!-- Row 3, Full Width: Vaccine Selection (Pulls ONLY vaccines added on Add Vaccination page) -->
+                            <div class="form-group full-width">
+                                <label class="form-label" for="vaccineSelect">Vaccine Selection (Filtered by Specific Month) *</label>
+                                <select name="vaccine_id" id="vaccineSelect" class="form-select" onchange="onVaccineSelectChange(this)" required>
+                                    <option value="" disabled selected>Select a child above to view eligible vaccines</option>
+                                    {% for v in master_vaccines %}
+                                        <option 
+                                            value="{{ v.id }}" 
+                                            data-target-month="{{ v.target_month }}" 
+                                            data-target-month-str="{{ v.target_month_display }}"
+                                            data-vax-name="{{ v.vaccine_name }}"
+                                            data-vax-code="{{ v.vaccine_code|default:'VAC' }}"
+                                            data-base-label="{{ v.vaccine_name }} ({{ v.vaccine_code|default:'VAC' }}) — {{ v.target_month_display }} — {{ v.vaccine_type }}"
+                                        >
+                                            {{ v.vaccine_name }} ({{ v.vaccine_code|default:"VAC" }}) — {{ v.target_month_display }} — {{ v.vaccine_type }}
+                                        </option>
+                                    {% empty %}
+                                        <option value="" disabled>No vaccine added yet (Add in Vaccination Adding page)</option>
+                                    {% endfor %}
+                                </select>
+                                <div id="vaxEligibilityNotice" style="display: none; margin-top: 10px; font-size: 0.84rem; border-radius: 10px; padding: 10px 14px; line-height: 1.5;"></div>
+                            </div>
+
+                            <!-- Row 4: Automated Notification Message for Mother based on Scheduling Date -->
+                            <div class="form-group full-width">
+                                <label class="form-label" for="singleNotificationMessage" style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span><i class="fa-regular fa-bell" style="color: #047857;"></i> Automated Notification Message for Mother *</span>
+                                    <span style="font-size: 0.76rem; font-weight: 600; color: #059669; background: #e6f4ee; padding: 2px 8px; border-radius: 12px;">
+                                        <i class="fa-solid fa-sparkles"></i> Auto-Generated from Scheduling Date
+                                    </span>
+                                </label>
+                                <textarea 
+                                    name="notification_message" 
+                                    id="singleNotificationMessage" 
+                                    class="form-textarea" 
+                                    rows="3" 
+                                    placeholder="Select child, date, and vaccine to auto-generate the notification message..."
+                                    required
+                                ></textarea>
+                                <div style="font-size: 0.78rem; color: #64748b; margin-top: 4px; display: flex; align-items: center; gap: 5px;">
+                                    <i class="fa-solid fa-circle-info" style="color: #0284c7;"></i>
+                                    <span>This automated reminder message is delivered directly to the mother's account based on the scheduled date.</span>
+                                </div>
+                            </div>
+
+                            <!-- Row 5: Clinical Notes / Remarks (Full Width) -->
+                            <div class="form-group full-width">
+                                <label class="form-label" for="clinicalNotesInput">Clinical Notes / Remarks</label>
+                                <textarea 
+                                    name="clinical_notes" 
+                                    id="clinicalNotesInput" 
+                                    class="form-textarea" 
+                                    placeholder="Any adverse reactions or follow-up instructions..."
+                                ></textarea>
+                            </div>
+
+                        </div>
+
+                        <!-- Row 4: Actions Footer Divider -->
+                        <div class="form-footer-actions">
+                            <button type="reset" class="btn-discard" onclick="resetFormCustom()">
+                                Discard
+                            </button>
+                            <button type="submit" class="btn-save-record">
+                                <i class="fa-solid fa-calendar-check"></i>
+                                <span>Schedule Vaccination</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- BULK SCHEDULING & NOTIFICATION BY CHILD MONTH FORM -->
+                <div id="bulkFormBlock" style="{% if active_tab != 'bulk' %}display: none;{% endif %}">
+                    <form method="POST" action="/myapp/schedule_vaccination/" id="bulkScheduleForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="action_type" value="schedule_bulk">
+
+                        <div class="form-grid-2col">
+                            
+                            <!-- Target Child Month / Age Group -->
+                            <div class="form-group">
+                                <label class="form-label" for="targetMonthSelect">Target Child Age / Checkup Month *</label>
+                                <select name="target_month" id="targetMonthSelect" class="form-select" required>
+                                    <option value="all">All Children (All Ages & Months)</option>
+                                    <option value="0" selected>Month 0 (At Birth / Newborns)</option>
+                                    <option value="1.5">Month 1.5 (6 Weeks / 1.5 Months)</option>
+                                    <option value="2.5">Month 2.5 (10 Weeks / 2.5 Months)</option>
+                                    <option value="3.5">Month 3.5 (14 Weeks / 3.5 Months)</option>
+                                    <option value="9">Month 9 (9 to 12 Months)</option>
+                                    <option value="18">Month 18 (1.5 to 2 Years)</option>
+                                    <option value="60">Month 60 (5 Years Booster)</option>
+                                </select>
+                            </div>
+
+                            <!-- Vaccine Selection (Master Vaccines from Add Vaccination page) -->
+                            <div class="form-group">
+                                <label class="form-label" for="bulkVaccineSelect">Vaccine Selection *</label>
+                                <select name="vaccine_id" id="bulkVaccineSelect" class="form-select" onchange="onBulkVaccineChange(this)" required>
+                                    <option value="" disabled selected>Select Vaccine to Schedule</option>
+                                    {% for v in master_vaccines %}
+                                        <option value="{{ v.id }}" data-target-month="{{ v.target_month }}" data-target-month-str="{{ v.target_month_display }}">
+                                            {{ v.vaccine_name }} ({{ v.vaccine_code|default:"VAC" }}) — {{ v.target_month_display }}
+                                        </option>
+                                    {% empty %}
+                                        <option value="" disabled>No vaccine added yet (Add in Vaccination Adding page)</option>
+                                    {% endfor %}
+                                </select>
+                                <div id="bulkMonthNotice" style="margin-top: 6px; font-size: 0.8rem; color: #047857; font-weight: 600;"></div>
+                            </div>
+
+                            <!-- Scheduled Date of Administration -->
+                            <div class="form-group">
+                                <label class="form-label" for="bulkVaxDateInput">Date of Administration / Scheduled Date *</label>
+                                <div class="input-icon-wrap">
+                                    <i class="fa-regular fa-calendar-days"></i>
+                                    <input 
+                                        type="date" 
+                                        name="vaccination_date" 
+                                        id="bulkVaxDateInput" 
+                                        class="form-input-with-icon" 
+                                        value="{{ today_date }}" 
+                                        onchange="onBulkVaxDateChange(this)"
+                                        required
+                                    >
+                                </div>
+                            </div>
+
+                            <!-- Notification Target Scope Notice -->
+                            <div class="form-group">
+                                <label class="form-label">Notification Broadcast Scope</label>
+                                <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 0.75rem 1rem; font-size: 0.84rem; color: #166534; display: flex; align-items: center; gap: 8px;">
+                                    <i class="fa-solid fa-bullhorn" style="font-size: 1rem;"></i>
+                                    <span>Sends automated pickup/appointment notifications directly to mothers of eligible children.</span>
+                                </div>
+                            </div>
+
+                            <!-- Bulk Notification Message / Remarks -->
+                            <div class="form-group full-width">
+                                <label class="form-label" for="reminderMessageInput">Bulk Scheduling Notification Message</label>
+                                <textarea 
+                                    name="reminder_message" 
+                                    id="reminderMessageInput" 
+                                    class="form-textarea" 
+                                    placeholder="Enter custom reminder message for mothers..."
+                                >Upcoming Vaccination Schedule: Please bring your child for vaccination scheduled on the assigned date at your local Anganwadi/Health Center.</textarea>
+                            </div>
+
+                        </div>
+
+                        <div class="form-footer-actions">
+                            <button type="reset" class="btn-discard">
+                                Discard
+                            </button>
+                            <button type="submit" class="btn-save-record" style="background-color: #047857;">
+                                <i class="fa-solid fa-paper-plane"></i>
+                                <span>Bulk Schedule & Send Notifications</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+            <!-- Banner Link to Vaccination Records -->
+            <div style="background-color: #ffffff; border: 1px solid #eae5dc; border-radius: 16px; padding: 1.25rem 1.75rem; display: flex; align-items: center; justify-content: space-between; margin-top: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background-color: #e6f0eb; color: #062e20; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 1rem; font-weight: 700; color: #111827;">Track Immunization & Vaccination Records</h4>
+                        <p style="font-size: 0.83rem; color: #6b7280; margin-top: 2px;">View vaccination records, record Taken/Missed status, reschedule missed doses, and send reminders.</p>
+                    </div>
+                </div>
+                <a href="/myapp/vaccination_records/" style="padding: 0.65rem 1.35rem; background-color: var(--brand-green); color: #ffffff; text-decoration: none; border-radius: 10px; font-size: 0.88rem; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
+                    <span>View Vaccination Records</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+
+        </main>
+    </div>
+
+    <script id="childVaxDataJson" type="application/json">
+        {{ child_vax_json|safe }}
+    </script>
+
+    <script>
+        const childVaxData = JSON.parse(document.getElementById('childVaxDataJson').textContent || '{}');
+
+        function switchMode(mode) {
+            const singleBlock = document.getElementById('singleFormBlock');
+            const bulkBlock = document.getElementById('bulkFormBlock');
+            const tabBtns = document.querySelectorAll('.tab-btn');
+
+            if (mode === 'bulk') {
+                singleBlock.style.display = 'none';
+                bulkBlock.style.display = 'block';
+                tabBtns[0].classList.remove('active');
+                tabBtns[1].classList.add('active');
+            } else {
+                singleBlock.style.display = 'block';
+                bulkBlock.style.display = 'none';
+                tabBtns[0].classList.add('active');
+                tabBtns[1].classList.remove('active');
+            }
+        }
+
+        function onChildSelectChange(selectElem) {
+            const childId = selectElem.value;
+            const selectedOption = selectElem.options[selectElem.selectedIndex];
+            const motherName = selectedOption.getAttribute('data-mother') || '';
+            const ageStr = selectedOption.getAttribute('data-age-str') || '';
+            const childMonths = parseInt(selectedOption.getAttribute('data-months'), 10) || 0;
+
+            const motherInput = document.getElementById('motherNameInput');
+            if (motherInput) motherInput.value = motherName;
+
+            const monthDisplay = document.getElementById('childMonthDisplay');
+            if (monthDisplay) {
+                monthDisplay.value = ageStr ? `${ageStr} (Auto-Assigned)` : 'Select a child to auto-detect month';
+            }
+
+            filterVaccinesForChild(childId, childMonths);
+        }
+
+        function filterVaccinesForChild(childId, childMonths) {
+            const vaxSelect = document.getElementById('vaccineSelect');
+            const noticeDiv = document.getElementById('vaxEligibilityNotice');
+            if (!vaxSelect) return;
+
+            const childInfo = childVaxData[childId] || { completed: [], completed_display: [], active: [], active_display: [] };
+            const completedNames = childInfo.completed || [];
+            const activeNames = childInfo.active || [];
+
+            let eligibleCount = 0;
+            let monthMismatchCount = 0;
+            let completedCount = 0;
+            let activeCount = 0;
+
+            for (let i = 0; i < vaxSelect.options.length; i++) {
+                const opt = vaxSelect.options[i];
+                if (!opt.value) continue;
+
+                const targetMonthAttr = opt.getAttribute('data-target-month');
+                const targetMonth = targetMonthAttr !== null && targetMonthAttr !== '' ? parseInt(targetMonthAttr, 10) : null;
+                const vaxName = (opt.getAttribute('data-vax-name') || '').trim().toLowerCase();
+                const baseLabel = opt.getAttribute('data-base-label') || opt.textContent;
+
+                // Check 1: Is this vaccine already completed/taken by this child?
+                const isCompleted = completedNames.includes(vaxName);
+                // Check 2: Is this vaccine already scheduled/active?
+                const isActive = activeNames.includes(vaxName);
+                // Check 3: Does the child's month match the vaccine's specific target month?
+                const isMonthMatch = (targetMonth === null || targetMonth === childMonths);
+
+                if (isCompleted) {
+                    opt.disabled = true;
+                    opt.textContent = `❌ ${baseLabel} [ALREADY COMPLETED - CANNOT RE-ASSIGN]`;
+                    opt.style.color = '#9ca3af';
+                    completedCount++;
+                } else if (isActive) {
+                    opt.disabled = true;
+                    opt.textContent = `⏳ ${baseLabel} [ALREADY ACTIVE / SCHEDULED]`;
+                    opt.style.color = '#9ca3af';
+                    activeCount++;
+                } else if (!isMonthMatch) {
+                    opt.disabled = true;
+                    opt.textContent = `⚠️ ${baseLabel} [REQUIRES MONTH ${targetMonth} - Child is Month ${childMonths}]`;
+                    opt.style.color = '#dc2626';
+                    monthMismatchCount++;
+                } else {
+                    opt.disabled = false;
+                    opt.textContent = `✅ ${baseLabel} [ELIGIBLE FOR MONTH ${childMonths}]`;
+                    opt.style.color = '#065f46';
+                    opt.style.fontWeight = '700';
+                    eligibleCount++;
+                }
+            }
+
+            // If previously selected vaccine is now disabled, reset select
+            if (vaxSelect.selectedIndex > 0 && vaxSelect.options[vaxSelect.selectedIndex].disabled) {
+                vaxSelect.value = '';
+            }
+
+            // Update user notification box
+            if (noticeDiv) {
+                noticeDiv.style.display = 'block';
+                if (eligibleCount > 0) {
+                    let text = `<div style="display: flex; align-items: flex-start; gap: 8px;">
+                        <i class="fa-solid fa-circle-check" style="color: #059669; font-size: 1.1rem; margin-top: 2px;"></i>
+                        <div>
+                            <strong style="color: #065f46;">Eligibility Filter Active:</strong> Found <strong style="color: #065f46;">${eligibleCount}</strong> vaccine(s) specifically designated for <strong>Month ${childMonths}</strong>.
+                        </div>
+                    </div>`;
+                    if (childInfo.completed_display && childInfo.completed_display.length > 0) {
+                        text += `<div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #a7f3d0; color: #047857;">
+                            <i class="fa-solid fa-lock" style="font-size: 0.8rem; margin-right: 4px;"></i> <strong>Completed Vaccines (Locked from Re-assignment):</strong> ${childInfo.completed_display.join(', ')}
+                        </div>`;
+                    }
+                    noticeDiv.style.backgroundColor = '#ecfdf5';
+                    noticeDiv.style.border = '1px solid #a7f3d0';
+                    noticeDiv.innerHTML = text;
+                } else {
+                    let text = `<div style="display: flex; align-items: flex-start; gap: 8px;">
+                        <i class="fa-solid fa-triangle-exclamation" style="color: #d97706; font-size: 1.1rem; margin-top: 2px;"></i>
+                        <div>
+                            <strong style="color: #92400e;">No Available Vaccines for Month ${childMonths}:</strong> No new vaccine in the master catalog is designated for Month ${childMonths} that hasn't already been completed.
+                        </div>
+                    </div>`;
+                    if (childInfo.completed_display && childInfo.completed_display.length > 0) {
+                        text += `<div style="margin-top: 6px; color: #b45309;">
+                            <i class="fa-solid fa-circle-info"></i> Completed for this child: ${childInfo.completed_display.join(', ')}
+                        </div>`;
+                    }
+                    noticeDiv.style.backgroundColor = '#fffbeb';
+                    noticeDiv.style.border = '1px solid #fde68a';
+                    noticeDiv.innerHTML = text;
+                }
+            }
+        }
+
+        function onChildSelectChange(selectElem) {
+            const childId = selectElem.value;
+            const selectedOption = selectElem.options[selectElem.selectedIndex];
+            const motherName = selectedOption.getAttribute('data-mother') || '';
+            const ageStr = selectedOption.getAttribute('data-age-str') || '';
+            const childMonths = parseInt(selectedOption.getAttribute('data-months'), 10) || 0;
+
+            const motherInput = document.getElementById('motherNameInput');
+            if (motherInput) motherInput.value = motherName;
+
+            const monthDisplay = document.getElementById('childMonthDisplay');
+            if (monthDisplay) {
+                monthDisplay.value = ageStr ? `${ageStr} (Auto-Assigned)` : 'Select a child to auto-detect month';
+            }
+
+            filterVaccinesForChild(childId, childMonths);
+            updateAutoNotificationMessage();
+        }
+
+        function onDateInputChange(inputElem) {
+            updateAutoNotificationMessage();
+        }
+
+        function onVaccineSelectChange(selectElem) {
+            const selectedOption = selectElem.options[selectElem.selectedIndex];
+            if (!selectedOption || selectedOption.disabled) return;
+            updateAutoNotificationMessage();
+        }
+
+        function updateAutoNotificationMessage() {
+            const childSelect = document.getElementById('childSelect');
+            const vaxSelect = document.getElementById('vaccineSelect');
+            const dateInput = document.getElementById('vaxDateInput');
+            const notifTextarea = document.getElementById('singleNotificationMessage');
+            const motherInput = document.getElementById('motherNameInput');
+
+            if (!notifTextarea) return;
+
+            const selectedChildOpt = (childSelect && childSelect.selectedIndex >= 0) ? childSelect.options[childSelect.selectedIndex] : null;
+            const selectedVaxOpt = (vaxSelect && vaxSelect.selectedIndex >= 0) ? vaxSelect.options[vaxSelect.selectedIndex] : null;
+
+            const childName = (selectedChildOpt && selectedChildOpt.value) ? selectedChildOpt.text.split('(')[0].trim() : '';
+            const motherName = motherInput ? motherInput.value.trim() : '';
+            const rawDate = dateInput ? dateInput.value : '';
+
+            let formattedDate = '';
+            if (rawDate) {
+                try {
+                    const parts = rawDate.split('-');
+                    if (parts.length === 3) {
+                        const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                        formattedDate = d.toLocaleDateString('en-US', options);
+                    }
+                } catch (e) {
+                    formattedDate = rawDate;
+                }
+            }
+
+            const vaxName = (selectedVaxOpt && selectedVaxOpt.value && !selectedVaxOpt.disabled) ? (selectedVaxOpt.getAttribute('data-vax-name') || '') : '';
+            const vaxCode = (selectedVaxOpt && selectedVaxOpt.value && !selectedVaxOpt.disabled) ? (selectedVaxOpt.getAttribute('data-vax-code') || '') : '';
+            const vaxMonthStr = (selectedVaxOpt && selectedVaxOpt.value && !selectedVaxOpt.disabled) ? (selectedVaxOpt.getAttribute('data-target-month-str') || '') : '';
+
+            const greeting = motherName ? `Dear ${motherName}, ` : 'Dear Mother, ';
+
+            if (childName && formattedDate && vaxName) {
+                const codePart = vaxCode ? ` (${vaxCode})` : '';
+                const monthPart = vaxMonthStr ? ` [${vaxMonthStr}]` : '';
+                notifTextarea.value = `${greeting}vaccination appointment for your child ${childName} has been scheduled on ${formattedDate} for ${vaxName}${codePart}${monthPart}. Please visit your assigned Anganwadi / Health Center on the scheduled date.`;
+            } else if (childName && formattedDate) {
+                notifTextarea.value = `${greeting}vaccination for ${childName} is scheduled on ${formattedDate}. Please select a vaccine to complete the notification details.`;
+            } else if (formattedDate) {
+                notifTextarea.value = `Vaccination Reminder: Upcoming immunization session scheduled on ${formattedDate} at your local Anganwadi/Health Center.`;
+            }
+        }
+
+        function onBulkVaxDateChange(inputElem) {
+            updateBulkNotificationMessage();
+        }
+
+        function onBulkVaccineChange(selectElem) {
+            const selectedOption = selectElem.options[selectElem.selectedIndex];
+            const targetMonth = selectedOption.getAttribute('data-target-month');
+            const targetMonthStr = selectedOption.getAttribute('data-target-month-str') || `Month ${targetMonth}`;
+            const targetMonthSelect = document.getElementById('targetMonthSelect');
+            const noticeDiv = document.getElementById('bulkMonthNotice');
+
+            if (targetMonth !== null && targetMonth !== '') {
+                if (targetMonthSelect) {
+                    targetMonthSelect.value = targetMonth;
+                }
+                if (noticeDiv) {
+                    noticeDiv.innerHTML = `<i class="fa-solid fa-circle-info"></i> Child age filter automatically locked to <strong>${targetMonthStr}</strong> for this vaccine.`;
+                }
+            }
+            updateBulkNotificationMessage();
+        }
+
+        function updateBulkNotificationMessage() {
+            const bulkVaxSelect = document.getElementById('bulkVaccineSelect');
+            const bulkDateInput = document.getElementById('bulkVaxDateInput');
+            const reminderInput = document.getElementById('reminderMessageInput');
+
+            if (!reminderInput) return;
+
+            const selectedOpt = (bulkVaxSelect && bulkVaxSelect.selectedIndex >= 0) ? bulkVaxSelect.options[bulkVaxSelect.selectedIndex] : null;
+            const rawDate = bulkDateInput ? bulkDateInput.value : '';
+
+            let formattedDate = '';
+            if (rawDate) {
+                try {
+                    const parts = rawDate.split('-');
+                    if (parts.length === 3) {
+                        const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                        formattedDate = d.toLocaleDateString('en-US', options);
+                    }
+                } catch (e) {
+                    formattedDate = rawDate;
+                }
+            }
+
+            const vaxName = (selectedOpt && selectedOpt.value) ? selectedOpt.textContent.split('—')[0].trim() : '';
+            const targetMonthStr = (selectedOpt && selectedOpt.value) ? selectedOpt.getAttribute('data-target-month-str') || '' : '';
+
+            if (vaxName && formattedDate) {
+                const monthPart = targetMonthStr ? ` (${targetMonthStr})` : '';
+                reminderInput.value = `Upcoming Vaccination Schedule: Please bring your child for ${vaxName}${monthPart} scheduled on ${formattedDate} at your local Anganwadi/Health Center.`;
+            } else if (formattedDate) {
+                reminderInput.value = `Upcoming Vaccination Schedule: Please bring your child for vaccination scheduled on ${formattedDate} at your local Anganwadi/Health Center.`;
+            }
+        }
+
+        // Initialize notification messages on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            updateAutoNotificationMessage();
+            updateBulkNotificationMessage();
+        });
+
+        function resetFormCustom() {
+            document.getElementById('vaccinationScheduleForm').reset();
+            const motherInput = document.getElementById('motherNameInput');
+            if (motherInput) motherInput.value = '';
+            const monthDisplay = document.getElementById('childMonthDisplay');
+            if (monthDisplay) monthDisplay.value = 'Select a child to auto-detect month';
+            const noticeDiv = document.getElementById('vaxEligibilityNotice');
+            if (noticeDiv) noticeDiv.style.display = 'none';
+
+            const notifTextarea = document.getElementById('singleNotificationMessage');
+            if (notifTextarea) notifTextarea.value = '';
+
+            const vaxSelect = document.getElementById('vaccineSelect');
+            if (vaxSelect) {
+                for (let i = 0; i < vaxSelect.options.length; i++) {
+                    const opt = vaxSelect.options[i];
+                    if (!opt.value) {
+                        opt.textContent = 'Select a child above to view eligible vaccines';
+                        continue;
+                    }
+                    const baseLabel = opt.getAttribute('data-base-label') || opt.textContent;
+                    opt.textContent = baseLabel;
+                    opt.disabled = false;
+                    opt.style.color = '';
+                    opt.style.fontWeight = '';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

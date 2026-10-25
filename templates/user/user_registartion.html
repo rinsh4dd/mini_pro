@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mother Registration - MaatriCare</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --brand-green: #144d37;
+            --brand-green-hover: #0f3d2b;
+            --brand-green-light: #e6f4ee;
+            --bg-warm: #f6f3ed;
+            --card-bg: #ffffff;
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --input-focus: #144d37;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--bg-warm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+            color: var(--text-dark);
+        }
+
+        /* Container Card */
+        .register-container {
+            background-color: var(--card-bg);
+            border: 1px solid #eee8dd;
+            border-radius: 20px;
+            padding: 2.5rem 3rem;
+            width: 100%;
+            max-width: 880px;
+            box-shadow: 0 10px 35px rgba(20, 77, 55, 0.07);
+        }
+
+        .header-title {
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 1.85rem;
+            text-align: left;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 0.85rem 1.25rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-warning {
+            background-color: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #b45309;
+        }
+
+        .alert-danger, .alert-error {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+        }
+
+        .alert-success {
+            background-color: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+        }
+
+        .form-alert-box {
+            padding: 0.85rem 1.25rem;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            margin-bottom: 1.5rem;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            background-color: #fff7ed;
+            border: 1px solid #fed7aa;
+            color: #c2410c;
+        }
+
+        /* Grid Layout */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem 1.5rem;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .three-col-grid {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.92rem;
+            color: var(--text-dark);
+            background-color: #ffffff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--brand-green);
+            box-shadow: 0 0 0 3px rgba(20, 77, 55, 0.12);
+        }
+
+        .form-input.is-invalid, .form-select.is-invalid {
+            border-color: #ef4444 !important;
+            background-color: #fffbfb;
+        }
+
+        .form-input.is-invalid:focus, .form-select.is-invalid:focus {
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+        }
+
+        .form-input.is-valid, .form-select.is-valid {
+            border-color: #10b981;
+        }
+
+        .field-warning {
+            color: #dc2626;
+            font-size: 0.78rem;
+            font-weight: 500;
+            margin-top: 0.35rem;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            line-height: 1.3;
+        }
+
+        .field-warning.active {
+            display: flex;
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%3C6B7280' %3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.1em;
+            padding-right: 2.5rem;
+            cursor: pointer;
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+        }
+
+        /* Password toggle button */
+        .toggle-pwd {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 4px;
+        }
+        .toggle-pwd:hover {
+            color: var(--text-dark);
+        }
+
+        /* Buttons Section */
+        .action-row {
+            margin-top: 1.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn-register {
+            padding: 0.85rem 2.2rem;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.98rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(20, 77, 55, 0.2);
+            min-width: 140px;
+        }
+
+        .btn-register:hover {
+            background-color: var(--brand-green-hover);
+            box-shadow: 0 6px 16px rgba(20, 77, 55, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .login-link-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .login-link-text a {
+            color: var(--brand-green);
+            font-weight: 600;
+            text-decoration: none;
+            margin-left: 4px;
+        }
+
+        .login-link-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 768px) {
+            .register-container {
+                padding: 1.8rem 1.5rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .three-col-grid {
+                grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+
+            .action-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn-register {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-container">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid #eee8dd; padding-bottom: 0.85rem;">
+            <a href="/" style="color: var(--text-muted); font-size: 0.88rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-weight: 500; transition: color 0.2s ease;">
+                <i class="fa-solid fa-arrow-left"></i> Back to Home
+            </a>
+            <a href="/" style="text-decoration: none; font-size: 0.95rem; font-weight: 800; color: var(--brand-green); letter-spacing: -0.01em;">
+                MaatriCare
+            </a>
+        </div>
+
+        <h2 class="header-title">Mother Registration</h2>
+
+        <!-- Django System Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'success' }}">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if success %}
+        <div class="alert alert-success">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Registration successful! <a href="/myapp/login/" style="color: inherit; font-weight: 600; text-decoration: underline;">Click here to Login</a>.</span>
+        </div>
+        {% endif %}
+
+        <form action="/myapp/user_registartion/" method="POST" id="registrationForm">
+            {% csrf_token %}
+
+            <div class="form-grid">
+                
+                <!-- Name -->
+                <div class="form-group">
+                    <label class="form-label" for="name">Full Name</label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        id="name" 
+                        name="name" 
+                        placeholder="Enter full name" 
+                        value="{{ form.name|default:'' }}"
+                        required
+                        minlength="3"
+                    >
+                </div>
+
+                <!-- Husband Name -->
+                <div class="form-group">
+                    <label class="form-label" for="husband_name">Husband's Name</label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        id="husband_name" 
+                        name="husband_name" 
+                        placeholder="Enter husband name" 
+                        value="{{ form.husband_name|default:'' }}"
+                        required
+                        minlength="3"
+                    >
+                </div>
+
+                <!-- Date of Birth -->
+                <div class="form-group">
+                    <label class="form-label" for="dob">Date of Birth</label>
+                    <input 
+                        type="date" 
+                        class="form-input" 
+                        id="dob" 
+                        name="dob" 
+                        value="{{ form.dob|default:'' }}"
+                        onchange="calculateAge()"
+                        required
+                    >
+                    <small id="motherDobNotice" style="color: #047857; font-size: 0.78rem; margin-top: 4px; font-weight: 500;">Mother must be at least 18 years old.</small>
+                </div>
+
+                <!-- Age -->
+                <div class="form-group">
+                    <label class="form-label" for="age">Age</label>
+                    <input 
+                        type="number" 
+                        class="form-input" 
+                        id="age" 
+                        name="age" 
+                        placeholder="Enter age" 
+                        min="18" 
+                        max="60" 
+                        value="{{ form.age|default:'' }}"
+                        required
+                    >
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input 
+                        type="email" 
+                        class="form-input" 
+                        id="email" 
+                        name="email" 
+                        placeholder="e.g. name@gmail.com" 
+                        pattern="[a-zA-Z0-9._%+-]+@[gG][mM][aA][iI][lL]\.[cC][oO][mM]"
+                        title="Please enter a valid @gmail.com email address"
+                        oninput="if(!/^[a-zA-Z0-9._%+-]+@gmail\.com$/i.test(this.value.trim())){this.setCustomValidity('Please enter a valid @gmail.com email address (e.g., name@gmail.com)');}else{this.setCustomValidity('');}"
+                        oninvalid="this.setCustomValidity('Please enter a valid @gmail.com email address (e.g., name@gmail.com)')"
+                        value="{{ form.email|default:'' }}"
+                        required
+                    >
+                </div>
+
+                <!-- Phone Number -->
+                <div class="form-group">
+                    <label class="form-label" for="phone">Phone Number</label>
+                    <input 
+                        type="tel" 
+                        class="form-input" 
+                        id="phone" 
+                        name="phone" 
+                        placeholder="e.g. 9876543210" 
+                        maxlength="10"
+                        pattern="[6-9][0-9]{9}"
+                        title="Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9."
+                        oninvalid="if(this.validity.patternMismatch){this.setCustomValidity('Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9.');}else{this.setCustomValidity('');}"
+                        oninput="this.setCustomValidity('')"
+                        value="{{ form.phone|default:'' }}"
+                        required
+                    >
+                </div>
+
+                <!-- Expecting Delivery Date (EDD) -->
+                <div class="form-group">
+                    <label class="form-label" for="expected_delivery_date">
+                        Expecting Delivery Date (EDD)
+                        <span style="font-weight: 400; color: var(--text-muted); font-size: 0.8rem;">(Optional)</span>
+                    </label>
+                    <input 
+                        type="date" 
+                        class="form-input" 
+                        id="expected_delivery_date" 
+                        name="expected_delivery_date" 
+                        value="{{ form.expected_delivery_date|default:'' }}"
+                        onchange="calculateGestation()"
+                    >
+                    <small id="gestationNotice" style="color: #047857; font-size: 0.8rem; margin-top: 5px; display: none; align-items: center; gap: 6px; font-weight: 600;">
+                    </small>
+                </div>
+
+                <!-- Blood Group -->
+                <div class="form-group">
+                    <label class="form-label" for="blood_group">Blood Group</label>
+                    <select class="form-select" id="blood_group" name="blood_group" required>
+                        <option value="" disabled {% if not form.blood_group %}selected{% endif %}>-- Select Blood Group --</option>
+                        <option value="A+" {% if form.blood_group == 'A+' %}selected{% endif %}>A+</option>
+                        <option value="A-" {% if form.blood_group == 'A-' %}selected{% endif %}>A-</option>
+                        <option value="B+" {% if form.blood_group == 'B+' %}selected{% endif %}>B+</option>
+                        <option value="B-" {% if form.blood_group == 'B-' %}selected{% endif %}>B-</option>
+                        <option value="O+" {% if form.blood_group == 'O+' %}selected{% endif %}>O+</option>
+                        <option value="O-" {% if form.blood_group == 'O-' %}selected{% endif %}>O-</option>
+                        <option value="AB+" {% if form.blood_group == 'AB+' %}selected{% endif %}>AB+</option>
+                        <option value="AB-" {% if form.blood_group == 'AB-' %}selected{% endif %}>AB-</option>
+                    </select>
+                </div>
+
+                <!-- Panchayath -->
+                <div class="form-group">
+                    <label class="form-label" for="panchayath">Panchayath</label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        id="panchayath" 
+                        name="panchayath" 
+                        placeholder="e.g. Kozhikode Grama Panchayath" 
+                        value="{{ form.panchayath|default:'Kozhikode Grama Panchayath' }}"
+                        required
+                    >
+                </div>
+
+                <!-- Residing Area / Ward (1 of 5 Areas) -->
+                <div class="form-group">
+                    <label class="form-label" for="area">
+                        Panchayath Area (Ward Jurisdiction)
+                        <span style="color: #dc2626;">*</span>
+                    </label>
+                    <select class="form-select" id="area" name="area" required>
+                        <option value="" disabled {% if not form.area %}selected{% endif %}>-- Select 1 of 5 Panchayath Areas --</option>
+                        <option value="Ward 01 - Main Community Center" {% if form.area == 'Ward 01 - Main Community Center' %}selected{% endif %}>Area 1: Ward 01 - Main Community Center</option>
+                        <option value="Ward 02 - East Sector" {% if form.area == 'Ward 02 - East Sector' %}selected{% endif %}>Area 2: Ward 02 - East Sector</option>
+                        <option value="Ward 03 - West Gram" {% if form.area == 'Ward 03 - West Gram' %}selected{% endif %}>Area 3: Ward 03 - West Gram</option>
+                        <option value="Ward 04 - North Colony" {% if form.area == 'Ward 04 - North Colony' %}selected{% endif %}>Area 4: Ward 04 - North Colony</option>
+                        <option value="Ward 05 - South Extension" {% if form.area == 'Ward 05 - South Extension' %}selected{% endif %}>Area 5: Ward 05 - South Extension</option>
+                    </select>
+                    <small style="color: #047857; font-size: 0.78rem; margin-top: 5px; display: flex; align-items: center; gap: 5px; font-weight: 500;">
+                        <i class="fa-solid fa-lock" style="font-size: 0.75rem;"></i> Routed strictly to the active ASHA worker(s) assigned to this area.
+                    </small>
+                </div>
+
+                <!-- Address (House / Street Name) -->
+                <div class="form-group full-width">
+                    <label class="form-label" for="address">Address</label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        id="address" 
+                        name="address" 
+                        placeholder="Enter complete house / street address" 
+                        value="{{ form.address|default:'' }}"
+                        required
+                        minlength="5"
+                    >
+                </div>
+
+                <!-- District, State, Pincode -->
+                <div class="three-col-grid">
+                    <div class="form-group">
+                        <label class="form-label" for="district">District</label>
+                        <input 
+                            type="text" 
+                            class="form-input" 
+                            id="district" 
+                            name="district" 
+                            placeholder="Enter district" 
+                            value="{{ form.district|default:'' }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="state">State</label>
+                        <input 
+                            type="text" 
+                            class="form-input" 
+                            id="state" 
+                            name="state" 
+                            placeholder="Enter state" 
+                            value="{{ form.state|default:'' }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="pincode">Pincode</label>
+                        <input 
+                            type="text" 
+                            class="form-input" 
+                            id="pincode" 
+                            name="pincode" 
+                            placeholder="6-digit pincode" 
+                            maxlength="6"
+                            pattern="[1-9][0-9]{5}"
+                            title="Please enter a valid 6-digit postal pincode."
+                            oninvalid="if(this.validity.patternMismatch){this.setCustomValidity('Please enter a valid 6-digit postal pincode.');}else{this.setCustomValidity('');}"
+                            oninput="this.setCustomValidity('')"
+                            value="{{ form.pincode|default:'' }}"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <!-- Account Credentials for Login -->
+                <div class="form-group">
+                    <label class="form-label" for="username">Username for Login</label>
+                    <input
+                        type="text"
+                        class="form-input"
+                        id="username"
+                        name="username"
+                        placeholder="Choose a username (min 3 characters)"
+                        value="{{ form.username|default:'' }}"
+                        required
+                        minlength="3"
+                    >
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <div class="input-wrapper">
+                        <input
+                            type="password"
+                            class="form-input"
+                            id="password"
+                            name="password"
+                            placeholder="Enter password (min 6 characters)"
+                            style="padding-right: 2.5rem;"
+                            required
+                            minlength="6"
+                        >
+                        <button 
+                            type="button" 
+                            class="toggle-pwd" 
+                            onclick="togglePwdVisibility('password', 'pwdIcon')" 
+                            title="Toggle password visibility"
+                        >
+                            <i class="fa-regular fa-eye" id="pwdIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group full-width">
+                    <label class="form-label" for="confirm_password">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <input
+                            type="password"
+                            class="form-input"
+                            id="confirm_password"
+                            name="confirm_password"
+                            placeholder="Re-enter password to confirm"
+                            style="padding-right: 2.5rem;"
+                            required
+                            minlength="6"
+                        >
+                        <button 
+                            type="button" 
+                            class="toggle-pwd" 
+                            onclick="togglePwdVisibility('confirm_password', 'confirmPwdIcon')" 
+                            title="Toggle password visibility"
+                        >
+                            <i class="fa-regular fa-eye" id="confirmPwdIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Submit Button & Footer Link -->
+            <div class="action-row">
+                <button type="submit" class="btn-register">Register</button>
+                <div class="login-link-text">
+                    Already have an account? <a href="/myapp/login/">Login here</a>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        // Auto-calculate Age based on Date of Birth
+        function calculateAge() {
+            const dobInput = document.getElementById('dob');
+            const ageInput = document.getElementById('age');
+            const dobValue = dobInput.value;
+            if (!dobValue) return;
+
+            const dobDate = new Date(dobValue);
+            const today = new Date();
+            if (dobDate >= today) return;
+
+            let age = today.getFullYear() - dobDate.getFullYear();
+            const monthDiff = today.getMonth() - dobDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate())) {
+                age--;
+            }
+
+            if (age < 18) {
+                alert('Mother must be at least 18 years old to register.');
+                dobInput.value = '';
+                ageInput.value = '';
+                return;
+            }
+
+            if (age >= 18 && age <= 60) {
+                ageInput.value = age;
+            }
+        }
+
+        // Calculate Gestation Week from Expecting Delivery Date
+        function calculateGestation() {
+            const eddInput = document.getElementById('expected_delivery_date');
+            const gestNotice = document.getElementById('gestationNotice');
+            if (!eddInput || !gestNotice) return;
+
+            const eddVal = eddInput.value;
+            if (!eddVal) {
+                gestNotice.style.display = 'none';
+                return;
+            }
+
+            const eddDate = new Date(eddVal);
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            eddDate.setHours(0,0,0,0);
+
+            if (eddDate < today) {
+                gestNotice.style.display = 'flex';
+                gestNotice.style.color = '#dc2626';
+                gestNotice.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Expecting delivery date must be today or in the future. Past dates cannot be selected.`;
+                eddInput.value = '';
+                return;
+            }
+
+            gestNotice.style.color = '#047857';
+            const diffTime = eddDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const gestDays = 280 - diffDays;
+            let weeks = Math.floor(gestDays / 7);
+            if (weeks < 0) weeks = 0;
+
+            gestNotice.style.display = 'flex';
+            if (weeks > 40) {
+                gestNotice.innerHTML = `<i class="fa-solid fa-calculator"></i> Estimated Gestational Age: <strong>${weeks} Weeks (Post-term)</strong>`;
+            } else {
+                gestNotice.innerHTML = `<i class="fa-solid fa-calculator"></i> Estimated Gestational Age: <strong>${weeks} Weeks</strong>`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+
+            const eddInput = document.getElementById('expected_delivery_date');
+            if (eddInput) {
+                eddInput.setAttribute('min', todayStr);
+            }
+
+            // DOB max constraint (must be at least 18 years old)
+            const maxDobYear = today.getFullYear() - 18;
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const maxDobStr = `${maxDobYear}-${month}-${day}`;
+
+            const dobInput = document.getElementById('dob');
+            if (dobInput) {
+                dobInput.setAttribute('max', maxDobStr);
+            }
+
+            calculateGestation();
+        });
+
+        // Toggle Password Visibility
+        function togglePwdVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fa-regular fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fa-regular fa-eye';
+            }
+        }
+
+        // Form Submit Validation (Email & Password Match)
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            const emailInput = document.getElementById('email');
+            if (emailInput) {
+                const emailVal = emailInput.value.trim();
+                if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/i.test(emailVal)) {
+                    e.preventDefault();
+                    emailInput.setCustomValidity('Please enter a valid @gmail.com email address (e.g., name@gmail.com)');
+                    emailInput.reportValidity();
+                    emailInput.focus();
+                    return false;
+                } else {
+                    emailInput.setCustomValidity('');
+                }
+            }
+
+            const pwd = document.getElementById('password').value;
+            const confirmPwd = document.getElementById('confirm_password').value;
+            if (pwd !== confirmPwd) {
+                e.preventDefault();
+                alert('Passwords do not match. Please re-enter your password.');
+                document.getElementById('confirm_password').focus();
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1323 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASHA Worker Dashboard - MaatriCare</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js 4.4 Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <style>
+        :root {
+            --sidebar-bg: #073525;
+            --sidebar-hover: #0d4432;
+            --sidebar-active: #134d38;
+            --sidebar-text-muted: #97baa9;
+            --brand-green: #0c3829;
+            --brand-green-hover: #07261b;
+            --bg-page: #fbf9f4;
+            --card-bg: #ffffff;
+            --text-heading: #111827;
+            --text-body: #4b5563;
+            --text-muted: #6b7280;
+            --border-color: #ebe5db;
+            --badge-bg: #e2ede6;
+            --badge-text: #0f3d2c;
+            --search-bg: #f0ece2;
+            --shadow-card: 0 4px 20px rgba(7, 53, 37, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* ================= Left Sidebar ================= */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem 1.25rem 1.75rem;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        /* Brand section */
+        .sidebar-brand {
+            padding: 0 0.5rem 2rem;
+            text-decoration: none;
+            display: block;
+        }
+
+        .brand-title {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-sub {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--sidebar-text-muted);
+            margin-top: 3px;
+            letter-spacing: 0.01em;
+        }
+
+        /* Menu Items */
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .nav-item-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0.78rem 1.1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.94rem;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item-link i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item-link:hover {
+            color: #ffffff;
+            background-color: var(--sidebar-hover);
+        }
+
+        .nav-item-link.active {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+        }
+
+        /* Bottom Logout */
+        .sidebar-footer {
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.75rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.94rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            color: #ffffff;
+            background-color: rgba(239, 68, 68, 0.15);
+        }
+
+        /* ================= Main Content Container ================= */
+        .main-wrapper {
+            margin-left: 260px;
+            flex: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-page);
+        }
+
+        /* Top Header */
+        .top-header {
+            height: 80px;
+            padding: 0 2.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--bg-page);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            width: 380px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 0.92rem;
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.72rem 1.1rem 0.72rem 2.75rem;
+            background-color: var(--search-bg);
+            border: 1px solid transparent;
+            border-radius: 50px;
+            font-size: 0.92rem;
+            color: var(--text-heading);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input::placeholder {
+            color: #8f9b94;
+            font-size: 0.9rem;
+        }
+
+        .search-input:focus {
+            background-color: #ffffff;
+            border-color: var(--border-color);
+            box-shadow: 0 0 0 3px rgba(12, 56, 41, 0.08);
+        }
+
+        /* Top Right Actions */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.75rem;
+        }
+
+        .btn-add-mother {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            padding: 0.65rem 1.4rem;
+            border-radius: 50px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(12, 56, 41, 0.18);
+        }
+
+        .btn-add-mother:hover {
+            background-color: var(--brand-green-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(12, 56, 41, 0.28);
+        }
+
+        /* Worker Profile Badge */
+        .worker-profile-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .worker-info {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .worker-name {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            line-height: 1.2;
+        }
+
+        .worker-id {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .worker-avatar-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background-color: #dbe8e1;
+        }
+
+        /* ================= Content Body ================= */
+        .dashboard-body {
+            padding: 2.25rem 2.5rem 3.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Flash Messages */
+        .alert-box {
+            padding: 0.85rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.92rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background-color: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+        }
+
+        .alert-warning {
+            background-color: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #b45309;
+        }
+
+        /* Metrics Summary 3 Cards Row */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .metric-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.75rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            box-shadow: var(--shadow-card);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(7, 53, 37, 0.06);
+        }
+
+        .metric-icon-row {
+            display: flex;
+            align-items: center;
+        }
+
+        .metric-icon-box {
+            font-size: 1.45rem;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .metric-label {
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .metric-number {
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: var(--brand-green);
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        /* ================= Active Mothers Section ================= */
+        .records-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 22px;
+            padding: 2rem 2.25rem;
+            box-shadow: var(--shadow-card);
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .records-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .records-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            letter-spacing: -0.01em;
+        }
+
+        .records-badge {
+            background-color: var(--badge-bg);
+            color: var(--badge-text);
+            padding: 0.35rem 0.85rem;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            border: 1px solid rgba(15, 61, 44, 0.1);
+        }
+
+        /* Empty State */
+        .empty-state-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 3.5rem 1rem;
+        }
+
+        .empty-state-icon {
+            font-size: 3.8rem;
+            color: #b8c8be;
+            margin-bottom: 1.15rem;
+        }
+
+        .empty-state-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 0.35rem;
+        }
+
+        .empty-state-desc {
+            font-size: 0.94rem;
+            color: #6b7280;
+            max-width: 380px;
+        }
+
+        /* Data Table (When records exist) */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .custom-table th {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .custom-table td {
+            font-size: 0.92rem;
+            color: var(--text-heading);
+            padding: 1.1rem 1rem;
+            border-bottom: 1px solid #f3f0e8;
+            vertical-align: middle;
+        }
+
+        .custom-table tr:hover td {
+            background-color: #faf8f3;
+        }
+
+        .table-avatar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar-initials {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background-color: #eaf3ee;
+            color: var(--brand-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .btn-action-sm {
+            padding: 0.45rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #f1f6f2;
+            color: var(--brand-green);
+            transition: all 0.2s ease;
+        }
+
+        .btn-action-sm:hover {
+            background-color: var(--brand-green);
+            color: #ffffff;
+        }
+
+        /* ================= Quick Add Mother Modal ================= */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(7, 53, 37, 0.55);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1.5rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background-color: #ffffff;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 620px;
+            padding: 2.25rem;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: #9ca3af;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: #111827;
+        }
+
+        .modal-header-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--brand-green);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.15rem;
+        }
+
+        .modal-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .modal-form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .modal-form-label {
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .modal-input {
+            padding: 0.68rem 0.9rem;
+            border: 1px solid #d1dbd5;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #111827;
+            outline: none;
+        }
+
+        .modal-input:focus {
+            border-color: var(--brand-green);
+            box-shadow: 0 0 0 3px rgba(12, 56, 41, 0.1);
+        }
+
+        .modal-submit-btn {
+            margin-top: 1.5rem;
+            width: 100%;
+            padding: 0.8rem 1.25rem;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .modal-submit-btn:hover {
+            background-color: var(--brand-green-hover);
+        }
+
+        /* Mobile Hamburger */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--brand-green);
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        /* ================= Responsive Media Queries ================= */
+        @media (max-width: 1024px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .search-container {
+                width: 260px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-wrapper {
+                margin-left: 0;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .top-header {
+                padding: 0 1.25rem;
+            }
+
+            .dashboard-body {
+                padding: 1.5rem 1.25rem;
+            }
+
+            .search-container {
+                display: none;
+            }
+
+            .modal-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-form-group.full-width {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= Left Sidebar ================= -->
+    {% include 'ashawoker/sidebar.html' %}
+
+    <!-- ================= Main Wrapper ================= -->
+    <main class="main-wrapper">
+
+        <!-- Top Header Navigation -->
+        <header class="top-header">
+            <div style="display: flex; align-items: center;">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()" aria-label="Toggle Sidebar Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <!-- Search Input Bar -->
+                <form method="GET" action="/myapp/ashaworker_home/" class="search-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" name="search" class="search-input" placeholder="Search patients, kits..."
+                        value="{{ search_query|default:'' }}">
+                </form>
+            </div>
+
+            <!-- Top Right Profile & Add Button -->
+            <div class="header-actions">
+                <!-- + Add Mother Button -->
+                <button type="button" class="btn-add-mother" onclick="openModal()">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span>Add Mother</span>
+                </button>
+
+                <!-- Worker Profile Card -->
+                <a href="/myapp/ashaworker_profile/" class="worker-profile-card">
+                    <div class="worker-info">
+                        <span class="worker-name">{{ worker.Full_name|default:'ASHA Worker' }}</span>
+                        <span class="worker-id"><i class="fa-solid fa-location-dot"></i> {{ worker.Area_assigned|default:'Assigned Area' }}</span>
+                    </div>
+                    {% if worker.image %}
+                    <img src="{{ worker.image.url }}" alt="Profile Avatar" class="worker-avatar-img">
+                    {% else %}
+                    <img src="{% static 'images/asha_avatar.png' %}" alt="Profile Avatar" class="worker-avatar-img"
+                        onerror="this.src='/static/images/mother_child_logo.png'">
+                    {% endif %}
+                </a>
+            </div>
+        </header>
+
+        <!-- Dashboard Content Body -->
+        <div class="dashboard-body">
+
+            <!-- Flash Messages -->
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert-box alert-{{ message.tags|default:'success' }}">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>{{ message }}</span>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <!-- Area Jurisdiction Banner -->
+            <div
+                style="background: linear-gradient(135deg, #0f3d2b, #1b6348); color: #ffffff; padding: 1.1rem 1.4rem; border-radius: 14px; margin-bottom: 1.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 4px 15px rgba(15, 61, 43, 0.15);">
+                <div>
+                    <div
+                        style="font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.08em; color: #a3e6cb; font-weight: 700;">
+                        Area Jurisdiction & Healthcare Desk</div>
+                    <div style="font-size: 1.15rem; font-weight: 800; margin-top: 2px;">{{ assigned_area|default:worker.Area_assigned|default:"Panchayath Sector" }}</div>
+                </div>
+                <div
+                    style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; background: rgba(255,255,255,0.15); padding: 0.4rem 0.9rem; border-radius: 50px; font-weight: 600;">
+                    <i class="fa-solid fa-shield-halved"></i> Data Isolated & Private to this Area
+                </div>
+            </div>
+
+            <!-- ================= 3 Metric Summary Cards ================= -->
+            <section class="metrics-grid">
+
+                <!-- Card 1: PREGNANT WOMEN -->
+                <div class="metric-card">
+                    <div class="metric-icon-row">
+                        <div class="metric-icon-box">
+                            <i class="fa-solid fa-person"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="metric-label">PREGNANT WOMEN (THIS AREA)</div>
+                        <div class="metric-number">{{ pregnant_count|default:0 }}</div>
+                    </div>
+                </div>
+
+                <!-- Card 2: NEWBORNS -->
+                <div class="metric-card">
+                    <div class="metric-icon-row">
+                        <div class="metric-icon-box">
+                            <i class="fa-solid fa-baby-carriage"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="metric-label">NEWBORNS (THIS AREA)</div>
+                        <div class="metric-number">{{ newborns_count|default:0 }}</div>
+                    </div>
+                </div>
+
+                <!-- Card 3: GROWTH RECORDS -->
+                <div class="metric-card">
+                    <div class="metric-icon-row">
+                        <div class="metric-icon-box">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="metric-label">CHILD GROWTH RECORDS (THIS AREA)</div>
+                        <div class="metric-number">{{ growth_records_count|default:0 }}</div>
+                        <div style="font-size: 0.74rem; color: var(--text-muted); font-weight: 600; margin-top: 4px;">
+                            {{ total_growth_logs|default:0 }} checkup log{{ total_growth_logs|pluralize }} recorded
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ================= Child Growth Nutritional Overview Section ================= -->
+            <section style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 1.5rem;">
+                <!-- Growth Stat Breakdown Card -->
+                <div class="metric-card"
+                    style="padding: 1.6rem 2rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1.25rem;">
+                    <div>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 10px;">
+                            <h3
+                                style="font-size: 1.15rem; font-weight: 800; color: var(--brand-green); display: flex; align-items: center; gap: 9px;">
+                                <i class="fa-solid fa-chart-pie" style="color: #10b981;"></i> Child Growth & Nutritional
+                                Overview
+                            </h3>
+                            <span
+                                style="font-size: 0.78rem; font-weight: 700; background: #e6f4ee; color: var(--brand-green); padding: 4px 12px; border-radius: 50px; border: 1px solid rgba(12, 56, 41, 0.12);">
+                                {{ total_children_count|default:0 }} Children Screened
+                            </span>
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                            Real-time nutritional status breakdown based on WHO anthropometric growth standards across
+                            {{ assigned_area|default:worker.Area_assigned }}.
+                        </p>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                        <div
+                            style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 14px; padding: 0.9rem; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 800; color: #065f46;">{{ normal_count|default:0 }}</div>
+                            <div
+                                style="font-size: 0.75rem; font-weight: 700; color: #047857; text-transform: uppercase; margin-top: 2px; letter-spacing: 0.03em;">
+                                Normal Growth</div>
+                        </div>
+                        <div
+                            style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 14px; padding: 0.9rem; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 800; color: #b45309;">{{ underweight_count|default:0 }}</div>
+                            <div
+                                style="font-size: 0.75rem; font-weight: 700; color: #92400e; text-transform: uppercase; margin-top: 2px; letter-spacing: 0.03em;">
+                                Underweight</div>
+                        </div>
+                        <div
+                            style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 14px; padding: 0.9rem; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 800; color: #dc2626;">{{ attention_count|default:0 }}</div>
+                            <div
+                                style="font-size: 0.75rem; font-weight: 700; color: #991b1b; text-transform: uppercase; margin-top: 2px; letter-spacing: 0.03em;">
+                                Needs Care</div>
+                        </div>
+                    </div>
+
+                    <div
+                        style="display: flex; justify-content: flex-end; border-top: 1px dashed var(--border-color); padding-top: 0.85rem;">
+                        <a href="/myapp/child_growth_record/"
+                            style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.86rem; font-weight: 700; color: var(--brand-green); text-decoration: none; transition: all 0.2s;">
+                            <span>Manage Child Growth Registry</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Doughnut Chart Card -->
+                <div class="metric-card"
+                    style="padding: 1.5rem 1.75rem; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <div style="width: 100%; text-align: center; margin-bottom: 0.5rem;">
+                        <span
+                            style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Nutritional
+                            Distribution</span>
+                    </div>
+                    <div style="position: relative; width: 100%; height: 160px;">
+                        <canvas id="childNutritionalDonutChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= Upcoming Pregnancy Checkup Schedule (Next Visit Tracker) ================= -->
+            <section class="table-card" style="margin-top: 1rem;">
+                <div class="table-header"
+                    style="padding: 1.5rem 2rem 1.25rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <h2 class="table-title"
+                            style="font-size: 1.25rem; font-weight: 800; color: var(--brand-green); display: flex; align-items: center; gap: 10px;">
+                            <i class="fa-solid fa-calendar-check" style="color: #10b981;"></i> Upcoming Pregnancy
+                            Checkup Schedule
+                        </h2>
+                        <p style="font-size: 0.84rem; color: var(--text-muted); margin-top: 2px;">
+                            Tracks next visit dates calculated from monthly record entries for pregnant women in {{ assigned_area|default:worker.Area_assigned }}.
+                        </p>
+                    </div>
+                    <span
+                        style="background: #e6f4ee; color: var(--brand-green); padding: 0.35rem 0.9rem; border-radius: 50px; font-size: 0.8rem; font-weight: 700; border: 1px solid rgba(12, 56, 41, 0.12);">
+                        {{ pregnancy_visit_schedule|length }} Scheduled Tracker(s)
+                    </span>
+                </div>
+
+                {% if pregnancy_visit_schedule %}
+                <div class="table-responsive">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Pregnant Woman Name</th>
+                                <th>Spouse & Contact</th>
+                                <th>Latest Visit Date</th>
+                                <th>Next Visit Date</th>
+                                <th>Health Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in pregnancy_visit_schedule %}
+                            <tr>
+                                <td>
+                                    <div class="table-avatar">
+                                        <div class="avatar-initials"
+                                            style="background-color: #d1fae5; color: #065f46; font-weight: 800;">
+                                            {{ item.name|slice:":1"|upper }}
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 700; color: var(--text-heading);">{{ item.name }}
+                                            </div>
+                                            <div style="font-size: 0.76rem; color: var(--text-muted);">Pregnant Mother
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="font-size: 0.88rem; font-weight: 600;">{{ item.husband_name }}</div>
+                                    <div style="font-size: 0.78rem; color: var(--text-muted);"><i
+                                            class="fa-solid fa-phone" style="font-size:0.7rem;"></i> {{ item.phone }}
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if item.latest_visit_date %}
+                                    <span
+                                        style="background: #f3f4f6; color: #374151; padding: 4px 10px; border-radius: 6px; font-size: 0.83rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">
+                                        <i class="fa-regular fa-calendar-check" style="color: #6b7280;"></i> {{ item.latest_visit_date|date:"M d, Y" }}
+                                    </span>
+                                    {% else %}
+                                    <span style="color: var(--text-muted); font-size: 0.82rem; font-style: italic;">No
+                                        visit logged yet</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if item.next_visit_date %}
+                                    <div style="display: flex; flex-direction: column; gap: 3px;">
+                                        <span
+                                            style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 4px 10px; border-radius: 6px; font-size: 0.84rem; font-weight: 800; display: inline-flex; align-items: center; gap: 5px; width: fit-content;">
+                                            <i class="fa-solid fa-calendar-day"></i> {{ item.next_visit_date|date:"M d, Y" }}
+                                        </span>
+                                        {% if item.days_left is not None %}
+                                        {% if item.days_left > 0 %}
+                                        <span
+                                            style="font-size: 0.75rem; color: #047857; font-weight: 700; margin-left: 2px;">
+                                            <i class="fa-regular fa-clock"></i> In {{ item.days_left }} day{% if item.days_left != 1 %}s{% endif %}
+                                        </span>
+                                        {% elif item.days_left == 0 %}
+                                        <span
+                                            style="font-size: 0.75rem; color: #b45309; font-weight: 800; margin-left: 2px;">
+                                            <i class="fa-solid fa-bell"></i> Visit Due Today!
+                                        </span>
+                                        {% else %}
+                                        <span
+                                            style="font-size: 0.75rem; color: #dc2626; font-weight: 800; margin-left: 2px;">
+                                            <i class="fa-solid fa-triangle-exclamation"></i> Overdue by {{ item.overdue_days }} day{% if item.overdue_days != 1 %}s{% endif %}
+                                        </span>
+                                        {% endif %}
+                                        {% endif %}
+                                    </div>
+                                    {% else %}
+                                    <span
+                                        style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700;">
+                                        Initial Visit Pending
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if item.health_status == 'High Risk' %}
+                                    <span
+                                        style="background: #fee2e2; color: #dc2626; padding: 3px 10px; border-radius: 50px; font-size: 0.76rem; font-weight: 800;">
+                                        <i class="fa-solid fa-circle-exclamation"></i> High Risk
+                                    </span>
+                                    {% elif item.health_status == 'Observation' %}
+                                    <span
+                                        style="background: #fef3c7; color: #b45309; padding: 3px 10px; border-radius: 50px; font-size: 0.76rem; font-weight: 800;">
+                                        <i class="fa-solid fa-eye"></i> Observation
+                                    </span>
+                                    {% elif item.health_status == 'Normal' %}
+                                    <span
+                                        style="background: #d1fae5; color: #065f46; padding: 3px 10px; border-radius: 50px; font-size: 0.76rem; font-weight: 800;">
+                                        <i class="fa-solid fa-circle-check"></i> Normal
+                                    </span>
+                                    {% else %}
+                                    <span
+                                        style="background: #f3f4f6; color: #6b7280; padding: 3px 10px; border-radius: 50px; font-size: 0.76rem; font-weight: 700;">
+                                        Pending
+                                    </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state-box">
+                    <div class="empty-state-icon">
+                        <i class="fa-regular fa-calendar-xmark"></i>
+                    </div>
+                    <h3 class="empty-state-title">No upcoming checkup schedule</h3>
+                    <p class="empty-state-desc">Pregnancy visit schedules will automatically update here when checkup
+                        records are entered.</p>
+                </div>
+                {% endif %}
+            </section>
+
+            <!-- ================= Active Beneficiary Mothers Table ================= -->
+            <section class="table-card" style="margin-top: 1rem;">
+                <div class="table-header">
+                    <h2 class="table-title">Area Beneficiary Mothers</h2>
+                    <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">Showing mothers in {{ assigned_area|default:worker.Area_assigned }}</span>
+                </div>
+
+                {% if active_mothers %}
+                <div class="table-responsive">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Patient Name</th>
+                                <th>Spouse</th>
+                                <th>Contact</th>
+                                <th>Area / Ward</th>
+                                <th>Blood Group</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for mother in active_mothers %}
+                            <tr>
+                                <td>
+                                    <div class="table-avatar">
+                                        <div class="avatar-initials">
+                                            {{ mother.name|slice:":1"|upper }}
+                                        </div>
+                                        <div style="font-weight: 600;">{{ mother.name }}</div>
+                                    </div>
+                                </td>
+                                <td>{{ mother.husband_name }}</td>
+                                <td>{{ mother.phone }}</td>
+                                <td>
+                                    <span
+                                        style="background: #eef7f2; color: #14593f; padding: 3px 8px; border-radius: 4px; font-size: 0.78rem; font-weight: 600;">
+                                        {{ mother.area|default:mother.panchayath }}
+                                    </span>
+                                </td>
+                                <td><strong>{{ mother.blood_group|default:"--" }}</strong></td>
+                                <td>
+                                    {% if mother.is_currently_pregnant %}
+                                    <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                        <span style="background: #e6f4ee; color: #047857; padding: 3px 8px; border-radius: 6px; font-size: 0.76rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                                            <i class="fa-solid fa-person-pregnant"></i> Pregnant{% if mother.has_delivered_child %} (Preg #{{ mother.current_pregnancy_number }}){% endif %}
+                                        </span>
+                                        <a href="/myapp/manage_pregnancy/?selected_mother={{ mother.id }}"
+                                            class="btn-action-sm">
+                                            <i class="fa-solid fa-notes-medical"></i> Log Visit
+                                        </a>
+                                    </div>
+                                    {% elif mother.has_delivered %}
+                                    <span
+                                        style="background: #f1f5f9; color: #475569; padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                                        <i class="fa-solid fa-baby"></i> Delivered
+                                    </span>
+                                    {% else %}
+                                    <a href="/myapp/manage_pregnancy/?selected_mother={{ mother.id }}"
+                                        class="btn-action-sm">
+                                        <i class="fa-solid fa-notes-medical"></i> Log Visit
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <!-- Empty State matching design reference -->
+                <div class="empty-state-box">
+                    <div class="empty-state-icon">
+                        <i class="fa-regular fa-folder-open"></i>
+                    </div>
+                    <h3 class="empty-state-title">No mother record added yet for {{ assigned_area|default:worker.Area_assigned }}</h3>
+                    <p class="empty-state-desc">New mother registrations added in this area will appear here for
+                        verification and medical tracking.</p>
+                </div>
+                {% endif %}
+            </section>
+
+        </div>
+    </main>
+
+    <!-- ================= Quick Add Mother Modal ================= -->
+    <div class="modal-overlay" id="addMotherModal" onclick="closeModal(event)">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()" aria-label="Close modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="modal-header-title">Add New Mother Record ({{ worker.Area_assigned|default:'Assigned Area' }})
+            </h3>
+
+            <form method="POST" action="/myapp/ashaworker_home/">
+                {% csrf_token %}
+                <input type="hidden" name="action_type" value="add_mother">
+                <input type="hidden" name="area"
+                    value="{{ worker.Area_assigned|default:'Ward 01 - Main Community Center' }}">
+
+                <div class="modal-form-grid">
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Full Name *</label>
+                        <input type="text" name="name" class="modal-input" placeholder="e.g. Fatima Beevi" required>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Husband's Name *</label>
+                        <input type="text" name="husband_name" class="modal-input" placeholder="e.g. Rashid Khan"
+                            required>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Date of Birth *</label>
+                        <input type="date" name="dob" class="modal-input" required>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Age *</label>
+                        <input type="number" name="age" class="modal-input" placeholder="e.g. 26" required min="16"
+                            max="60">
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Phone Number *</label>
+                        <input type="tel" name="phone" class="modal-input" placeholder="10-digit mobile" required
+                            pattern="[0-9]{10}">
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label class="modal-form-label">Blood Group *</label>
+                        <select name="blood_group" class="modal-input" required>
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-form-group full-width">
+                        <label class="modal-form-label">Assigned Area Jurisdiction</label>
+                        <input type="text" class="modal-input"
+                            value="{{ worker.Area_assigned|default:'Ward 01 - Main Community Center' }}" readonly
+                            style="background-color: #f1f5f3; font-weight: 600;">
+                    </div>
+
+                    <div class="modal-form-group full-width">
+                        <label class="modal-form-label">Residential Address *</label>
+                        <input type="text" name="address" class="modal-input" placeholder="Door No, Street Name"
+                            required>
+                    </div>
+                </div>
+
+                <button type="submit" class="modal-submit-btn">
+                    Save Mother Record
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {% if has_new_registration %}
+    <!-- ================= New Mother Registration Alert Modal ================= -->
+    <div class="modal-overlay active" id="newRegistrationModal"
+        style="display: flex; align-items: center; justify-content: center; z-index: 2000; background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(4px);">
+        <div class="modal-card"
+            style="max-width: 550px; width: 90%; border-radius: 18px; padding: 1.75rem; background: #ffffff; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+            <!-- Modal Header -->
+            <div
+                style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div
+                        style="width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, #10b981, #047857); color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); flex-shrink: 0;">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+                    <div>
+                        <span
+                            style="background: #fef3c7; color: #b45309; font-size: 0.73rem; font-weight: 800; padding: 3px 10px; border-radius: 50px; text-transform: uppercase; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 4px;">
+                            <i class="fa-solid fa-bell"></i> New Registration Alert
+                        </span>
+                        <h3
+                            style="font-size: 1.25rem; font-weight: 800; color: var(--text-heading); margin-top: 4px; line-height: 1.2;">
+                            New Mother Registered!
+                        </h3>
+                    </div>
+                </div>
+                <button type="button" onclick="closeNewRegistrationModal()" aria-label="Close"
+                    style="background: #f3f4f6; border: none; font-size: 1.1rem; color: #6b7280; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div style="margin-bottom: 1.25rem;">
+                <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+                    {% if new_registered_mothers|length == 1 %}
+                    A new mother registration has been recorded in <strong>{{ assigned_area }}</strong>. Please review
+                    and verify the profile below:
+                    {% else %}
+                    There are <strong>{{ new_registered_mothers|length }}</strong> new mother registrations pending
+                    verification in <strong>{{ assigned_area }}</strong>.
+                    {% endif %}
+                </p>
+
+                <div
+                    style="display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto; padding-right: 4px;">
+                    {% for m in new_registered_mothers %}
+                    <div
+                        style="background: #faf8f4; border: 1px solid var(--border-color); border-radius: 12px; padding: 0.9rem 1.1rem; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                        <div>
+                            <div style="font-weight: 800; font-size: 0.98rem; color: var(--brand-green);">{{ m.name }}
+                            </div>
+                            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">
+                                Spouse: <strong>{{ m.husband_name }}</strong> &bull; Phone: <strong>{{ m.phone }}</strong>
+                            </div>
+                            <div
+                                style="font-size: 0.78rem; color: #047857; margin-top: 3px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                                <span><i class="fa-solid fa-location-dot"></i> {{ m.area|default:m.panchayath }}</span>
+                                {% if m.expected_delivery_date %}
+                                &bull; <span><i class="fa-regular fa-calendar"></i> EDD: {{ m.expected_delivery_date|date:"M d, Y" }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <span
+                            style="background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 50px; white-space: nowrap;">
+                            Pending Verification
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div
+                style="display: flex; align-items: center; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                <button type="button" onclick="closeNewRegistrationModal()"
+                    style="padding: 0.65rem 1.3rem; border-radius: 10px; font-size: 0.88rem; font-weight: 600; background: #f3f4f6; border: 1px solid #e5e7eb; color: #374151; cursor: pointer;">
+                    Dismiss
+                </button>
+                <a href="/myapp/verify_mother/"
+                    style="padding: 0.65rem 1.4rem; border-radius: 10px; font-size: 0.88rem; font-weight: 800; background: var(--brand-green); color: #ffffff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(15, 74, 51, 0.2);">
+                    <i class="fa-solid fa-user-check"></i> Verify Mothers Now
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Scripts -->
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function openModal() {
+            document.getElementById('addMotherModal').classList.add('active');
+        }
+
+        function closeModal(e) {
+            document.getElementById('addMotherModal').classList.remove('active');
+        }
+
+        function closeNewRegistrationModal() {
+            const modal = document.getElementById('newRegistrationModal');
+            if (modal) {
+                modal.classList.remove('active');
+                modal.style.display = 'none';
+            }
+        }
+
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeNewRegistrationModal();
+            }
+        });
+
+        // Initialize Nutritional Overview Donut
+        document.addEventListener("DOMContentLoaded", function () {
+            const donutCanvas = document.getElementById('childNutritionalDonutChart');
+            if (donutCanvas) {
+                new Chart(donutCanvas.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Normal Growth', 'Underweight', 'Needs Attention'],
+                        datasets: [{
+                            data: [{{ normal_count|default:0 }}, {{ underweight_count|default:0 }}, {{ attention_count|default:0 }}],
+                            backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                            borderWidth: 2,
+                            borderColor: '#ffffff',
+                        }]
+                    },
+            options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '68%',
+            plugins: {
+                legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11, weight: '600' }, padding: 12 } }
+            }
+        }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

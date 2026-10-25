@@ -1,0 +1,1356 @@
+[
+  {
+    "model": "asha_worker",
+    "doc": "asha_worker(id, LOGIN, Full_name, Age, dob, Qualification, Email, Address, image, Area_assigned, Phone, Joining_date, Current_status)",
+    "fields": [
+      {
+        "name": "id",
+        "type": "BigAutoField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "LOGIN",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "User",
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "Full_name",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "Age",
+        "type": "IntegerField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "dob",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": true,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "Qualification",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "Email",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "Address",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "image",
+        "type": "FileField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": 100
+      },
+      {
+        "name": "Area_assigned",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "Phone",
+        "type": "BigIntegerField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "Joining_date",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "Current_status",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": "Active",
+        "max_length": null
+      }
+    ]
+  },
+  {
+    "model": "anganwadi_teacher",
+    "doc": "anganwadi_teacher(id, LOGIN, Name, Age, dob, Gender, Phone, Email, Address, image, Qualification, center_name, joining_date, Current_status)",
+    "fields": [
+      {
+        "name": "id",
+        "type": "BigAutoField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "LOGIN",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "User",
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "Name",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "Age",
+        "type": "IntegerField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "dob",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": true,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "Gender",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "Phone",
+        "type": "BigIntegerField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "Email",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "Address",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "image",
+        "type": "FileField",
+        "is_relation": false,
+        "related_model": null,
+        "null": true,
+        "blank": true,
+        "default": null,
+        "max_length": 100
+      },
+      {
+        "name": "Qualification",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "center_name",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "joining_date",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "Current_status",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": "Active",
+        "max_length": null
+      }
+    ]
+  },
+  {
+    "model": "user_table",
+    "doc": "user_table(id, LOGIN, ASHA, name, husband_name, age, dob, blood_group, phone, Email, Address, panchayath, area, district, state, pincode, expected_delivery_date, registration_date)",
+    "fields": [
+      {
+        "name": "id",
+        "type": "BigAutoField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "LOGIN",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "User",
+        "null": true,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "ASHA",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "asha_worker",
+        "null": true,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "name",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "husband_name",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "age",
+        "type": "IntegerField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "dob",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "blood_group",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "phone",
+        "type": "BigIntegerField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "Email",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "Address",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "panchayath",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "area",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": true,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "district",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "state",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "pincode",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "expected_delivery_date",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": true,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "registration_date",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": true,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      }
+    ]
+  },
+  {
+    "model": "pregnancy_record",
+    "doc": "pregnancy_record(id, USER, ASHA, previous_pregnency_count, expected_delivery_date, checkup_date, weight, height, blood_pressure, hemoglobin, health_status, additional_report, next_checkup_date)",
+    "fields": [
+      {
+        "name": "id",
+        "type": "BigAutoField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "USER",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "user_table",
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "ASHA",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "asha_worker",
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "previous_pregnency_count",
+        "type": "IntegerField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "expected_delivery_date",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "checkup_date",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "weight",
+        "type": "FloatField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "height",
+        "type": "FloatField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "blood_pressure",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "hemoglobin",
+        "type": "FloatField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "health_status",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "additional_report",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "next_checkup_date",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      }
+    ]
+  },
+  {
+    "model": "child",
+    "doc": "child(id, USER, ASHA, child_name, gender, date_of_birth, birth_weight, birth_height, blood_group, place_of_birth, delivery_type, hospital, health_status)",
+    "fields": [
+      {
+        "name": "id",
+        "type": "BigAutoField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "USER",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "user_table",
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "ASHA",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "asha_worker",
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "child_name",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "gender",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "date_of_birth",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "birth_weight",
+        "type": "FloatField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "birth_height",
+        "type": "FloatField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "blood_group",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "place_of_birth",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "delivery_type",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "hospital",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": true,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "health_status",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      }
+    ]
+  },
+  {
+    "model": "child_growth_record",
+    "doc": "child_growth_record(id, CHILD, height, weight, growth_date, health_condition, report_details)",
+    "fields": [
+      {
+        "name": "id",
+        "type": "BigAutoField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "CHILD",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "child",
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "height",
+        "type": "FloatField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "weight",
+        "type": "FloatField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "growth_date",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "health_condition",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "report_details",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      }
+    ]
+  },
+  {
+    "model": "vaccination",
+    "doc": "vaccination(id, CHILD, vaccine_code, vaccine_name, vaccine_type, target_month, description, vaccination_date, status)",
+    "fields": [
+      {
+        "name": "id",
+        "type": "BigAutoField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "CHILD",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "child",
+        "null": true,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "vaccine_code",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": true,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "vaccine_name",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "vaccine_type",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "target_month",
+        "type": "IntegerField",
+        "is_relation": false,
+        "related_model": null,
+        "null": true,
+        "blank": true,
+        "default": "0",
+        "max_length": null
+      },
+      {
+        "name": "description",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": true,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "vaccination_date",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": true,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "status",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": "Scheduled",
+        "max_length": null
+      }
+    ]
+  },
+  {
+    "model": "notification",
+    "doc": "notification(id, USER, message, notification_date)",
+    "fields": [
+      {
+        "name": "id",
+        "type": "BigAutoField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "USER",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "user_table",
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "message",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "notification_date",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      }
+    ]
+  },
+  {
+    "model": "vaccine_schedule",
+    "doc": "vaccine_schedule(id, VACCINATION, schedule_date, time_from, time_to)",
+    "fields": [
+      {
+        "name": "id",
+        "type": "BigAutoField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "VACCINATION",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "vaccination",
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "schedule_date",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "time_from",
+        "type": "TimeField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "time_to",
+        "type": "TimeField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      }
+    ]
+  },
+  {
+    "model": "nutrition_kit",
+    "doc": "nutrition_kit(id, TEACHER, USER, kit_type, product_name, product_details, date, distribution_date, quantity, status)",
+    "fields": [
+      {
+        "name": "id",
+        "type": "BigAutoField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "TEACHER",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "anganwadi_teacher",
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "USER",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "user_table",
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "kit_type",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "product_name",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "product_details",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "date",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "distribution_date",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "quantity",
+        "type": "IntegerField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "status",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": "Pending",
+        "max_length": null
+      }
+    ]
+  },
+  {
+    "model": "kit_stock",
+    "doc": "kit_stock(id, TEACHER, kit_category, product_name, product_details, stock_unit, quantity, date)",
+    "fields": [
+      {
+        "name": "id",
+        "type": "BigAutoField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "TEACHER",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "anganwadi_teacher",
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "kit_category",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": "Pregnant Care Kit",
+        "max_length": null
+      },
+      {
+        "name": "product_name",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "product_details",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": true,
+        "default": "",
+        "max_length": null
+      },
+      {
+        "name": "stock_unit",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": "Packs",
+        "max_length": null
+      },
+      {
+        "name": "quantity",
+        "type": "IntegerField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": "0",
+        "max_length": null
+      },
+      {
+        "name": "date",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      }
+    ]
+  },
+  {
+    "model": "kit_notification",
+    "doc": "kit_notification(id, NUTRITION, USER, notification_message, notification_date)",
+    "fields": [
+      {
+        "name": "id",
+        "type": "BigAutoField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "NUTRITION",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "nutrition_kit",
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "USER",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "user_table",
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "notification_message",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "notification_date",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      }
+    ]
+  },
+  {
+    "model": "report",
+    "doc": "report(id, report_type, report_details, generated_date)",
+    "fields": [
+      {
+        "name": "id",
+        "type": "BigAutoField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "report_type",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "report_details",
+        "type": "TextField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "generated_date",
+        "type": "DateField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      }
+    ]
+  },
+  {
+    "model": "notification_seen",
+    "doc": "notification_seen(id, USER, notif_id, seen_at)",
+    "fields": [
+      {
+        "name": "id",
+        "type": "BigAutoField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "USER",
+        "type": "ForeignKey",
+        "is_relation": true,
+        "related_model": "user_table",
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": null
+      },
+      {
+        "name": "notif_id",
+        "type": "CharField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": false,
+        "default": null,
+        "max_length": 64
+      },
+      {
+        "name": "seen_at",
+        "type": "DateTimeField",
+        "is_relation": false,
+        "related_model": null,
+        "null": false,
+        "blank": true,
+        "default": null,
+        "max_length": null
+      }
+    ]
+  }
+]

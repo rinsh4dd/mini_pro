@@ -1,0 +1,2264 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maternal & Child Health Intelligence Report - MaatriCare</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js 4.4 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <style>
+        :root {
+            --sidebar-bg: #073423;
+            --sidebar-active: #154d37;
+            --sidebar-hover: #0e3d29;
+            --main-bg: #f9f6f0;
+            --card-bg: #ffffff;
+            --text-dark: #111827;
+            --text-muted: #6b7280;
+            --brand-green: #062e20;
+            --brand-green-hover: #0c4a34;
+            --brand-green-light: #e6f4ee;
+            --brand-green-border: #cce8dc;
+            --border-color: #ede7dc;
+            --border-light: #f0ebe1;
+            --input-bg: #ffffff;
+            --input-border: #e2ddd3;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+            --shadow-card: 0 4px 16px -2px rgba(15, 23, 42, 0.05);
+            --shadow-hover: 0 10px 25px -4px rgba(15, 23, 42, 0.08);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--main-bg);
+            display: flex;
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.75rem 1rem;
+            min-height: 100vh;
+            flex-shrink: 0;
+        }
+
+        .brand-header {
+            padding: 0 0.75rem 1.75rem 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #a8d5be;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .brand-icon-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .brand-text-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-subtitle {
+            font-size: 0.80rem;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.8rem 1rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item a:hover {
+            background-color: var(--sidebar-hover);
+            color: #ffffff;
+        }
+
+        .nav-item.active a {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .nav-item a i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .logout-wrapper {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.8rem 1rem;
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+        }
+
+        /* ================= MAIN WRAPPER & TOPBAR ================= */
+        .main-wrapper {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .topbar {
+            height: 76px;
+            background-color: var(--main-bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #374151;
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background-color: #ede8dc;
+            color: var(--brand-green);
+        }
+
+        .header-title-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar-page-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+        }
+
+        .topbar-breadcrumb {
+            font-size: 0.80rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: var(--brand-green-light);
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Content Body Container */
+        .content-body {
+            padding: 2rem 2.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+            max-width: 1440px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* ================= EXECUTIVE REPORT COMMAND CARD ================= */
+        .report-command-card {
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            padding: 1.75rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .report-header-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .report-title-group h1 {
+            font-size: 1.65rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.025em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .report-title-group p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+
+        .badge-official {
+            font-size: 0.70rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            background: var(--brand-green-light);
+            color: var(--brand-green);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--brand-green-border);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .export-suite-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-export {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 0.55rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            color: #334155;
+        }
+
+        .btn-export:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: var(--brand-green);
+            transform: translateY(-1px);
+        }
+
+        .btn-export-pdf {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #dc2626;
+        }
+
+        .btn-export-pdf:hover {
+            background: #dc2626;
+            color: #ffffff;
+            border-color: #dc2626;
+        }
+
+        .btn-export-csv {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+            color: #166534;
+        }
+
+        .btn-export-csv:hover {
+            background: #166534;
+            color: #ffffff;
+            border-color: #166534;
+        }
+
+        /* Filter Controls Form Ribbon */
+        .filter-ribbon-form {
+            display: flex;
+            align-items: flex-end;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .filter-field label {
+            font-size: 0.74rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-field select {
+            width: 100%;
+            padding: 0.65rem 0.95rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--input-border);
+            background-color: var(--input-bg);
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-field select:focus {
+            border-color: var(--brand-green);
+            box-shadow: 0 0 0 3px rgba(15, 74, 51, 0.1);
+        }
+
+        .filter-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 1px;
+        }
+
+        .btn-generate-report {
+            background: var(--brand-green);
+            color: #ffffff;
+            padding: 0.68rem 1.4rem;
+            border-radius: var(--radius-md);
+            font-size: 0.88rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(15, 74, 51, 0.2);
+            white-space: nowrap;
+        }
+
+        .btn-generate-report:hover {
+            background: var(--brand-green-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(15, 74, 51, 0.25);
+        }
+
+        .btn-reset-report {
+            background: #f8fafc;
+            color: #64748b;
+            padding: 0.68rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.88rem;
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-reset-report:hover {
+            background: #fee2e2;
+            color: #dc2626;
+            border-color: #fca5a5;
+        }
+
+        /* Active Metadata Scope Ribbon */
+        .report-scope-strip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            background: #faf8f5;
+            border: 1px solid #ebd9c8;
+            padding: 0.65rem 1.25rem;
+            border-radius: var(--radius-md);
+            flex-wrap: wrap;
+            font-size: 0.82rem;
+        }
+
+        .scope-pills-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .scope-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 700;
+            color: var(--brand-green);
+        }
+
+        .scope-pill span {
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        /* ================= AWAITING REPORT STATE (CLEAN & ELEGANT) ================= */
+        .awaiting-report-card {
+            background: #ffffff;
+            border-radius: var(--radius-xl);
+            border: 1.5px dashed #cbd5e1;
+            padding: 4rem 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.25rem;
+            margin: 1rem 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .awaiting-icon-box {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: var(--brand-green-light);
+            color: var(--brand-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.85rem;
+            box-shadow: 0 8px 20px -4px rgba(15, 74, 51, 0.15);
+        }
+
+        .awaiting-report-card h2 {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+        }
+
+        .awaiting-report-card p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            max-width: 580px;
+            line-height: 1.6;
+        }
+
+        .quick-presets-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        .preset-btn {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 0.55rem 1.1rem;
+            border-radius: 30px;
+            font-size: 0.80rem;
+            font-weight: 700;
+            color: #334155;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .preset-btn:hover {
+            background: #ffffff;
+            border-color: var(--brand-green);
+            color: var(--brand-green);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(15, 74, 51, 0.1);
+        }
+
+        /* ================= EXECUTIVE SCORECARD (5 METRIC TILES) ================= */
+        .executive-scorecard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .score-tile {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: 1.4rem;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .score-tile:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .score-tile-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .score-icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .icon-blue { background: #eff6ff; color: #2563eb; }
+        .icon-emerald { background: #ecfdf5; color: #059669; }
+        .icon-teal { background: #f0fdfa; color: #0d9488; }
+        .icon-amber { background: #fffbeb; color: #d97706; }
+        .icon-rose { background: #fff1f2; color: #e11d48; }
+
+        .score-badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .score-val {
+            font-size: 1.95rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+        }
+
+        .score-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #334155;
+            margin-top: 6px;
+        }
+
+        .score-subtext {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ================= REPORT SECTIONS (CLEAN, WHITE CARD PANELS) ================= */
+        .report-section-panel {
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+        }
+
+        .section-panel-header {
+            padding: 1.25rem 1.75rem;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .section-header-text h2 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.015em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-header-text p {
+            font-size: 0.80rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .section-panel-body {
+            padding: 1.75rem;
+        }
+
+        /* Section Sub-Nav Pills */
+        .section-quick-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 0.5rem 0;
+        }
+
+        .quick-nav-pill {
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            color: #475569;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .quick-nav-pill:hover, .quick-nav-pill.active {
+            background: var(--brand-green);
+            color: #ffffff;
+            border-color: var(--brand-green);
+        }
+
+        /* ================= 4 ANALYTICAL CHARTS GRID ================= */
+        .charts-2x2-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .charts-2x2-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-card-box {
+            background: #ffffff;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            padding: 1.35rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .chart-box-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        .chart-box-header h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-canvas-wrap {
+            position: relative;
+            height: 270px;
+            width: 100%;
+        }
+
+        .chart-toggle-group {
+            display: inline-flex;
+            background: #f1f5f9;
+            padding: 3px;
+            border-radius: 20px;
+            gap: 2px;
+        }
+
+        .chart-tab-btn {
+            background: transparent;
+            border: none;
+            padding: 4px 10px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .chart-tab-btn:hover {
+            color: var(--text-dark);
+        }
+
+        .chart-tab-btn.active {
+            background: #ffffff;
+            color: var(--brand-green);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            font-weight: 700;
+        }
+
+        .ward-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #f0fdf4;
+            color: #166534;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            border: 1px solid #bbf7d0;
+        }
+
+        /* ================= WARD PROFILE DOSSIER (SINGLE WARD MODE) ================= */
+        .ward-dossier-card {
+            background: linear-gradient(135deg, #fdfbf7 0%, #ffffff 100%);
+            border: 1.5px solid var(--brand-green-border);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .ward-dossier-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #ebd9c8;
+            padding-bottom: 1.25rem;
+        }
+
+        .ward-dossier-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--brand-green);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .staff-cards-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .staff-profile-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.15rem;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .staff-profile-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .staff-profile-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .staff-role-lbl {
+            font-size: 0.70rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        .staff-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .staff-contact {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Ward Demographic Matrix in Dossier */
+        .ward-matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 0.85rem;
+        }
+
+        .matrix-tile {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0.95rem;
+            text-align: center;
+        }
+
+        .matrix-val {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .matrix-lbl {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        /* ================= 5 WARDS COMPARATIVE CARDS GRID ================= */
+        .wards-5-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .ward-card-box {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .ward-card-box:hover {
+            border-color: var(--brand-green);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .ward-card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .ward-card-name {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .ward-card-sector {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .ward-card-staff {
+            background: #f8fafc;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            padding: 0.65rem 0.85rem;
+            font-size: 0.78rem;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .ward-card-stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            text-align: center;
+        }
+
+        .mini-stat {
+            background: #faf8f4;
+            border-radius: 6px;
+            padding: 6px 4px;
+        }
+
+        .mini-stat-num {
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .mini-stat-lbl {
+            font-size: 0.66rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* ================= ADMINISTRATIVE DATA TABLES ================= */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .report-data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.84rem;
+        }
+
+        .report-data-table th {
+            background: #f8fafc;
+            color: #475569;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 0.85rem 1.15rem;
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        .report-data-table td {
+            padding: 0.95rem 1.15rem;
+            color: #1e293b;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: middle;
+        }
+
+        .report-data-table tr:hover td {
+            background: #fcfaf8;
+        }
+
+        .report-data-table tfoot td {
+            background: #f8fafc;
+            font-weight: 800;
+            border-top: 2px solid var(--border-color);
+            border-bottom: none;
+            padding: 1rem 1.15rem;
+        }
+
+        /* Medical Severity Badges */
+        .badge-risk-critical {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge-risk-safe {
+            background: #ecfdf5;
+            color: #047857;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .badge-status-overdue {
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .badge-status-ok {
+            background: #f0fdf4;
+            color: #166534;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        /* Print Formatting */
+        @media print {
+            .sidebar, .top-header, .topbar, .filter-ribbon-form, .export-suite-group, .section-quick-nav, .btn-reset-report, .btn-generate-report, .awaiting-report-card {
+                display: none !important;
+            }
+            body { 
+                background: #ffffff !important; 
+                color: #000000 !important;
+                display: block !important;
+            }
+            .main-wrapper {
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .content-body { 
+                padding: 0 !important; 
+                width: 100% !important; 
+                max-width: 100% !important; 
+            }
+            .report-command-card {
+                box-shadow: none !important;
+                border: 1px solid #d1d5db !important;
+                background: #ffffff !important;
+                padding: 1rem !important;
+                margin-bottom: 1rem !important;
+                page-break-after: avoid;
+            }
+            .report-scope-strip {
+                border-top: 1px solid #e5e7eb !important;
+                padding-top: 8px !important;
+                margin-top: 8px !important;
+            }
+            .report-section-panel, .executive-scorecard-grid, .score-tile { 
+                border: 1px solid #e5e7eb !important; 
+                box-shadow: none !important; 
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+            }
+            .report-data-table {
+                font-size: 8pt !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= REUSABLE ADMIN SIDEBAR ================= -->
+    {% include 'admin/sidebar.html' %}
+
+    <!-- ================= MAIN REPORT WORKSPACE ================= -->
+    <main class="main-wrapper">
+
+        <!-- Standard Admin Topbar matching other admin pages -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <a href="/myapp/adminhome/" class="back-btn" title="Back to Dashboard">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <div class="header-title-block">
+                    <h2 class="topbar-page-title">Maternal & Child Health Intelligence Report</h2>
+                    <span class="topbar-breadcrumb">Admin Dashboard / Health Reports & Analytics</span>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <div class="profile-pill">
+                    <div class="avatar-box">
+                        <img src="{% static 'images/mother_child_logo.png' %}" alt="Admin Avatar" onerror="this.onerror=null; this.src='/static/images/mother_child_logo.png';">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Workspace Body -->
+        <div class="content-body">
+
+            <!-- ================= EXECUTIVE REPORT COMMAND & FILTER BAR ================= -->
+            <div class="report-command-card">
+                <div class="report-header-top">
+                    <div class="report-title-group">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                            <span class="badge-official"><i class="fa-solid fa-building-shield"></i> Official Government Intelligence</span>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Panchayath Jurisdiction Audit</span>
+                        </div>
+                        <h1>
+                            <i class="fa-solid fa-chart-column" style="color: var(--brand-green);"></i>
+                            Health Analytics & Ward Reports
+                        </h1>
+                        <p>
+                            Comprehensive tracking across all 5 wards: maternal pregnancy care, pediatric immunization compliance, clinical high-risk surveillance, and nutrition kit inventory.
+                        </p>
+                    </div>
+
+                    <!-- Export Actions Suite -->
+                    {% if has_filter_applied %}
+                    <div class="export-suite-group">
+                        {% if selected_panchayath != 'all' and selected_ward_code %}
+                        <div style="font-size: 0.76rem; font-weight: 700; color: #0369a1; background: #e0f2fe; padding: 6px 12px; border-radius: 20px; border: 1px solid #bae6fd; display: inline-flex; align-items: center; gap: 6px;">
+                            <i class="fa-solid fa-location-dot"></i> Scope: {{ scope_display_name }}
+                        </div>
+                        {% endif %}
+                        <a href="/myapp/export_report_csv/?panchayath={{ selected_panchayath }}&date_range={{ date_range }}&report_type={{ report_type }}&applied=1" class="btn-export btn-export-csv" title="Download Spreadsheet / CSV Data for {{ scope_display_name }}">
+                            <i class="fa-solid fa-file-excel"></i>
+                            <span>Excel / CSV</span>
+                        </a>
+                        <a href="/myapp/export_report_text/?panchayath={{ selected_panchayath }}&date_range={{ date_range }}&report_type={{ report_type }}&applied=1" class="btn-export" title="Download Plain Text Summary for {{ scope_display_name }}">
+                            <i class="fa-solid fa-file-lines"></i>
+                            <span>Text (.txt)</span>
+                        </a>
+                        <button type="button" onclick="window.print()" class="btn-export" title="Print this Report for {{ scope_display_name }}">
+                            <i class="fa-solid fa-print"></i>
+                            <span>Print</span>
+                        </button>
+                    </div>
+                    {% else %}
+                    <div style="font-size: 0.80rem; color: var(--text-muted); background: #f8fafc; padding: 6px 14px; border-radius: 30px; border: 1px dashed var(--border-color); display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-circle-info" style="color: var(--brand-green);"></i>
+                        Apply filters below to enable official document exports
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Unified Filter Form Ribbon -->
+                <form method="GET" action="/myapp/report/" class="filter-ribbon-form" id="reportFilterForm">
+                    <!-- Control 1: Report Type -->
+                    <div class="filter-field">
+                        <label><i class="fa-solid fa-file-lines"></i> Report Type</label>
+                        <select name="report_type" id="reportTypeSelect">
+                            <option value="all" {% if report_type == 'all' or not report_type %}selected{% endif %}>COMPLETE COMPREHENSIVE REPORT</option>
+                            <option value="charts" {% if report_type == 'charts' %}selected{% endif %}>GRAPHICS & ANALYTICAL CHARTS</option>
+                            <option value="wards" {% if report_type == 'wards' %}selected{% endif %}>WARD DETAILS INFORMATION</option>
+                            <option value="vax" {% if report_type == 'vax' %}selected{% endif %}>TOTAL VACCINATION INFORMATION</option>
+                            <option value="kits" {% if report_type == 'kits' %}selected{% endif %}>TOTAL NUTRITION KITS LOGISTICS</option>
+                            <option value="highrisk" {% if report_type == 'highrisk' %}selected{% endif %}>HIGH RISK MATERNAL WATCHLIST</option>
+                        </select>
+                    </div>
+
+                    <!-- Control 2: Ward / Panchayath Scope -->
+                    <div class="filter-field">
+                        <label><i class="fa-solid fa-map-location-dot"></i> Ward Jurisdiction</label>
+                        <select name="panchayath" id="panchayathSelect">
+                            <option value="all" {% if selected_panchayath == 'all' or not selected_panchayath %}selected{% endif %}>ALL WARDS (Whole Panchayath)</option>
+                            {% for p in all_panchayaths_list %}
+                                <option value="{{ p }}" {% if selected_panchayath != 'all' and selected_ward_code and selected_ward_code in p %}selected{% elif selected_panchayath != 'all' and selected_panchayath == p %}selected{% endif %}>{{ p }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Control 3: Reporting Timeframe -->
+                    <div class="filter-field">
+                        <label><i class="fa-solid fa-calendar-days"></i> Audit Period</label>
+                        <select name="date_range" id="dateRangeSelect">
+                            <option value="all" {% if date_range == 'all' %}selected{% endif %}>All-Time Cumulative</option>
+                            <option value="30days" {% if date_range == '30days' %}selected{% endif %}>Last 30 Days (Monthly Trend)</option>
+                            <option value="90days" {% if date_range == '90days' %}selected{% endif %}>Last 90 Days (Quarterly Audit)</option>
+                            <option value="year" {% if date_range == 'year' %}selected{% endif %}>Current Year (2026 YTD)</option>
+                        </select>
+                    </div>
+
+                    <!-- Hidden applied flag -->
+                    <input type="hidden" name="applied" value="1">
+
+                    <!-- Actions -->
+                    <div class="filter-actions">
+                        <button type="submit" class="btn-generate-report">
+                            <i class="fa-solid fa-filter"></i> Apply Filters
+                        </button>
+                        {% if has_filter_applied %}
+                            <a href="/myapp/report/" class="btn-reset-report" title="Clear current filter parameters">
+                                <i class="fa-solid fa-rotate-left"></i> Reset
+                            </a>
+                        {% endif %}
+                    </div>
+                </form>
+
+                <!-- Active Scope Indicator Strip -->
+                <div class="report-scope-strip">
+                    <div class="scope-pills-wrap">
+                        {% if has_filter_applied %}
+                            <div class="scope-pill">
+                                <span>Jurisdiction:</span>
+                                <i class="fa-solid fa-location-dot" style="font-size: 0.75rem; color: #10b981;"></i>
+                                {{ scope_display_name }}
+                            </div>
+                            <span style="color: #cbd5e1;">•</span>
+                            <div class="scope-pill">
+                                <span>Report Mode:</span>
+                                <i class="fa-solid fa-layer-group" style="font-size: 0.75rem; color: #0f766e;"></i>
+                                {{ report_type_display }}
+                            </div>
+                            <span style="color: #cbd5e1;">•</span>
+                            <div class="scope-pill">
+                                <span>Period:</span>
+                                {{ date_range|upper }}
+                            </div>
+                        {% else %}
+                            <div class="scope-pill" style="color: #b45309;">
+                                <i class="fa-solid fa-hourglass-half"></i>
+                                <span>Status:</span> Awaiting Filter Application
+                            </div>
+                            <span style="color: #cbd5e1;">•</span>
+                            <span style="color: #64748b;">Select report parameters above and click <strong>Apply Filters</strong> to generate data.</span>
+                        {% endif %}
+                    </div>
+
+                    <div style="font-size: 0.78rem; color: var(--text-muted);">
+                        Generated: {{ generated_date }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= STATE 1: AWAITING FILTER APPLICATION ================= -->
+            {% if not has_filter_applied %}
+            <div class="awaiting-report-card">
+                <div class="awaiting-icon-box">
+                    <i class="fa-solid fa-sliders"></i>
+                </div>
+                <h2>Awaiting Report Generation</h2>
+                <p>
+                    Report summaries and medical records are loaded on-demand. Choose your desired <strong>Type of Report</strong> and <strong>Ward</strong> in the toolbar above, then click <strong>Apply Filters</strong> to view report details.
+                </p>
+
+                <!-- Quick 1-Click Presets -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 0.5rem;">
+                    <span style="font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--brand-green);">
+                        Or Quick-Launch a Preset Report:
+                    </span>
+                    <div class="quick-presets-group">
+                        <button type="button" class="preset-btn" onclick="applyPreset('all', 'all')">
+                            <i class="fa-solid fa-layer-group" style="color: var(--brand-green);"></i> Complete Report (All Wards)
+                        </button>
+                        <button type="button" class="preset-btn" onclick="applyPreset('all', 'Ward 01 - Main Community Center')">
+                            <i class="fa-solid fa-map-pin" style="color: #2563eb;"></i> Complete Report (Ward 01 Only)
+                        </button>
+                        <button type="button" class="preset-btn" onclick="applyPreset('charts', 'all')">
+                            <i class="fa-solid fa-chart-line" style="color: #0d9488;"></i> Analytical Charts
+                        </button>
+                        <button type="button" class="preset-btn" onclick="applyPreset('highrisk', 'all')">
+                            <i class="fa-solid fa-triangle-exclamation" style="color: #e11d48;"></i> High-Risk Watchlist
+                        </button>
+                        <button type="button" class="preset-btn" onclick="applyPreset('vax', 'all')">
+                            <i class="fa-solid fa-syringe" style="color: #7c3aed;"></i> Vaccination Audit
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= STATE 2: REPORTS DISPLAYED ONCE FILTERS ARE APPLIED ================= -->
+            {% else %}
+
+            <!-- Section 1: Executive Core Metrics Scorecard (Shown when All or relevant) -->
+            <div class="executive-scorecard-grid">
+                <!-- KPI 1: Active Pregnant Mothers -->
+                <div class="score-tile">
+                    <div class="score-tile-top">
+                        <div class="score-icon-box icon-blue">
+                            <i class="fa-solid fa-person-pregnant"></i>
+                        </div>
+                        <span class="score-badge" style="background: #eff6ff; color: #2563eb;">Active</span>
+                    </div>
+                    <div class="score-val">{{ kpis.total_pregnant }}</div>
+                    <div class="score-label">Active Expectant Mothers</div>
+                    <div class="score-subtext">Delivered Mothers: <strong>{{ kpis.total_delivered }}</strong> registered</div>
+                </div>
+
+                <!-- KPI 2: Registered Children -->
+                <div class="score-tile">
+                    <div class="score-tile-top">
+                        <div class="score-icon-box icon-emerald">
+                            <i class="fa-solid fa-baby"></i>
+                        </div>
+                        <span class="score-badge" style="background: #ecfdf5; color: #059669;">Pediatric</span>
+                    </div>
+                    <div class="score-val">{{ kpis.total_children }}</div>
+                    <div class="score-label">Registered Infants & Children</div>
+                    <div class="score-subtext">Under growth & nutrition monitoring</div>
+                </div>
+
+                <!-- KPI 3: Vaccine Coverage -->
+                <div class="score-tile">
+                    <div class="score-tile-top">
+                        <div class="score-icon-box icon-teal">
+                            <i class="fa-solid fa-syringe"></i>
+                        </div>
+                        <span class="score-badge" style="background: #f0fdfa; color: #0d9488;">{{ kpis.vax_coverage_pct }}% Protection</span>
+                    </div>
+                    <div class="score-val">{{ kpis.total_vax_supplied }}</div>
+                    <div class="score-label">Vaccine Doses Administered</div>
+                    <div class="score-subtext">Overdue / Missed Doses: <strong style="color: #dc2626;">{{ kpis.vax_missed }}</strong></div>
+                </div>
+
+                <!-- KPI 4: Nutrition Kits Logistics -->
+                <div class="score-tile">
+                    <div class="score-tile-top">
+                        <div class="score-icon-box icon-amber">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                        </div>
+                        <span class="score-badge" style="background: #fffbeb; color: #d97706;">{{ kpis.kits_disbursed_pct }}% Distributed</span>
+                    </div>
+                    <div class="score-val">{{ kpis.kits_supplied }}</div>
+                    <div class="score-label">Nutrition Kits Disbursed</div>
+                    <div class="score-subtext">Warehouse Buffer Stock: <strong>{{ kpis.kits_stock_reserve }}</strong> packs</div>
+                </div>
+
+                <!-- KPI 5: Clinical High-Risk Cases -->
+                <div class="score-tile">
+                    <div class="score-tile-top">
+                        <div class="score-icon-box icon-rose">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <span class="score-badge" style="background: #fff1f2; color: #e11d48;">Priority Clinical</span>
+                    </div>
+                    <div class="score-val">{{ kpis.high_risk_count }}</div>
+                    <div class="score-label">High-Risk Maternal Cases</div>
+                    <div class="score-subtext">Low Hb (&lt;10 g/dL) or BP ≥ 140/90</div>
+                </div>
+            </div>
+
+            <!-- Quick Section Navigation Pills (When All-in-One is active) -->
+            {% if report_type == 'all' %}
+            <div class="section-quick-nav">
+                <span style="font-size: 0.74rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Jump to Section:</span>
+                <a href="#sec-charts" class="quick-nav-pill"><i class="fa-solid fa-chart-line"></i> Analytics Charts</a>
+                <a href="#sec-wards" class="quick-nav-pill"><i class="fa-solid fa-hospital-user"></i> Ward Dossier</a>
+                <a href="#sec-vax" class="quick-nav-pill"><i class="fa-solid fa-shield-virus"></i> Immunization Audit</a>
+                <a href="#sec-kits" class="quick-nav-pill"><i class="fa-solid fa-boxes-packing"></i> Nutrition Kits</a>
+                <a href="#sec-highrisk" class="quick-nav-pill"><i class="fa-solid fa-heart-pulse"></i> High-Risk Watchlist</a>
+            </div>
+            {% endif %}
+
+            <!-- ================= SECTION 1: VISUAL ANALYTICS & TREND CHARTS ================= -->
+            {% if report_type == 'all' or report_type == 'charts' %}
+            <section id="sec-charts" class="report-section-panel">
+                <div class="section-panel-header">
+                    <div class="section-header-text">
+                        <h2><i class="fa-solid fa-chart-line" style="color: #2563eb;"></i> Analytical Visualizations & Trends</h2>
+                        <p>Longitudinal maternal registrations, delivery outcomes, vaccination coverage rates, and inventory distribution.</p>
+                    </div>
+                    <span class="badge-official"><i class="fa-solid fa-chart-pie"></i> 4 Interactive Data Models</span>
+                </div>
+
+                <div class="section-panel-body">
+                    <div class="charts-2x2-grid">
+                        <!-- Chart 1: Maternal Registrations & Delivery Trend -->
+                        <div class="chart-card-box">
+                            <div class="chart-box-header">
+                                <h3><i class="fa-solid fa-arrow-trend-up" style="color: var(--brand-green);"></i> Maternal Registration & Progression</h3>
+                                <button type="button" onclick="downloadSingleChart('maternalTrendChart', 'Maternal_Registration_Trend')" class="btn-export" style="padding: 4px 8px; font-size: 0.74rem;">
+                                    <i class="fa-solid fa-download"></i> Save PNG
+                                </button>
+                            </div>
+                            <div class="chart-canvas-wrap">
+                                <canvas id="maternalTrendChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Chart 2: Vaccines Supplied vs Missed -->
+                        <div class="chart-card-box">
+                            <div class="chart-box-header">
+                                <h3><i class="fa-solid fa-syringe" style="color: #0d9488;"></i> Vaccinations Supplied vs Overdue Doses</h3>
+                                <button type="button" onclick="downloadSingleChart('vaxAuditChart', 'Vaccination_Audit_Chart')" class="btn-export" style="padding: 4px 8px; font-size: 0.74rem;">
+                                    <i class="fa-solid fa-download"></i> Save PNG
+                                </button>
+                            </div>
+                            <div class="chart-canvas-wrap">
+                                <canvas id="vaxAuditChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Chart 3: Nutrition Kit Inventory & Ward Coverage -->
+                        <div class="chart-card-box">
+                            <div class="chart-box-header">
+                                <h3><i class="fa-solid fa-boxes-stacked" style="color: #d97706;"></i> Nutrition Kits Logistics</h3>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <div class="chart-toggle-group">
+                                        <button type="button" class="chart-tab-btn active" id="btnKitWardView" onclick="switchKitChartMode('ward')">Ward Coverage</button>
+                                        <button type="button" class="chart-tab-btn" id="btnKitStockView" onclick="switchKitChartMode('stock')">Stock Reserves</button>
+                                    </div>
+                                    <button type="button" onclick="downloadSingleChart('kitInventoryChart', 'Nutrition_Kits_Chart')" class="btn-export" style="padding: 4px 8px; font-size: 0.74rem;">
+                                        <i class="fa-solid fa-download"></i> Save PNG
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="chart-canvas-wrap">
+                                <canvas id="kitInventoryChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Chart 4: Ward-wise Demographics & Coverage -->
+                        <div class="chart-card-box">
+                            <div class="chart-box-header">
+                                <h3><i class="fa-solid fa-children" style="color: #7c3aed;"></i> Pediatric Demographics by Ward</h3>
+                                <button type="button" onclick="downloadSingleChart('childStatChart', 'Child_Demographics_Chart')" class="btn-export" style="padding: 4px 8px; font-size: 0.74rem;">
+                                    <i class="fa-solid fa-download"></i> Save PNG
+                                </button>
+                            </div>
+                            <div class="chart-canvas-wrap">
+                                <canvas id="childStatChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+
+            <!-- ================= SECTION 2: WARD DETAILS & FIELD STAFF ROSTER ================= -->
+            {% if report_type == 'all' or report_type == 'wards' %}
+            <section id="sec-wards" class="report-section-panel">
+                <div class="section-panel-header">
+                    <div class="section-header-text">
+                        <h2>
+                            <i class="fa-solid fa-hospital-user" style="color: var(--brand-green);"></i>
+                            {% if selected_ward_code %}
+                                {{ scope_display_name }} Administrative Profile
+                            {% else %}
+                                All 5 Wards Administrative & Field Staff Dossier
+                            {% endif %}
+                        </h2>
+                        <p>Field staff assignments, ASHA worker contact, Anganwadi centers, and ward demographic statistics.</p>
+                    </div>
+
+                    {% if selected_ward_code %}
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="badge-official" style="background: #e6f4ee; color: var(--brand-green);">
+                            <i class="fa-solid fa-circle-check"></i> Showing {{ selected_ward_code }} Only
+                        </span>
+                        <button type="button" onclick="applyPreset('wards', 'all')" class="btn-export" style="padding: 4px 10px; font-size: 0.76rem;">
+                            <i class="fa-solid fa-globe"></i> Show All 5 Wards
+                        </button>
+                    </div>
+                    {% else %}
+                    <span class="badge-official">All 5 Administrative Units</span>
+                    {% endif %}
+                </div>
+
+                <div class="section-panel-body" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <!-- CASE A: Single Ward Selected (Dedicated Dossier View) -->
+                    {% if selected_ward_code and panchayaths %}
+                        {% with p=panchayaths.0 %}
+                        <div class="ward-dossier-card">
+                            <div class="ward-dossier-top">
+                                <div>
+                                    <div class="ward-dossier-title">
+                                        <i class="fa-solid fa-map-location-dot"></i>
+                                        {{ p.name }}
+                                    </div>
+                                    <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 3px;">
+                                        Sector: <strong>{{ p.sector|default:"Primary Health Sub-Center Area" }}</strong>
+                                    </div>
+                                </div>
+                                <span class="badge-official" style="font-size: 0.76rem; padding: 6px 12px;">
+                                    <i class="fa-solid fa-shield-halved"></i> Active Administrative Jurisdiction
+                                </span>
+                            </div>
+
+                            <!-- Field Staff Profile Cards -->
+                            <div class="staff-cards-row">
+                                <!-- ASHA Worker Card -->
+                                <div class="staff-profile-card">
+                                    <div class="staff-profile-avatar" style="background: #eff6ff; color: #2563eb;">
+                                        <i class="fa-solid fa-user-nurse"></i>
+                                    </div>
+                                    <div class="staff-profile-info">
+                                        <span class="staff-role-lbl">Designated ASHA Worker</span>
+                                        <div class="staff-name">{{ p.asha_name }}</div>
+                                        <div class="staff-contact">
+                                            {% if p.asha_phone != 'N/A' %}
+                                                <i class="fa-solid fa-phone" style="margin-right: 4px;"></i> {{ p.asha_phone }}
+                                            {% else %}
+                                                Contact via Administrative Office
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Anganwadi Teacher Card -->
+                                <div class="staff-profile-card">
+                                    <div class="staff-profile-avatar" style="background: #ecfdf5; color: #059669;">
+                                        <i class="fa-solid fa-chalkboard-user"></i>
+                                    </div>
+                                    <div class="staff-profile-info">
+                                        <span class="staff-role-lbl">Anganwadi Teacher & Center</span>
+                                        <div class="staff-name">{{ p.teacher_name }}</div>
+                                        <div class="staff-contact">
+                                            <i class="fa-solid fa-school" style="margin-right: 4px;"></i> {{ p.center_name }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ward Core Metric Tiles -->
+                            <div class="ward-matrix-grid">
+                                <div class="matrix-tile">
+                                    <div class="matrix-val">{{ p.total_women }}</div>
+                                    <div class="matrix-lbl">Total Women</div>
+                                </div>
+                                <div class="matrix-tile">
+                                    <div class="matrix-val" style="color: #2563eb;">{{ p.pregnant_count }}</div>
+                                    <div class="matrix-lbl">Pregnant</div>
+                                </div>
+                                <div class="matrix-tile">
+                                    <div class="matrix-val" style="color: #7c3aed;">{{ p.delivered_count }}</div>
+                                    <div class="matrix-lbl">Delivered</div>
+                                </div>
+                                <div class="matrix-tile">
+                                    <div class="matrix-val" style="color: #059669;">{{ p.children_count }}</div>
+                                    <div class="matrix-lbl">Children</div>
+                                </div>
+                                <div class="matrix-tile">
+                                    <div class="matrix-val" style="color: #0d9488;">{{ p.vax_supplied }} / {{ p.vax_missed }}</div>
+                                    <div class="matrix-lbl">Vaccines (Supp / Miss)</div>
+                                </div>
+                                <div class="matrix-tile">
+                                    <div class="matrix-val" style="color: #d97706;">{{ p.kits_supplied }} / {{ p.kits_missed }}</div>
+                                    <div class="matrix-lbl">Kits (Supp / Miss)</div>
+                                </div>
+                                <div class="matrix-tile">
+                                    <div class="matrix-val" style="color: {% if p.high_risk_count > 0 %}#dc2626{% else %}#059669{% endif %};">
+                                        {{ p.high_risk_count }}
+                                    </div>
+                                    <div class="matrix-lbl">High-Risk Cases</div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endwith %}
+
+                    <!-- CASE B: All Wards Selected (5 Ward Cards Grid) -->
+                    {% else %}
+                        <div class="wards-5-grid">
+                            {% for p in panchayaths %}
+                            <div class="ward-card-box">
+                                <div>
+                                    <div class="ward-card-top">
+                                        <div>
+                                            <div class="ward-card-name">{{ p.name }}</div>
+                                            <div class="ward-card-sector">{{ p.sector|default:"Primary Center Sector" }}</div>
+                                        </div>
+                                        <button type="button" onclick="applyPreset('wards', '{{ p.name }}')" class="btn-export" style="padding: 3px 8px; font-size: 0.72rem;" title="Isolate this ward">
+                                            <i class="fa-solid fa-filter"></i> Isolate
+                                        </button>
+                                    </div>
+
+                                    <div class="ward-card-staff" style="margin-top: 0.85rem;">
+                                        <div><strong>ASHA:</strong> {{ p.asha_name }}</div>
+                                        <div><strong>Teacher:</strong> {{ p.teacher_name }}</div>
+                                        <div style="color: var(--text-muted); font-size: 0.72rem;">{{ p.center_name }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="ward-card-stats-row">
+                                    <div class="mini-stat">
+                                        <div class="mini-stat-num">{{ p.total_women }}</div>
+                                        <div class="mini-stat-lbl">Women</div>
+                                    </div>
+                                    <div class="mini-stat">
+                                        <div class="mini-stat-num" style="color: #2563eb;">{{ p.pregnant_count }}</div>
+                                        <div class="mini-stat-lbl">Pregnant</div>
+                                    </div>
+                                    <div class="mini-stat">
+                                        <div class="mini-stat-num" style="color: #059669;">{{ p.children_count }}</div>
+                                        <div class="mini-stat-lbl">Children</div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <!-- Comparative Ward Ledger Table -->
+                    <div class="table-responsive">
+                        <table class="report-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Ward Jurisdiction</th>
+                                    <th>Assigned ASHA Worker</th>
+                                    <th>Anganwadi Center</th>
+                                    <th>Total Women</th>
+                                    <th>Pregnant</th>
+                                    <th>Delivered</th>
+                                    <th>Infants</th>
+                                    <th>Vaccines (Supp / Miss)</th>
+                                    <th>Kits (Supp / Miss)</th>
+                                    <th>High-Risk</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for p in panchayaths %}
+                                <tr>
+                                    <td>
+                                        <strong style="color: var(--brand-green);">{{ p.name }}</strong>
+                                    </td>
+                                    <td>
+                                        <strong>{{ p.asha_name }}</strong>
+                                        {% if p.asha_phone != 'N/A' %}
+                                            <div style="font-size: 0.72rem; color: var(--text-muted);"><i class="fa-solid fa-phone"></i> {{ p.asha_phone }}</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div>{{ p.teacher_name }}</div>
+                                        <div style="font-size: 0.72rem; color: var(--text-muted);">{{ p.center_name }}</div>
+                                    </td>
+                                    <td><strong>{{ p.total_women }}</strong></td>
+                                    <td><strong style="color: #2563eb;">{{ p.pregnant_count }}</strong></td>
+                                    <td><strong style="color: #7c3aed;">{{ p.delivered_count }}</strong></td>
+                                    <td><strong style="color: #059669;">{{ p.children_count }}</strong></td>
+                                    <td>
+                                        <strong>{{ p.vax_supplied }}</strong> / <span style="color: #dc2626;">{{ p.vax_missed }}</span>
+                                    </td>
+                                    <td>
+                                        <strong>{{ p.kits_supplied }}</strong> / <span style="color: #d97706;">{{ p.kits_missed }}</span>
+                                    </td>
+                                    <td>
+                                        {% if p.high_risk_count > 0 %}
+                                            <span class="badge-risk-critical">{{ p.high_risk_count }} Cases</span>
+                                        {% else %}
+                                            <span class="badge-risk-safe">0 None</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="10" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                                        No ward records found matching filter criteria.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3">
+                                        <i class="fa-solid fa-calculator" style="margin-right: 6px; color: var(--brand-green);"></i>
+                                        {% if selected_ward_code %}{{ scope_display_name }} Subtotal{% else %}Panchayath All 5 Wards Total{% endif %}
+                                    </td>
+                                    <td>{{ kpis.total_registered }}</td>
+                                    <td><span style="color: #2563eb;">{{ kpis.total_pregnant }}</span></td>
+                                    <td><span style="color: #7c3aed;">{{ kpis.total_delivered }}</span></td>
+                                    <td><span style="color: #059669;">{{ kpis.total_children }}</span></td>
+                                    <td>{{ kpis.total_vax_supplied }} / {{ kpis.vax_missed }}</td>
+                                    <td>{{ kpis.kits_supplied }} / {{ kpis.kits_missed }}</td>
+                                    <td><span style="color: #dc2626;">{{ kpis.high_risk_count }}</span></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+
+            <!-- ================= SECTION 3: CHILD VACCINATION COMPLIANCE AUDIT ================= -->
+            {% if report_type == 'all' or report_type == 'vax' %}
+            <section id="sec-vax" class="report-section-panel">
+                <div class="section-panel-header">
+                    <div class="section-header-text">
+                        <h2><i class="fa-solid fa-shield-virus" style="color: #0d9488;"></i> Child Vaccination Compliance & Overdue Audit</h2>
+                        <p>Complete infant immunization coverage ledger, doses administered, and priority overdue dose tracking.</p>
+                    </div>
+                    <span class="badge-official" style="background: #f0fdfa; color: #0d9488;">
+                        Coverage: {{ kpis.vax_coverage_pct }}% Protection
+                    </span>
+                </div>
+
+                <div class="section-panel-body">
+                    <div class="table-responsive">
+                        <table class="report-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Child Name</th>
+                                    <th>Age / DOB</th>
+                                    <th>Mother Name & Phone</th>
+                                    <th>Ward Jurisdiction</th>
+                                    <th>Assigned ASHA</th>
+                                    <th>Overdue / Missed Vaccines</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ch in missed_vax %}
+                                <tr>
+                                    <td>
+                                        <strong style="color: #0f172a;">{{ ch.child_name }}</strong>
+                                        <div style="font-size: 0.72rem; color: var(--text-muted);"><i class="fa-solid fa-venus-mars"></i> {{ ch.gender|default:"Child" }}</div>
+                                    </td>
+                                    <td>
+                                        <strong>{{ ch.age_str }}</strong>
+                                        <div style="font-size: 0.72rem; color: var(--text-muted);">{{ ch.dob }}</div>
+                                    </td>
+                                    <td>
+                                        <div><strong>{{ ch.mother_name }}</strong></div>
+                                        <div style="font-size: 0.72rem; color: var(--text-muted);"><i class="fa-solid fa-phone"></i> {{ ch.mother_phone }}</div>
+                                    </td>
+                                    <td>{{ ch.panchayath }}</td>
+                                    <td>{{ ch.asha_name }}</td>
+                                    <td>
+                                        <span style="font-weight: 700; color: #dc2626;">{{ ch.missing_vaccines }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge-status-overdue">{{ ch.status }}</span>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" style="text-align: center; padding: 2.5rem; color: #059669;">
+                                        <i class="fa-solid fa-circle-check" style="font-size: 1.5rem; margin-bottom: 6px;"></i>
+                                        <p style="font-weight: 700;">100% Immunization Compliance in the current scope. No overdue vaccines flagged!</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+
+            <!-- ================= SECTION 4: NUTRITION KITS LOGISTICS & SUPPLY CHAIN ================= -->
+            {% if report_type == 'all' or report_type == 'kits' %}
+            <section id="sec-kits" class="report-section-panel">
+                <div class="section-panel-header">
+                    <div class="section-header-text">
+                        <h2><i class="fa-solid fa-boxes-packing" style="color: #d97706;"></i> Nutrition Kits Logistics & Stock Reserves</h2>
+                        <p>Distribution quotas, warehouse stock reserve thresholds, disbursed packs, and pending pickups.</p>
+                    </div>
+                    <span class="badge-official" style="background: #fffbeb; color: #d97706;">
+                        Distributed: {{ kpis.kits_disbursed_pct }}%
+                    </span>
+                </div>
+
+                <div class="section-panel-body">
+                    <div class="table-responsive">
+                        <table class="report-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nutrition Kit Package</th>
+                                    <th>Disbursed Packs</th>
+                                    <th>Total Allocated Stock</th>
+                                    <th>Warehouse Reserve</th>
+                                    <th>Inventory Status</th>
+                                    <th>Last Disbursed Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for k in kits %}
+                                <tr>
+                                    <td>
+                                        <strong style="color: #0f172a;">{{ k.kit_name }}</strong>
+                                    </td>
+                                    <td><strong>{{ k.disbursed_qty }} Packs</strong></td>
+                                    <td>{{ k.allocated_stock }} Units</td>
+                                    <td>
+                                        <strong style="color: {{ k.status_color }};">{{ k.stock_remaining }} Units</strong>
+                                    </td>
+                                    <td>
+                                        <span style="background: {{ k.status_bg }}; color: {{ k.status_color }}; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 0.74rem;">
+                                            {{ k.status_label }}
+                                        </span>
+                                    </td>
+                                    <td>{{ k.last_issued }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                                        No kit inventory records found for current scope.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>Total Logistics Volume</td>
+                                    <td><strong>{{ kpis.kits_supplied }} Packs</strong></td>
+                                    <td>{{ kpis.kits_stock_capacity }} Capacity</td>
+                                    <td><strong>{{ kpis.kits_stock_reserve }} Buffer</strong></td>
+                                    <td colspan="2"><span style="color: var(--brand-green);">{{ kpis.kits_stock_pct }}% Buffer Safe</span></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+
+            <!-- ================= SECTION 5: CLINICAL HIGH-RISK MATERNAL WATCHLIST ================= -->
+            {% if report_type == 'all' or report_type == 'highrisk' %}
+            <section id="sec-highrisk" class="report-section-panel">
+                <div class="section-panel-header">
+                    <div class="section-header-text">
+                        <h2><i class="fa-solid fa-triangle-exclamation" style="color: #e11d48;"></i> Clinical High-Risk Maternal Surveillance Watchlist</h2>
+                        <p>Active surveillance of maternal complications: severe anemia (Hb &lt; 10 g/dL), gestational hypertension (BP ≥ 140/90), and clinical priority flags.</p>
+                    </div>
+                    <span class="badge-official" style="background: #fff1f2; color: #e11d48;">
+                        Flagged Cases: {{ kpis.high_risk_count }}
+                    </span>
+                </div>
+
+                <div class="section-panel-body">
+                    <div class="table-responsive">
+                        <table class="report-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mother Name</th>
+                                    <th>Age</th>
+                                    <th>Hemoglobin (Hb)</th>
+                                    <th>Blood Pressure (BP)</th>
+                                    <th>Ward Jurisdiction</th>
+                                    <th>Assigned ASHA Worker</th>
+                                    <th>Clinical Complication & Status</th>
+                                    <th>Contact</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for hr in high_risk %}
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <div style="width: 32px; height: 32px; border-radius: 50%; background: #fee2e2; color: #dc2626; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.80rem; flex-shrink: 0;">
+                                                {{ hr.mother_name|slice:":1"|default:"M" }}
+                                            </div>
+                                            <div>
+                                                <strong style="color: #0f172a; font-size: 0.92rem; display: block;">{{ hr.mother_name|default:hr.name }}</strong>
+                                                {% if hr.edd and hr.edd != 'N/A' %}
+                                                <span style="font-size: 0.74rem; color: var(--text-muted);">EDD: {{ hr.edd }}</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ hr.age }} Yrs</td>
+                                    <td>
+                                        <strong style="color: #dc2626;">{{ hr.hemoglobin_display|default:hr.hemoglobin }}</strong>
+                                    </td>
+                                    <td>
+                                        <strong style="color: #b91c1c;">{{ hr.blood_pressure }}</strong>
+                                    </td>
+                                    <td>
+                                        <span class="ward-badge"><i class="fa-solid fa-location-dot" style="color: #0d9488;"></i> {{ hr.panchayath }}</span>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 6px;">
+                                            <i class="fa-solid fa-user-nurse" style="color: #059669;"></i>
+                                            <strong style="color: #0f172a;">{{ hr.asha_name|default:hr.asha }}</strong>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge-risk-critical">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ hr.risk_summary|default:hr.complication|default:"Priority Maternal Care" }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="tel:{{ hr.phone }}" style="color: var(--brand-green); font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                                            <i class="fa-solid fa-phone"></i> {{ hr.phone }}
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="8" style="text-align: center; padding: 2.5rem; color: #059669;">
+                                        <i class="fa-solid fa-circle-check" style="font-size: 1.5rem; margin-bottom: 6px;"></i>
+                                        <p style="font-weight: 700;">No maternal high-risk complications flagged in the current jurisdiction scope!</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+
+            {% endif %} <!-- End of has_filter_applied check -->
+
+        </div>
+    </main>
+
+    <!-- ================= JAVASCRIPT: PRESETS & CHARTS ================= -->
+    <script>
+        // Quick 1-Click Preset Form Submitter
+        function applyPreset(reportType, ward) {
+            const rSelect = document.getElementById('reportTypeSelect');
+            const pSelect = document.getElementById('panchayathSelect');
+            if (rSelect) rSelect.value = reportType;
+            if (pSelect) pSelect.value = ward;
+            const form = document.getElementById('reportFilterForm');
+            if (form) form.submit();
+        }
+
+        // Helper to download single chart as PNG image
+        function downloadSingleChart(canvasId, fileName) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) {
+                alert("Chart canvas not found.");
+                return;
+            }
+            const link = document.createElement('a');
+            link.download = (fileName || 'health_analytics_chart') + '.png';
+            link.href = canvas.toDataURL('image/png', 1.0);
+            link.click();
+        }
+
+        {% if has_filter_applied %}
+        // ================= CHART.JS INITIALIZATION =================
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                const chartData = {{ charts_json|safe }};
+                if (!chartData) return;
+
+                const brandGreen = '#0f4a33';
+                const brandGreenLight = '#10b981';
+                const accentBlue = '#3b82f6';
+                const accentAmber = '#f59e0b';
+                const accentRose = '#ef4444';
+                const accentPurple = '#8b5cf6';
+
+                // Chart 1: Maternal Registration Trend
+                const trendCtx = document.getElementById('maternalTrendChart');
+                if (trendCtx && chartData.trend) {
+                    new Chart(trendCtx.getContext('2d'), {
+                        type: 'line',
+                        data: {
+                            labels: chartData.trend.labels,
+                            datasets: [
+                                {
+                                    label: 'Total Registered',
+                                    data: chartData.trend.registered,
+                                    borderColor: brandGreen,
+                                    backgroundColor: 'rgba(15, 74, 51, 0.08)',
+                                    fill: true,
+                                    tension: 0.35,
+                                    borderWidth: 2.5
+                                },
+                                {
+                                    label: 'Pregnant Mothers',
+                                    data: chartData.trend.pregnant,
+                                    borderColor: accentBlue,
+                                    backgroundColor: 'transparent',
+                                    tension: 0.35,
+                                    borderWidth: 2
+                                },
+                                {
+                                    label: 'Delivered Mothers',
+                                    data: chartData.trend.delivered,
+                                    borderColor: brandGreenLight,
+                                    backgroundColor: 'transparent',
+                                    borderDash: [4, 4],
+                                    tension: 0.35,
+                                    borderWidth: 2
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { position: 'top', labels: { boxWidth: 12, font: { weight: '600' } } }
+                            },
+                            scales: {
+                                y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+                                x: { grid: { display: false } }
+                            }
+                        }
+                    });
+                }
+
+                // Chart 2: Vaccinations Supplied vs Missed
+                const vaxCtx = document.getElementById('vaxAuditChart');
+                if (vaxCtx && chartData.vax_audit) {
+                    new Chart(vaxCtx.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: chartData.vax_audit.labels,
+                            datasets: [
+                                {
+                                    label: 'Supplied Doses',
+                                    data: chartData.vax_audit.supplied,
+                                    backgroundColor: brandGreenLight,
+                                    borderRadius: 6
+                                },
+                                {
+                                    label: 'Overdue Doses',
+                                    data: chartData.vax_audit.missed,
+                                    backgroundColor: accentRose,
+                                    borderRadius: 6
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { position: 'top', labels: { boxWidth: 12, font: { weight: '600' } } }
+                            },
+                            scales: {
+                                y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+                                x: { grid: { display: false } }
+                            }
+                        }
+                    });
+                }
+
+                // Chart 3 & Section 4: Nutrition Kit Inventory & Ward Logistics Helpers
+                function getKitChartConfig(mode, cd) {
+                    if (mode === 'stock' && cd.kits) {
+                        return {
+                            labels: cd.kits.labels,
+                            datasets: [
+                                {
+                                    label: 'Disbursed Packs',
+                                    data: cd.kits.disbursed,
+                                    backgroundColor: accentAmber,
+                                    borderRadius: 6
+                                },
+                                {
+                                    label: 'Warehouse Buffer Stock',
+                                    data: cd.kits.remaining,
+                                    backgroundColor: brandGreen,
+                                    borderRadius: 6
+                                }
+                            ],
+                            tooltipTitles: cd.kits.full_labels || cd.kits.labels
+                        };
+                    } else if (cd.kit_audit) {
+                        return {
+                            labels: cd.kit_audit.labels,
+                            datasets: [
+                                {
+                                    label: 'Kits Disbursed',
+                                    data: cd.kit_audit.supplied,
+                                    backgroundColor: accentAmber,
+                                    borderRadius: 6
+                                },
+                                {
+                                    label: 'Pending / Needed',
+                                    data: cd.kit_audit.missed,
+                                    backgroundColor: accentRose,
+                                    borderRadius: 6
+                                }
+                            ],
+                            tooltipTitles: cd.kit_audit.full_labels || cd.kit_audit.labels
+                        };
+                    }
+                    return null;
+                }
+
+                // Global references for mode switching
+                window.kitChartInstance = null;
+                window.globalReportChartData = chartData;
+
+                window.switchKitChartMode = function(mode) {
+                    if (!window.kitChartInstance || !window.globalReportChartData) return;
+                    const cfg = getKitChartConfig(mode, window.globalReportChartData);
+                    if (!cfg) return;
+
+                    const btnW = document.getElementById('btnKitWardView');
+                    const btnS = document.getElementById('btnKitStockView');
+                    if (btnW) btnW.classList.toggle('active', mode === 'ward');
+                    if (btnS) btnS.classList.toggle('active', mode === 'stock');
+
+                    window.kitChartInstance.data.labels = cfg.labels;
+                    window.kitChartInstance.data.datasets = cfg.datasets;
+                    window.kitChartInstance.options.plugins.tooltip.callbacks.title = function(items) {
+                        const idx = items[0].dataIndex;
+                        return (cfg.tooltipTitles && cfg.tooltipTitles[idx]) ? cfg.tooltipTitles[idx] : items[0].label;
+                    };
+                    window.kitChartInstance.update();
+                };
+
+                // Chart 3: Nutrition Kit Inventory Balance
+                const kitCtx = document.getElementById('kitInventoryChart');
+                if (kitCtx) {
+                    const kitCfg = getKitChartConfig('ward', chartData) || getKitChartConfig('stock', chartData);
+                    if (kitCfg) {
+                        window.kitChartInstance = new Chart(kitCtx.getContext('2d'), {
+                            type: 'bar',
+                            data: {
+                                labels: kitCfg.labels,
+                                datasets: kitCfg.datasets
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: { position: 'top', labels: { boxWidth: 12, font: { weight: '600' } } },
+                                    tooltip: {
+                                        callbacks: {
+                                            title: function(items) {
+                                                const idx = items[0].dataIndex;
+                                                return (kitCfg.tooltipTitles && kitCfg.tooltipTitles[idx]) ? kitCfg.tooltipTitles[idx] : items[0].label;
+                                            }
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+                                    x: { 
+                                        grid: { display: false },
+                                        ticks: { font: { weight: '600', size: 11 } }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+
+                // Chart 4: Child Demographics by Ward
+                const childCtx = document.getElementById('childStatChart');
+                if (childCtx && chartData.child_stat) {
+                    new Chart(childCtx.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: chartData.child_stat.labels,
+                            datasets: [
+                                {
+                                    label: 'Total Children',
+                                    data: chartData.child_stat.children,
+                                    backgroundColor: accentPurple,
+                                    borderRadius: 6
+                                },
+                                {
+                                    label: 'Vaccinated',
+                                    data: chartData.child_stat.vaccinated,
+                                    backgroundColor: brandGreenLight,
+                                    borderRadius: 6
+                                },
+                                {
+                                    label: 'Pending / Missed',
+                                    data: chartData.child_stat.unvaccinated,
+                                    backgroundColor: accentRose,
+                                    borderRadius: 6
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { position: 'top', labels: { boxWidth: 12, font: { weight: '600' } } }
+                            },
+                            scales: {
+                                y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+                                x: { grid: { display: false } }
+                            }
+                        }
+                    });
+                }
+
+            } catch (err) {
+                console.error("Chart.js render error:", err);
+            }
+        });
+        {% endif %}
+    </script>
+</body>
+</html>

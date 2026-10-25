@@ -1,0 +1,789 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Vaccination - MaatriCare Admin</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #073423;
+            --sidebar-active: #154d37;
+            --sidebar-hover: #0e3d29;
+            --main-bg: #f9f6f0;
+            --card-bg: #ffffff;
+            --text-dark: #111827;
+            --text-muted: #6b7280;
+            --brand-green: #0f4a33;
+            --brand-green-hover: #0a3523;
+            --brand-green-light: #e6f4ee;
+            --border-color: #f0ebe1;
+            --input-bg: #faf8f4;
+            --input-border: #e2ddd3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--main-bg);
+            display: flex;
+            color: var(--text-dark);
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.75rem 1rem;
+            min-height: 100vh;
+            flex-shrink: 0;
+        }
+
+        .brand-header {
+            padding: 0 0.75rem 1.75rem 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #a8d5be;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .brand-icon-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .brand-text-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-subtitle {
+            font-size: 0.80rem;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.8rem 1rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item a:hover {
+            background-color: var(--sidebar-hover);
+            color: #ffffff;
+        }
+
+        .nav-item.active a {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .nav-item a i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .logout-wrapper {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.8rem 1rem;
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+        }
+
+        /* ================= MAIN WRAPPER ================= */
+        .main-wrapper {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        /* Top Header Bar */
+        .topbar {
+            height: 76px;
+            background-color: var(--main-bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #374151;
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--brand-green);
+        }
+
+        .header-title-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar-page-title {
+            font-size: 1.18rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.2;
+        }
+
+        .topbar-breadcrumb {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .search-box {
+            position: relative;
+            width: 320px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 0.88rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.6rem 1rem 0.6rem 2.5rem;
+            border: 1px solid #e2ddd3;
+            border-radius: 30px;
+            background-color: #f1ede4;
+            font-size: 0.88rem;
+            color: var(--text-dark);
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            background-color: #ffffff;
+            border-color: var(--brand-green);
+            box-shadow: 0 0 0 3px rgba(15, 74, 51, 0.1);
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: #4b5563;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            color: var(--brand-green);
+            background-color: rgba(15, 74, 51, 0.08);
+        }
+
+        .notif-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 7px;
+            height: 7px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            border: 1.5px solid #ffffff;
+        }
+
+        .profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .avatar-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ================= PAGE CONTENT ================= */
+        .content-container {
+            padding: 2.25rem 2.5rem 3.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.85rem;
+            max-width: 1080px;
+            width: 100%;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 0.85rem 1.25rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background-color: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+        }
+
+        .alert-warning {
+            background-color: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #b45309;
+        }
+
+        .alert-error, .alert-danger {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+        }
+
+        .form-alert-box {
+            padding: 0.85rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            margin-bottom: 1.5rem;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            background-color: #fff7ed;
+            border: 1px solid #fed7aa;
+            color: #c2410c;
+        }
+
+        /* ================= VACCINE FORM CARD ================= */
+        .form-card {
+            background-color: var(--card-bg);
+            border: 1px solid #ede7dc;
+            border-radius: 20px;
+            padding: 2.25rem 2.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.025);
+            max-width: 900px;
+        }
+
+        .card-header-badge-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #f0ebe1;
+            margin-bottom: 1.75rem;
+        }
+
+        .badge-icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background-color: #e6f0eb;
+            color: var(--brand-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .card-header-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+
+        .card-desc {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        .form-grid-2col {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 0.8rem 1.1rem;
+            border: 1px solid var(--input-border);
+            border-radius: 10px;
+            background-color: var(--input-bg);
+            font-size: 0.92rem;
+            color: var(--text-dark);
+            transition: all 0.2s ease;
+        }
+
+        .form-input::placeholder, .form-textarea::placeholder {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            background-color: #ffffff;
+            border-color: var(--brand-green);
+            box-shadow: 0 0 0 3px rgba(15, 74, 51, 0.12);
+        }
+
+        .form-input.is-invalid, .form-textarea.is-invalid {
+            border-color: #ef4444 !important;
+            background-color: #fffbfb;
+        }
+
+        .form-input.is-invalid:focus, .form-textarea.is-invalid:focus {
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+        }
+
+        .form-input.is-valid, .form-textarea.is-valid {
+            border-color: #10b981;
+        }
+
+        .field-warning {
+            color: #dc2626;
+            font-size: 0.78rem;
+            font-weight: 500;
+            margin-top: 0.35rem;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            line-height: 1.3;
+        }
+
+        .field-warning.active {
+            display: flex;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.5;
+        }
+
+        .form-actions-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn-cancel {
+            padding: 0.72rem 1.75rem;
+            background-color: #ffffff;
+            color: #374151;
+            border: 1px solid #dcd7cc;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cancel:hover {
+            background-color: #f7f4ee;
+            border-color: #cfc9bd;
+        }
+
+        .btn-save {
+            padding: 0.72rem 1.85rem;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(15, 74, 51, 0.2);
+        }
+
+        .btn-save:hover {
+            background-color: #0b3927;
+            box-shadow: 0 6px 16px rgba(15, 74, 51, 0.3);
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+            }
+
+            .content-container {
+                padding: 1.5rem;
+            }
+
+            .form-grid-2col {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= ADMIN SIDEBAR ================= -->
+    {% include 'admin/sidebar.html' %}
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <div class="main-wrapper">
+        
+        <header class="topbar">
+            <div class="topbar-left">
+                <a href="/myapp/adminhome/" class="back-btn" title="Back to Dashboard">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <div class="header-title-block">
+                    <h2 class="topbar-page-title">Add New Vaccine</h2>
+                    <span class="topbar-breadcrumb">Vaccination Management / New Entry</span>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <div class="profile-pill">
+                    <div class="avatar-box">
+                        <img src="{% static 'images/mother_child_logo.png' %}" alt="Admin Avatar" onerror="this.onerror=null; this.src='/static/images/mother_child_logo.png';">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="content-container">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'success' }}">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="form-card">
+                
+                <!-- Card Header Badge Row -->
+                <div class="card-header-badge-row">
+                    <div class="badge-icon-box">
+                        <i class="fa-solid fa-id-card-clip"></i>
+                    </div>
+                    <div class="card-header-text">
+                        <h3 class="card-title">Vaccine Information</h3>
+                        <p class="card-desc">Basic identity and descriptive details of the vaccine.</p>
+                    </div>
+                </div>
+
+                <form action="/myapp/add_vaccination/" method="POST" id="addVaccineForm">
+                    {% csrf_token %}
+
+                    <div class="form-grid-2col">
+                        <!-- Vaccine Name -->
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" for="vaccine_name">Vaccine Name</label>
+                            <input 
+                                type="text" 
+                                class="form-input" 
+                                id="vaccine_name" 
+                                name="vaccine_name" 
+                                placeholder="e.g. Pentavalent" 
+                                value="{{ form.vaccine_name|default:'' }}"
+                                required
+                                minlength="2"
+                            >
+                        </div>
+
+                        <!-- Vaccine ID/Code -->
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" for="vaccine_code">Vaccine ID/Code</label>
+                            <input 
+                                type="text" 
+                                class="form-input" 
+                                id="vaccine_code" 
+                                name="vaccine_code" 
+                                placeholder="e.g. VAC-001" 
+                                value="{{ form.vaccine_code|default:'' }}"
+                                required
+                                minlength="2"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Type of Vaccine & Specific Month -->
+                    <div class="form-grid-2col" style="margin-bottom: 0;">
+                        <div class="form-group">
+                            <label class="form-label" for="vaccine_type">Type of Vaccine</label>
+                            <input 
+                                type="text" 
+                                class="form-input" 
+                                id="vaccine_type" 
+                                name="vaccine_type" 
+                                placeholder="e.g. mRNA, Inactivated, Toxoid" 
+                                value="{{ form.vaccine_type|default:'' }}"
+                                required
+                                minlength="2"
+                            >
+                        </div>
+
+                        <!-- Specific Administration Month -->
+                        <div class="form-group">
+                            <label class="form-label" for="target_month">Specific Month to Administer (Child Age) *</label>
+                            <select class="form-input" id="target_month" name="target_month" required>
+                                <option value="" disabled {% if form.target_month is None or form.target_month == '' %}selected{% endif %}>-- Select Specific Month --</option>
+                                <option value="0" {% if form.target_month == 0 or form.target_month == '0' %}selected{% endif %}>Month 0 (At Birth / Newborn)</option>
+                                <option value="1" {% if form.target_month == 1 or form.target_month == '1' %}selected{% endif %}>Month 1 (1st Month)</option>
+                                <option value="2" {% if form.target_month == 2 or form.target_month == '2' %}selected{% endif %}>Month 2 (2nd Month)</option>
+                                <option value="3" {% if form.target_month == 3 or form.target_month == '3' %}selected{% endif %}>Month 3 (3rd Month)</option>
+                                <option value="4" {% if form.target_month == 4 or form.target_month == '4' %}selected{% endif %}>Month 4 (4th Month)</option>
+                                <option value="5" {% if form.target_month == 5 or form.target_month == '5' %}selected{% endif %}>Month 5 (5th Month)</option>
+                                <option value="6" {% if form.target_month == 6 or form.target_month == '6' %}selected{% endif %}>Month 6 (6th Month)</option>
+                                <option value="7" {% if form.target_month == 7 or form.target_month == '7' %}selected{% endif %}>Month 7 (7th Month)</option>
+                                <option value="8" {% if form.target_month == 8 or form.target_month == '8' %}selected{% endif %}>Month 8 (8th Month)</option>
+                                <option value="9" {% if form.target_month == 9 or form.target_month == '9' %}selected{% endif %}>Month 9 (9th Month)</option>
+                                <option value="10" {% if form.target_month == 10 or form.target_month == '10' %}selected{% endif %}>Month 10 (10th Month)</option>
+                                <option value="11" {% if form.target_month == 11 or form.target_month == '11' %}selected{% endif %}>Month 11 (11th Month)</option>
+                                <option value="12" {% if form.target_month == 12 or form.target_month == '12' %}selected{% endif %}>Month 12 (12th Month / 1 Year)</option>
+                                <option value="15" {% if form.target_month == 15 or form.target_month == '15' %}selected{% endif %}>Month 15 (15th Month)</option>
+                                <option value="16" {% if form.target_month == 16 or form.target_month == '16' %}selected{% endif %}>Month 16 (16th Month)</option>
+                                <option value="18" {% if form.target_month == 18 or form.target_month == '18' %}selected{% endif %}>Month 18 (18th Month / 1.5 Years)</option>
+                                <option value="24" {% if form.target_month == 24 or form.target_month == '24' %}selected{% endif %}>Month 24 (24th Month / 2 Years)</option>
+                                <option value="36" {% if form.target_month == 36 or form.target_month == '36' %}selected{% endif %}>Month 36 (3 Years)</option>
+                                <option value="48" {% if form.target_month == 48 or form.target_month == '48' %}selected{% endif %}>Month 48 (4 Years)</option>
+                                <option value="60" {% if form.target_month == 60 or form.target_month == '60' %}selected{% endif %}>Month 60 (5 Years Booster)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label class="form-label" for="description">Description</label>
+                        <textarea 
+                            class="form-textarea" 
+                            id="description" 
+                            name="description" 
+                            rows="5" 
+                            placeholder="Enter detailed description of the vaccine, storage requirements, and purpose..." 
+                            required
+                        >{{ form.description|default:'' }}</textarea>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="form-actions-row">
+                        <a href="/myapp/adminhome/" class="btn-cancel">Cancel</a>
+                        <button type="submit" class="btn-save">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Vaccine
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- ================= MASTER VACCINATION REGISTRY TABLE ================= -->
+            <div class="form-card" style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                    <div>
+                        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--brand-green);"><i class="fa-solid fa-layer-group"></i> Master Vaccines List</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">Vaccines added here will appear in the Schedule Vaccination dropdown.</p>
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+                        <thead>
+                            <tr style="background-color: #faf8f5; border-bottom: 1px solid #ede8dc;">
+                                <th style="padding: 0.85rem 1rem; font-weight: 700; color: #6b7280; text-transform: uppercase; font-size: 0.78rem;">Vaccine Name</th>
+                                <th style="padding: 0.85rem 1rem; font-weight: 700; color: #6b7280; text-transform: uppercase; font-size: 0.78rem;">Code</th>
+                                <th style="padding: 0.85rem 1rem; font-weight: 700; color: #6b7280; text-transform: uppercase; font-size: 0.78rem;">Specific Month</th>
+                                <th style="padding: 0.85rem 1rem; font-weight: 700; color: #6b7280; text-transform: uppercase; font-size: 0.78rem;">Type</th>
+                                <th style="padding: 0.85rem 1rem; font-weight: 700; color: #6b7280; text-transform: uppercase; font-size: 0.78rem;">Description</th>
+                                <th style="padding: 0.85rem 1rem; font-weight: 700; color: #6b7280; text-transform: uppercase; font-size: 0.78rem; text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for mv in master_vaccines %}
+                                <tr style="border-bottom: 1px solid #f3efe6;">
+                                    <td style="padding: 0.9rem 1rem; font-weight: 700; color: var(--text-dark);">{{ mv.vaccine_name }}</td>
+                                    <td style="padding: 0.9rem 1rem;"><span style="background-color: #e6f4ee; color: #062e20; font-weight: 700; font-size: 0.78rem; padding: 3px 10px; border-radius: 50px;">{{ mv.vaccine_code }}</span></td>
+                                    <td style="padding: 0.9rem 1rem;">
+                                        <span style="background-color: #fef3c7; color: #92400e; font-weight: 700; font-size: 0.78rem; padding: 3px 10px; border-radius: 50px; border: 1px solid #fde68a;">
+                                            <i class="fa-regular fa-calendar-check" style="font-size: 0.7rem; margin-right: 4px;"></i>{{ mv.target_month_display }}
+                                        </span>
+                                    </td>
+                                    <td style="padding: 0.9rem 1rem; color: #374151;">{{ mv.vaccine_type }}</td>
+                                    <td style="padding: 0.9rem 1rem; color: #6b7280; font-size: 0.85rem;">{{ mv.description|truncatechars:80 }}</td>
+                                    <td style="padding: 0.9rem 1rem; text-align: right;">
+                                        <form method="POST" action="/myapp/add_vaccination/" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete vaccine {{ mv.vaccine_name|escapejs }}?');">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action_type" value="delete_master">
+                                            <input type="hidden" name="vaccine_id" value="{{ mv.id }}">
+                                            <button type="submit" style="background: none; border: none; color: #dc2626; cursor: pointer; font-size: 0.88rem; font-weight: 600;">
+                                                <i class="fa-regular fa-trash-can"></i> Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                                        <i class="fa-solid fa-syringe" style="font-size: 1.8rem; opacity: 0.4; margin-bottom: 0.5rem;"></i>
+                                        <p style="font-weight: 600;">No master vaccine registered yet.</p>
+                                        <p style="font-size: 0.82rem;">Use the form above to add a vaccine.</p>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+</html>

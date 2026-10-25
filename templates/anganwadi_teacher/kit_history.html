@@ -1,0 +1,704 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kit Distribution History - Anganwadi Portal | MaatriCare</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #062e20;
+            --sidebar-hover: #0a3d2b;
+            --sidebar-active: #0e4c36;
+            --sidebar-text-muted: #a3c4b5;
+            --brand-green: #083c2a;
+            --brand-green-hover: #052a1d;
+            --brand-green-light: #ecfdf5;
+            --brand-green-accent: #10b981;
+            --bg-page: #f8fafc;
+            --card-bg: #ffffff;
+            --text-heading: #0f172a;
+            --text-body: #334155;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --border-input: #cbd5e1;
+            --search-bg: #f1f5f9;
+            --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.75rem 1.15rem 1.5rem;
+            z-index: 100;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            padding: 0 0.5rem 1.75rem;
+            text-decoration: none;
+            display: block;
+        }
+
+        .brand-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-sub {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--sidebar-text-muted);
+            margin-top: 4px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-item-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.72rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item-link i {
+            font-size: 1.05rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item-link:hover {
+            color: #ffffff;
+            background-color: var(--sidebar-hover);
+        }
+
+        .nav-item-link.active {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+        }
+
+        .sidebar-footer {
+            padding-top: 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.7rem 1rem;
+            color: var(--sidebar-text-muted);
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            color: #ffffff;
+            background-color: rgba(239, 68, 68, 0.15);
+        }
+
+        /* Main Container */
+        .main-wrapper {
+            margin-left: 250px;
+            flex: 1;
+            min-width: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-page);
+        }
+
+        /* Top Header */
+        .top-header {
+            height: 74px;
+            padding: 0 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--brand-green);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 380px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 0.88rem;
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.65rem 1rem 0.65rem 2.6rem;
+            background-color: var(--search-bg);
+            border: 1px solid transparent;
+            border-radius: 9999px;
+            font-size: 0.88rem;
+            color: var(--text-heading);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            background-color: #ffffff;
+            border-color: #cbd5e1;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .worker-profile-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 1px solid var(--border-color);
+            padding-left: 1.25rem;
+        }
+
+        .worker-info {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .worker-name {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            line-height: 1.2;
+        }
+
+        .worker-id {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .worker-avatar-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #083c2a, #10b981);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+
+        /* Content Body */
+        .content-body {
+            padding: 2.25rem 2.5rem 3.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            width: 100%;
+            max-width: 1550px;
+            margin: 0 auto;
+        }
+
+        .page-title-header h1 {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: var(--brand-green);
+            letter-spacing: -0.02em;
+        }
+
+        .page-title-header p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Filter Controls Bar */
+        .filters-action-bar {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .filter-inputs-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-label-text {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .filter-dropdown-select, .filter-date-input {
+            padding: 0.65rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-input);
+            background-color: #ffffff;
+            font-size: 0.88rem;
+            color: var(--text-heading);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .filter-dropdown-select:focus, .filter-date-input:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .btn-filter-apply {
+            padding: 0.65rem 1.25rem;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Table Card */
+        .table-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            text-align: left;
+        }
+
+        .custom-table th {
+            background-color: #f8fafc;
+            padding: 1.1rem 1.5rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #475569;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .custom-table td {
+            padding: 1.15rem 1.5rem;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+            color: #334155;
+        }
+
+        .custom-table tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-wrapper {
+                margin-left: 0;
+            }
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .search-container {
+                width: 200px;
+            }
+        }
+
+        /* Modal Backdrop & Card */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(8, 60, 42, 0.45);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .modal-backdrop.show {
+            display: flex;
+        }
+        .modal-card {
+            background-color: #ffffff;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        .alert-message-bar {
+            padding: 0.9rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .alert-success {
+            background-color: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= Left Sidebar ================= -->
+    {% include 'anganwadi_teacher/sidebar.html' %}
+
+    <!-- ================= Main Container ================= -->
+    <main class="main-wrapper">
+
+        <!-- Top Header Navigation -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()" aria-label="Toggle Sidebar Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <form method="GET" action="/myapp/kit_history/" class="search-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" name="q" class="search-input" placeholder="Search distribution history..." value="{{ search_query|default:'' }}">
+                </form>
+            </div>
+
+            <!-- Profile Badge -->
+            <div class="header-actions">
+                <a href="/myapp/teacher_profile/" class="worker-profile-card" style="text-decoration: none; color: inherit;" title="View Profile">
+                    <div class="worker-info">
+                        <span class="worker-name">{{ teacher.Name|default:"Anganwadi Teacher" }}</span>
+                        <span class="worker-id"><i class="fa-solid fa-location-dot" style="color:#10b981; margin-right:3px;"></i> {{ teacher.center_name|default:"Anganwadi Center" }}</span>
+                    </div>
+                    <div class="worker-avatar-badge" title="{{ teacher.Name|default:'Teacher' }}" style="overflow:hidden; padding:0;">
+                        {% if teacher.image %}
+                            <img src="{{ teacher.image.url }}" alt="{{ teacher.Name }}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                        {% else %}
+                            {{ teacher.Name|slice:":1"|upper|default:"T" }}
+                        {% endif %}
+                    </div>
+                </a>
+            </div>
+        </header>
+
+        <!-- Body Content -->
+        <div class="content-body">
+
+            <!-- Title Header -->
+            <div class="page-title-header">
+                <h1>Distribution History Audit Log</h1>
+                <p>Complete historical register of issued nutrition packs, pickup statuses, and fulfillment updates.</p>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-message-bar alert-success">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Filter Controls Bar -->
+            <form method="GET" action="/myapp/kit_history/" class="filters-action-bar">
+                <div class="filter-inputs-group">
+                    <span class="filter-label-text"><i class="fa-solid fa-magnifying-glass" style="color: #10b981; margin-right: 4px;"></i> Search History:</span>
+                    <input type="text" name="q" class="filter-dropdown-select" placeholder="Search mother / product..." value="{{ search_query|default:'' }}" style="width: 320px;">
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button type="submit" class="btn-filter-apply">
+                        <i class="fa-solid fa-magnifying-glass"></i> Search
+                    </button>
+                    {% if search_query %}
+                        <a href="/myapp/kit_history/" class="btn-filter-apply" style="background-color: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; text-decoration: none;">Clear</a>
+                    {% endif %}
+                </div>
+            </form>
+
+            <!-- Table Card -->
+            <div class="table-card">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+
+                            <th>Beneficiary Mother</th>
+                            <th>Kit Category / Product</th>
+                            <th>Quantity</th>
+                            <th>Distribution Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dist in kit_history %}
+                            <tr>
+                                <td>
+                                    <strong>{{ dist.USER.name }}</strong>
+                                    <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">Ph: {{ dist.USER.phone }}</div>
+                                </td>
+                                <td>
+                                    <strong>{{ dist.kit_type }}</strong>
+                                    <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">{{ dist.product_name|default:"Standard Supplement" }}</div>
+                                </td>
+                                <td><strong>{{ dist.quantity }} Unit(s)</strong></td>
+                                <td>{{ dist.distribution_date|date:"M d, Y" }}</td>
+                                <td>
+                                    {% if dist.status == 'Collected' %}
+                                        <span style="background-color: #d1fae5; color: #065f46; padding: 0.35rem 0.85rem; border-radius: 9999px; font-weight: 700; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 6px;">
+                                            <i class="fa-solid fa-circle-check"></i> Collected
+                                        </span>
+                                    {% elif dist.status == 'Missed' %}
+                                        <div style="display: inline-flex; align-items: center; gap: 8px;">
+                                            <span style="background-color: #fee2e2; color: #991b1b; padding: 0.35rem 0.85rem; border-radius: 9999px; font-weight: 700; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 6px;">
+                                                <i class="fa-solid fa-circle-xmark"></i> Missed
+                                            </span>
+                                            <button type="button" onclick="openRescheduleKitModal('{{ dist.id }}', '{{ dist.USER.name|escapejs }}', '{{ dist.kit_type|escapejs }}', '{{ dist.distribution_date|date:"Y-m-d" }}')" style="padding: 0.35rem 0.85rem; background-color: #2563eb; color: #ffffff; border: none; border-radius: 9999px; font-weight: 700; font-size: 0.78rem; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);" title="Reschedule pickup date & send notification">
+                                                <i class="fa-solid fa-calendar-plus"></i> Reschedule
+                                            </button>
+                                        </div>
+                                    {% elif dist.status == 'Rescheduled' %}
+                                        <div style="display: inline-flex; align-items: center; gap: 8px;">
+                                            <span style="background-color: #dbeafe; color: #1e40af; padding: 0.35rem 0.85rem; border-radius: 9999px; font-weight: 700; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 6px;">
+                                                <i class="fa-solid fa-calendar-day"></i> Rescheduled
+                                            </span>
+                                            <form method="POST" action="/myapp/update_kit_status/{{ dist.id }}/" style="display: inline-block;">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="next" value="/myapp/kit_history/">
+                                                <select name="status" onchange="this.form.submit()" style="padding: 0.35rem 0.75rem; border-radius: 9999px; border: 1px solid #93c5fd; background-color: #eff6ff; color: #1e40af; font-weight: 700; font-size: 0.78rem; cursor: pointer; outline: none;">
+                                                    <option value="Rescheduled" selected>📅 Select Status</option>
+                                                    <option value="Collected">✔ Mark as Collected</option>
+                                                    <option value="Missed">✖ Mark as Missed</option>
+                                                </select>
+                                            </form>
+                                        </div>
+                                    {% else %}
+                                        <form method="POST" action="/myapp/update_kit_status/{{ dist.id }}/" style="display: inline-block;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="next" value="/myapp/kit_history/">
+                                            <select name="status" onchange="this.form.submit()" style="padding: 0.35rem 0.75rem; border-radius: 9999px; border: 1px solid #fcd34d; background-color: #fef3c7; color: #92400e; font-weight: 700; font-size: 0.78rem; cursor: pointer; outline: none;">
+                                                <option value="Pending" selected>🕒 Select Status / Pending</option>
+                                                <option value="Collected">✔ Mark as Collected</option>
+                                                <option value="Missed">✖ Mark as Missed</option>
+                                            </select>
+                                        </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 3.5rem 1rem; color: var(--text-muted);">
+                                    <i class="fa-solid fa-clock-rotate-left" style="font-size: 2.5rem; margin-bottom: 0.75rem; opacity: 0.35;"></i>
+                                    <p style="font-weight: 600; font-size: 0.95rem;">No distribution history record added yet.</p>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ================= RESCHEDULE NUTRITION KIT MODAL ================= -->
+    <div class="modal-backdrop" id="rescheduleKitModal">
+        <div class="modal-card">
+            <div style="padding: 1.25rem 1.5rem; background-color: #eff6ff; border-bottom: 1px solid #bfdbfe; display: flex; align-items: center; justify-content: space-between;">
+                <h3 style="font-size: 1.05rem; font-weight: 800; color: #1e40af;"><i class="fa-solid fa-calendar-plus"></i> Reschedule Kit Pickup</h3>
+                <button type="button" onclick="closeRescheduleKitModal()" style="background:none; border:none; font-size:1.3rem; cursor:pointer; color:#6b7280;">&times;</button>
+            </div>
+            <form method="POST" action="/myapp/reschedule_kit/">
+                {% csrf_token %}
+                <input type="hidden" name="kit_id" id="rescheduleKitId">
+                <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+                    <p style="font-size: 0.88rem; color: #374151; font-weight: 600;" id="rescheduleKitInfoText">Rescheduling kit pickup date.</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <label style="font-size: 0.86rem; font-weight: 700; color: #374151;" for="newKitDateInput">New Reschedule Date *</label>
+                        <input type="date" name="new_pickup_date" id="newKitDateInput" class="filter-date-input" style="width: 100%;" onchange="updateAutoKitRescheduleMessage()" required>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <label style="font-size: 0.86rem; font-weight: 700; color: #374151;" for="kitRescheduleMessage">Reminder Notification Message (Auto-Generated from Date)</label>
+                        <textarea name="reminder_message" id="kitRescheduleMessage" class="filter-dropdown-select" style="width: 100%; min-height: 85px; resize: vertical; font-family: inherit;" rows="3" placeholder="Automated reminder notification for mother..."></textarea>
+                    </div>
+
+                    <div style="background-color: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.82rem; color: #047857; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>An automated pickup reminder notification with the new date will be sent to the mother upon saving.</span>
+                    </div>
+                </div>
+                <div style="padding: 1rem 1.5rem; background-color: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" onclick="closeRescheduleKitModal()" style="padding: 0.6rem 1rem; background: #e2e8f0; color: #374151; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Cancel</button>
+                    <button type="submit" style="padding: 0.6rem 1.2rem; background: #2563eb; color: #ffffff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22);"><i class="fa-solid fa-paper-plane"></i> Reschedule & Send Reminder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        let currentKitUser = '';
+        let currentKitType = '';
+
+        function formatDateForDisplay(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                const year = parts[0];
+                const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                const monthIdx = parseInt(parts[1], 10) - 1;
+                const day = parseInt(parts[2], 10);
+                if (monthIdx >= 0 && monthIdx < 12) {
+                    return `${monthNames[monthIdx]} ${day}, ${year}`;
+                }
+            }
+            return dateStr;
+        }
+
+        function updateAutoKitRescheduleMessage() {
+            const dateVal = document.getElementById('newKitDateInput').value;
+            const formattedDate = formatDateForDisplay(dateVal) || dateVal;
+            const msgBox = document.getElementById('kitRescheduleMessage');
+            if (msgBox) {
+                msgBox.value = `Nutrition Kit Pickup Rescheduled: Your nutrition kit pickup (${currentKitType}) for ${currentKitUser} has been rescheduled to ${formattedDate}. Kindly visit your Anganwadi center to collect your kit.`;
+            }
+        }
+
+        function openRescheduleKitModal(id, userName, kitType, currentDate) {
+            currentKitUser = userName;
+            currentKitType = kitType;
+            document.getElementById('rescheduleKitId').value = id;
+            document.getElementById('rescheduleKitInfoText').textContent = `Rescheduling kit pickup (${kitType}) for mother "${userName}".`;
+            const targetDate = currentDate || new Date().toISOString().split('T')[0];
+            document.getElementById('newKitDateInput').value = targetDate;
+            updateAutoKitRescheduleMessage();
+            document.getElementById('rescheduleKitModal').classList.add('show');
+        }
+
+        function closeRescheduleKitModal() {
+            document.getElementById('rescheduleKitModal').classList.remove('show');
+        }
+    </script>
+</body>
+</html>

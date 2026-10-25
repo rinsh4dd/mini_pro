@@ -1,0 +1,867 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit ASHA Worker - MaatriCare Admin</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #073423;
+            --sidebar-active: #154d37;
+            --sidebar-hover: #0e3d29;
+            --main-bg: #f9f6f0;
+            --card-bg: #ffffff;
+            --text-dark: #111827;
+            --text-muted: #6b7280;
+            --brand-green: #0f4a33;
+            --brand-green-hover: #0a3523;
+            --brand-green-light: #e6f4ee;
+            --border-color: #f0ebe1;
+            --input-bg: #faf8f4;
+            --input-border: #e2ddd3;
+            --info-card-light: #ece8df;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--main-bg);
+            display: flex;
+            color: var(--text-dark);
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.75rem 1rem;
+            min-height: 100vh;
+            flex-shrink: 0;
+        }
+
+        .brand-header {
+            padding: 0 0.75rem 1.75rem 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #a8d5be;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .brand-icon-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .brand-text-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .brand-subtitle {
+            font-size: 0.80rem;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.8rem 1rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item a:hover {
+            background-color: var(--sidebar-hover);
+            color: #ffffff;
+        }
+
+        .nav-item.active a {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .nav-item a i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .logout-wrapper {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.8rem 1rem;
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-link:hover {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+        }
+
+        /* ================= MAIN WRAPPER ================= */
+        .main-wrapper {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .topbar {
+            height: 76px;
+            background-color: var(--main-bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #374151;
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--brand-green);
+        }
+
+        .topbar-page-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            white-space: nowrap;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: #4b5563;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            color: var(--brand-green);
+            background-color: rgba(15, 74, 51, 0.08);
+        }
+
+        .notif-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 7px;
+            height: 7px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            border: 1.5px solid #ffffff;
+        }
+
+        .profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .avatar-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ================= PAGE CONTENT ================= */
+        .content-container {
+            padding: 2.25rem 2.5rem 3.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.85rem;
+            max-width: 1180px;
+            width: 100%;
+        }
+
+        .page-header-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .breadcrumb {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 0.35rem;
+        }
+
+        .breadcrumb a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--brand-green);
+        }
+
+        .breadcrumb-active {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .page-main-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+            margin-bottom: 0.3rem;
+        }
+
+        .page-subtitle {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background-color: var(--brand-green-light);
+            color: var(--brand-green);
+            padding: 0.45rem 0.95rem;
+            border-radius: 20px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            border: 1px solid #c9e6d7;
+            white-space: nowrap;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #10b981;
+            box-shadow: 0 0 6px #10b981;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 0.85rem 1.25rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background-color: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+        }
+
+        .alert-warning {
+            background-color: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #b45309;
+        }
+
+        .alert-error, .alert-danger {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+        }
+
+        .form-alert-box {
+            padding: 0.85rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            margin-bottom: 1.5rem;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            background-color: #fff7ed;
+            border: 1px solid #fed7aa;
+            color: #c2410c;
+        }
+
+        /* ================= FORM CARD ================= */
+        .form-card {
+            background-color: var(--card-bg);
+            border: 1px solid #ede7dc;
+            border-radius: 18px;
+            padding: 2.25rem 2.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.025);
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #f0ebe1;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-grid-2col {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--input-border);
+            border-radius: 10px;
+            background-color: var(--input-bg);
+            font-size: 0.92rem;
+            color: var(--text-dark);
+            transition: all 0.2s ease;
+        }
+
+        .form-input::placeholder, .form-textarea::placeholder {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            background-color: #ffffff;
+            border-color: var(--brand-green);
+            box-shadow: 0 0 0 3px rgba(15, 74, 51, 0.12);
+        }
+
+        .form-input.is-invalid, .form-select.is-invalid, .form-textarea.is-invalid {
+            border-color: #ef4444 !important;
+            background-color: #fffbfb;
+        }
+
+        .form-input.is-invalid:focus, .form-select.is-invalid:focus, .form-textarea.is-invalid:focus {
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+        }
+
+        .form-input.is-valid, .form-select.is-valid, .form-textarea.is-valid {
+            border-color: #10b981;
+        }
+
+        .field-warning {
+            color: #dc2626;
+            font-size: 0.78rem;
+            font-weight: 500;
+            margin-top: 0.35rem;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            line-height: 1.3;
+        }
+
+        .field-warning.active {
+            display: flex;
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%3C6B7280' %3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.1em;
+            padding-right: 2.5rem;
+            cursor: pointer;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 90px;
+            line-height: 1.5;
+        }
+
+        .status-radio-group {
+            display: flex;
+            align-items: center;
+            gap: 1.75rem;
+            padding: 0.72rem 1rem;
+            border: 1px solid var(--input-border);
+            border-radius: 10px;
+            background-color: var(--input-bg);
+            height: 45px;
+        }
+
+        .radio-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .radio-item input[type="radio"] {
+            accent-color: var(--brand-green);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .form-actions-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 1rem;
+            padding-top: 1rem;
+        }
+
+        .btn-cancel {
+            padding: 0.72rem 1.5rem;
+            background-color: #e2ede7;
+            color: #374151;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cancel:hover {
+            background-color: #d2e4db;
+        }
+
+        .btn-save {
+            padding: 0.72rem 1.6rem;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(15, 74, 51, 0.2);
+        }
+
+        .btn-save:hover {
+            background-color: #0b3927;
+            box-shadow: 0 6px 16px rgba(15, 74, 51, 0.3);
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+            }
+
+            .content-container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= ADMIN SIDEBAR ================= -->
+    {% include 'admin/sidebar.html' %}
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <div class="main-wrapper">
+        
+        <header class="topbar">
+            <div class="topbar-left">
+                <a href="/myapp/manage_asha/" class="back-btn" title="Back to Manage ASHA">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <h2 class="topbar-page-title">Edit ASHA Worker</h2>
+            </div>
+
+            <div class="topbar-right">
+                <div class="profile-pill">
+                    <div class="avatar-box">
+                        <img src="{% static 'images/mother_child_logo.png' %}" alt="Admin Avatar" onerror="this.onerror=null; this.src='/static/images/mother_child_logo.png';">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="content-container">
+            
+            <div class="page-header-row">
+                <div>
+                    <div class="breadcrumb">
+                        <a href="/myapp/manage_asha/">Community Support</a> / <span class="breadcrumb-active">Edit Worker</span>
+                    </div>
+                    <h1 class="page-main-title">Update Worker Profile</h1>
+                    <p class="page-subtitle">Modify the official records and assigned cluster for this ASHA worker.</p>
+                </div>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'success' }}">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="form-card">
+                <form action="/myapp/edit_asha/{{ asha.id }}/" method="POST" id="editAshaForm" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- SECTION 1: PERSONAL INFORMATION -->
+                    <div class="form-section">
+                        <div class="section-header">PERSONAL INFORMATION</div>
+                        
+                        <div class="form-grid-2col">
+                            <!-- Full Name -->
+                            <div class="form-group">
+                                <label class="form-label" for="full_name">Full Name</label>
+                                <input 
+                                    type="text" 
+                                    class="form-input" 
+                                    id="full_name" 
+                                    name="full_name" 
+                                    value="{{ asha.Full_name }}" 
+                                    placeholder="Enter worker's full name" 
+                                    required
+                                    minlength="3"
+                                >
+                            </div>
+
+                            <!-- Date of Birth (DOB) -->
+                            <div class="form-group">
+                                <label class="form-label" for="dob">Date of Birth (DOB)</label>
+                                <input 
+                                    type="date" 
+                                    class="form-input" 
+                                    id="dob" 
+                                    name="dob" 
+                                    value="{{ asha.dob|date:'Y-m-d'|default:'' }}" 
+                                    required
+                                >
+                                <small id="dobNotice" style="color: #047857; font-size: 0.78rem; margin-top: 4px; font-weight: 500;">Worker must be at least 18 years old.</small>
+                            </div>
+
+                            <!-- Contact Number -->
+                            <div class="form-group">
+                                <label class="form-label" for="phone">Contact Number</label>
+                                <input 
+                                    type="tel" 
+                                    class="form-input" 
+                                    id="phone" 
+                                    name="phone" 
+                                    value="{{ asha.Phone }}" 
+                                    placeholder="e.g. 9876543210" 
+                                    maxlength="10"
+                                    pattern="[6-9][0-9]{9}"
+                                    title="Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9."
+                                    oninvalid="if(this.validity.patternMismatch){this.setCustomValidity('Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9.');}else{this.setCustomValidity('');}"
+                                    oninput="this.setCustomValidity('')"
+                                    required
+                                >
+                            </div>
+
+                            <!-- Email Address -->
+                            <div class="form-group">
+                                <label class="form-label" for="email">Email Address</label>
+                                <input 
+                                    type="email" 
+                                    class="form-input" 
+                                    id="email" 
+                                    name="email" 
+                                    value="{{ asha.Email }}" 
+                                    placeholder="e.g. worker@gmail.com" 
+                                    pattern="[a-zA-Z0-9._%+-]+@[gG][mM][aA][iI][lL]\.[cC][oO][mM]" 
+                                    title="Please enter a valid @gmail.com email address" 
+                                    oninput="if(!/^[a-zA-Z0-9._%+-]+@gmail\.com$/i.test(this.value.trim())){this.setCustomValidity('Please enter a valid @gmail.com email address (e.g., example@gmail.com)');}else{this.setCustomValidity('');}"
+                                    oninvalid="this.setCustomValidity('Please enter a valid @gmail.com email address (e.g., example@gmail.com)')"
+                                    required
+                                >
+                            </div>
+
+                            <!-- Profile Image -->
+                            <div class="form-group">
+                                <label class="form-label" for="image">Profile Image</label>
+                                {% if asha.image %}
+                                    <div style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                                        <img src="{{ asha.image.url }}" alt="{{ asha.Full_name }}" style="width: 100px; height: 100px; object-fit: cover;">
+                                        <span style="font-size: 0.85rem; color: #6b7280;">Current: {{ asha.image.name }}</span>
+                                    </div>
+                                {% endif %}
+                                <input 
+                                    type="file" 
+                                    class="form-input" 
+                                    id="image" 
+                                    name="image" 
+                                    accept="image/*"
+                                >
+                            </div>
+
+                            <!-- Assigned Village/Area (5 Panchayath Areas) -->
+                            <div class="form-group">
+                                <label class="form-label" for="area_assigned">Assigned Panchayath Area (Jurisdiction)</label>
+                                <select class="form-select" id="area_assigned" name="area_assigned" required>
+                                    <option value="Ward 01 - Main Community Center" {% if asha.Area_assigned == 'Ward 01 - Main Community Center' or 'Ward 01' in asha.Area_assigned %}selected{% endif %}>Area 1: Ward 01 - Main Community Center</option>
+                                    <option value="Ward 02 - East Sector" {% if asha.Area_assigned == 'Ward 02 - East Sector' or 'Ward 02' in asha.Area_assigned %}selected{% endif %}>Area 2: Ward 02 - East Sector</option>
+                                    <option value="Ward 03 - West Gram" {% if asha.Area_assigned == 'Ward 03 - West Gram' or 'Ward 03' in asha.Area_assigned %}selected{% endif %}>Area 3: Ward 03 - West Gram</option>
+                                    <option value="Ward 04 - North Colony" {% if asha.Area_assigned == 'Ward 04 - North Colony' or 'Ward 04' in asha.Area_assigned %}selected{% endif %}>Area 4: Ward 04 - North Colony</option>
+                                    <option value="Ward 05 - South Extension" {% if asha.Area_assigned == 'Ward 05 - South Extension' or 'Ward 05' in asha.Area_assigned %}selected{% endif %}>Area 5: Ward 05 - South Extension</option>
+                                </select>
+                            </div>
+                        <br>
+
+                        </div>
+
+                        <!-- Residential Address -->
+                        <div class="form-group">
+                            <label class="form-label" for="address">Address</label>
+                            <textarea 
+                                class="form-textarea" 
+                                id="address" 
+                                name="address" 
+                                rows="3" 
+                                placeholder="Enter complete residential address" 
+                                required
+                            >{{ asha.Address }}</textarea>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2: PROFESSIONAL DETAILS -->
+                    <div class="form-section" style="margin-bottom: 1.5rem;">
+                        <div class="section-header">PROFESSIONAL DETAILS</div>
+                        
+                        <div class="form-grid-2col">
+                            <!-- Date of Joining -->
+                            <div class="form-group">
+                                <label class="form-label" for="joining_date">Date of Joining</label>
+                                <input 
+                                    type="date" 
+                                    class="form-input" 
+                                    id="joining_date" 
+                                    name="joining_date" 
+                                    value="{{ asha.Joining_date|date:'Y-m-d' }}" 
+                                    required
+                                >
+                                <small style="color: #6b7280; font-size: 0.78rem; margin-top: 4px;">Must be today or a past date.</small>
+                            </div>
+
+                            <!-- Current Status -->
+                            <div class="form-group">
+                                <label class="form-label">Current Status</label>
+                                <div class="status-radio-group">
+                                    <label class="radio-item">
+                                        <input type="radio" name="status" value="Active" {% if asha.Current_status == 'Active' or not asha.Current_status %}checked{% endif %}>
+                                        <span>Active</span>
+                                    </label>
+                                    <label class="radio-item">
+                                        <input type="radio" name="status" value="Inactive" {% if asha.Current_status == 'Inactive' %}checked{% endif %}>
+                                        <span>Inactive</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Qualifications & Certifications -->
+                        <div class="form-group">
+                            <label class="form-label" for="qualification">Qualifications & Certifications</label>
+                            <textarea 
+                                class="form-textarea" 
+                                id="qualification" 
+                                name="qualification" 
+                                rows="4" 
+                                placeholder="Detail any healthcare certifications, ASHA training module completion, or educational background..." 
+                                required
+                            >{{ asha.Qualification }}</textarea>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="form-actions-row">
+                        <a href="/myapp/manage_asha/" class="btn-cancel">Cancel</a>
+                        <button type="submit" class="btn-save">
+                            <i class="fa-solid fa-floppy-disk"></i> Update Worker
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+            
+            // Joining date max limit (cannot be future date)
+            const joiningInput = document.getElementById('joining_date');
+            if (joiningInput) {
+                joiningInput.setAttribute('max', todayStr);
+            }
+
+            // DOB max limit (must be at least 18 years old)
+            const maxDobYear = today.getFullYear() - 18;
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const maxDobStr = `${maxDobYear}-${month}-${day}`;
+
+            const dobInput = document.getElementById('dob');
+            if (dobInput) {
+                dobInput.setAttribute('max', maxDobStr);
+            }
+
+            // Email @gmail.com Form Submit Check
+            document.querySelectorAll('form').forEach(function(form) {
+                form.addEventListener('submit', function(e) {
+                    const emailInput = form.querySelector('input[name="email"]');
+                    if (emailInput && emailInput.value.trim()) {
+                        const val = emailInput.value.trim();
+                        if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/i.test(val)) {
+                            e.preventDefault();
+                            emailInput.setCustomValidity('Please enter a valid @gmail.com email address (e.g., example@gmail.com)');
+                            emailInput.reportValidity();
+                            emailInput.focus();
+                            return false;
+                        } else {
+                            emailInput.setCustomValidity('');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,807 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Growth Records - MaatriCare</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #062e20;
+            --sidebar-hover: rgba(255, 255, 255, 0.08);
+            --sidebar-active: #d7e6dc;
+            --sidebar-active-text: #062e20;
+            --sidebar-text: #e2e8e5;
+            --sidebar-muted: #8da89d;
+            --page-bg: #faf7f0;
+            --card-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --subcard-bg: #ede8dc;
+            --subcard-warm: #f6f3ed;
+            --border-color: #ede8dc;
+            --border-light: #e5e0d4;
+            --accent-green: #062e20;
+            --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--page-bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 240px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 100;
+            padding: 1.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-brand {
+            padding: 0.5rem 0.75rem 1.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--sidebar-bg);
+            font-size: 1.2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .sidebar-brand h2 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.01em;
+            line-height: 1.15;
+        }
+
+        .sidebar-brand p {
+            font-size: 0.68rem;
+            color: var(--sidebar-muted);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            width: 100%;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0.7rem 1rem;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+        }
+
+        .nav-link i {
+            font-size: 1.05rem;
+            width: 20px;
+            text-align: center;
+            color: #a4c2b5;
+        }
+
+        .nav-link:hover {
+            background-color: var(--sidebar-hover);
+            color: #ffffff;
+        }
+
+        .nav-link.active {
+            background-color: var(--sidebar-active);
+            color: var(--sidebar-active-text);
+            font-weight: 700;
+        }
+
+        .nav-link.active i {
+            color: var(--sidebar-active-text);
+        }
+
+        .sidebar-bottom {
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-sidebar-logout {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.7rem 1rem;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .btn-sidebar-logout i {
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+            color: #a4c2b5;
+        }
+
+        .btn-sidebar-logout:hover {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+        }
+
+        /* ================= MAIN WRAPPER ================= */
+        .main-wrapper {
+            margin-left: 240px;
+            flex-grow: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--page-bg);
+            position: relative;
+        }
+
+        .top-header {
+            padding: 1.1rem 2.5rem;
+            background-color: var(--page-bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .breadcrumb-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb-wrap a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb-wrap a:hover {
+            color: var(--accent-green);
+        }
+
+        .breadcrumb-sep {
+            color: #9ca3af;
+        }
+
+        .breadcrumb-current {
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        .user-pill-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--card-bg);
+            padding: 5px 12px 5px 6px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .user-avatar-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--subcard-bg);
+            color: var(--accent-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .user-pill-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .content-container {
+            padding: 1.5rem 2.5rem 4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Top Bar with Child Selector */
+        .child-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .page-title-group h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+        }
+
+        .page-title-group p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .child-select-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 12px;
+        }
+
+        .child-select-box select {
+            border: none;
+            background: transparent;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-main);
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* KPI Cards Grid */
+        .growth-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+        }
+
+        .kpi-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.35rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .kpi-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .kpi-green { background: #d1fae5; color: #065f46; }
+        .kpi-teal { background: #ccfbf1; color: #0f766e; }
+        .kpi-amber { background: #fef3c7; color: #b45309; }
+        .kpi-purple { background: #ede9fe; color: #6d28d9; }
+
+        .kpi-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .kpi-val {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+        }
+
+        .kpi-lbl {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* Table Card Container */
+        .records-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 1.75rem 2rem;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .records-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-light);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .records-card-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .records-card-title i {
+            color: var(--accent-green);
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .growth-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.88rem;
+        }
+
+        .growth-table th {
+            background-color: var(--subcard-warm);
+            color: #4b5563;
+            font-weight: 700;
+            padding: 0.85rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .growth-table td {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #f3eee3;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .growth-table tr:hover td {
+            background-color: #faf8f5;
+        }
+
+        .month-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--subcard-bg);
+            color: var(--sidebar-bg);
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .health-chip {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .health-chip.warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Empty State */
+        .empty-growth-state {
+            padding: 3.5rem 1.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: #6b7280;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            color: #cbd5e1;
+        }
+
+        /* WHO Guidelines Guidance Card */
+        .who-guidelines-box {
+            background: #eaf3ee;
+            border: 1px solid #d6e4db;
+            border-radius: 14px;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .who-icon {
+            font-size: 1.4rem;
+            color: #065f46;
+            margin-top: 2px;
+        }
+
+        .who-content h4 {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #064e3b;
+            margin-bottom: 4px;
+        }
+
+        .who-content p {
+            font-size: 0.84rem;
+            color: #065f46;
+            line-height: 1.45;
+        }
+
+        @media (max-width: 1024px) {
+            .growth-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .main-wrapper { margin-left: 0; }
+            .top-header { padding: 1rem 1.25rem; }
+            .content-container { padding: 1rem 1.25rem 3rem; }
+            .growth-kpi-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= LEFT SIDEBAR ================= -->
+    <aside class="sidebar">
+        <div>
+            <a href="/myapp/userhome/" class="sidebar-brand">
+                <div class="brand-logo-icon">
+                    <i class="fa-solid fa-person-breastfeeding"></i>
+                </div>
+                <div>
+                    <h2>MaatriCare</h2>
+                    <p>MATERNAL PORTAL</p>
+                </div>
+            </a>
+
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a href="/myapp/userhome/" class="nav-link">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_profile/" class="nav-link">
+                        <i class="fa-regular fa-user"></i>
+                        <span>My Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_pregnancy_record/" class="nav-link">
+                        <i class="fa-solid fa-person-pregnant"></i>
+                        <span>Pregnancy Record</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_child_profile/" class="nav-link">
+                        <i class="fa-regular fa-face-smile"></i>
+                        <span>Child Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_child_growth/" class="nav-link active">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Child Growth</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_vaccination_schedule/" class="nav-link">
+                        <i class="fa-solid fa-syringe"></i>
+                        <span>Vaccination</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_kit_history/" class="nav-link">
+                        <i class="fa-solid fa-box-archive"></i>
+                        <span>Nutrition Kits</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_notifications/" class="nav-link">
+                        <i class="fa-regular fa-bell"></i>
+                        <span>Notifications</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-bottom">
+            <a href="/myapp/logout/" class="btn-sidebar-logout">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN WRAPPER ================= -->
+    <div class="main-wrapper">
+        <header class="top-header">
+            <div class="breadcrumb-wrap">
+                <a href="/myapp/userhome/">Maternal Portal</a>
+                <span class="breadcrumb-sep">&rsaquo;</span>
+                <span class="breadcrumb-current">Child Growth Records</span>
+            </div>
+
+            <div class="user-pill-profile">
+                <div class="user-avatar-circle">
+                    <i class="fa-regular fa-user"></i>
+                </div>
+                <span class="user-pill-name">{{ mother.name|default:"Registered Mother" }}</span>
+            </div>
+        </header>
+
+        <main class="content-container">
+
+            {% if not selected_child %}
+            <div class="records-card" style="text-align: center; padding: 4rem 2rem;">
+                <div style="font-size: 3rem; color: #cbd5e1; margin-bottom: 1rem;">
+                    <i class="fa-solid fa-baby"></i>
+                </div>
+                <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">No Child Record Available</h2>
+                <p style="font-size: 0.9rem; color: var(--text-muted); max-width: 480px; margin: 0 auto;">
+                    You do not have a newborn child registered in the system yet. Once your delivery is recorded by your ASHA healthcare worker, monthly growth records will appear here.
+                </p>
+                <div style="margin-top: 1.5rem;">
+                    <a href="/myapp/userhome/" style="padding: 0.65rem 1.5rem; background: var(--sidebar-bg); color: #fff; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-house"></i> Return to Dashboard
+                    </a>
+                </div>
+            </div>
+            {% else %}
+
+            <!-- Header with Child Selector -->
+            <div class="child-header-bar">
+                <div class="page-title-group">
+                    <h1>{{ child_name }}'s Growth Tracking</h1>
+                    <p>Month-by-month physical growth logs recorded by your local ASHA healthcare worker.</p>
+                </div>
+
+                {% if children.count > 1 %}
+                <div class="child-select-box">
+                    <i class="fa-solid fa-children" style="color: var(--accent-green);"></i>
+                    <form method="GET" action="/myapp/user_child_growth/">
+                        <select name="child_id" onchange="this.form.submit()">
+                            {% for c in children %}
+                            <option value="{{ c.id }}" {% if c.id == selected_child.id %}selected{% endif %}>
+                                {{ c.child_name }} ({{ c.gender }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- KPI Metric Cards -->
+            <div class="growth-kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icon kpi-green">
+                        <i class="fa-solid fa-weight-scale"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-val">{{ current_weight_val }} kg</span>
+                        <span class="kpi-lbl">Current Weight</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon kpi-teal">
+                        <i class="fa-solid fa-ruler-vertical"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-val">{{ current_height_val }} cm</span>
+                        <span class="kpi-lbl">Current Height</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon kpi-amber">
+                        <i class="fa-solid fa-baby"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-val">{{ child_birth_weight }}</span>
+                        <span class="kpi-lbl">Birth Weight</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon kpi-purple">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-val">{{ records_count }}</span>
+                        <span class="kpi-lbl">Growth Checkups Logged</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Growth Records Table -->
+            <div class="records-card">
+                <div class="records-card-header">
+                    <div>
+                        <h2 class="records-card-title">
+                            <i class="fa-solid fa-chart-line"></i> Month-by-Month Clinical Checkup History
+                        </h2>
+                        <p style="font-size: 0.8rem; color: #64748b; margin-top: 3px;">
+                            First Child: <strong>{{ child_name }}</strong> (Delivered from Pregnancy #1 on Aug 15, 2024 &bull; Complete 12-Month Pediatric Records)
+                        </p>
+                    </div>
+                    <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">
+                        Patient ID: {{ child_id_str }} &bull; DOB: {{ child_dob }}
+                    </span>
+                </div>
+
+                {% if growth_logs_data %}
+                <div class="table-responsive">
+                    <table class="growth-table">
+                        <thead>
+                            <tr>
+                                <th>Growth Stage</th>
+                                <th>Checkup Date</th>
+                                <th>Weight (kg)</th>
+                                <th>Height (cm)</th>
+                                <th>Health Condition</th>
+                                <th>Observations & Notes</th>
+                                <th>Attached Media / Report</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for g in growth_logs_data %}
+                            <tr>
+                                <td>
+                                    <span class="month-badge" style="{% if g.month == 0 %}background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; font-weight: 800;{% endif %} display: inline-flex; align-items: center; gap: 6px;">
+                                        <i class="fa-regular fa-calendar-check"></i> {{ g.stage_label }}
+                                    </span>
+                                </td>
+                                <td>{{ g.date }}</td>
+                                <td style="font-weight: 800; color: var(--accent-green);">{{ g.weight }}</td>
+                                <td style="font-weight: 800;">{{ g.height }}</td>
+                                <td>
+                                    <span class="health-chip {% if 'underweight' in g.condition|lower or 'stunt' in g.condition|lower %}warning{% endif %}">
+                                        {{ g.condition }}
+                                    </span>
+                                </td>
+                                <td style="color: #4b5563; font-weight: 500;">{{ g.details }}</td>
+                                <td>
+                                    {% if g.media_url %}
+                                    <a href="{{ g.media_url }}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.82rem; transition: all 0.2s ease;">
+                                        {% if g.media_type == 'image' %}
+                                            <i class="fa-solid fa-image" style="color: #0284c7;"></i> View Image
+                                        {% elif g.media_type == 'pdf' %}
+                                            <i class="fa-solid fa-file-pdf" style="color: #e11d48;"></i> View PDF
+                                        {% else %}
+                                            <i class="fa-solid fa-paperclip" style="color: #0284c7;"></i> View File
+                                        {% endif %}
+                                    </a>
+                                    {% else %}
+                                    <span style="display: inline-flex; align-items: center; gap: 4px; color: #9ca3af; font-size: 0.82rem; font-weight: 600;">
+                                        <i class="fa-solid fa-minus"></i> None
+                                    </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-growth-state">
+                    <div class="empty-icon">
+                        <i class="fa-solid fa-folder-open"></i>
+                    </div>
+                    <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main);">No Monthly Checkup Logs Yet</h3>
+                    <p style="font-size: 0.88rem; max-width: 420px;">
+                        Monthly checkup entries recorded by your ASHA healthcare worker during routine home visits will appear in this timeline.
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Pediatric Growth Guidelines Card -->
+            <div class="who-guidelines-box">
+                <i class="fa-solid fa-shield-heart who-icon"></i>
+                <div class="who-content">
+                    <h4>World Health Organization (WHO) Growth Monitoring Guidelines</h4>
+                    <p>
+                        A steady increase in weight and height is the most reliable indicator of your child's nutrition and vitality. If you notice a sudden drop in feeding or no weight gain over a month, consult your local ASHA worker or pediatrician immediately.
+                    </p>
+                </div>
+            </div>
+
+            {% endif %}
+
+        </main>
+    </div>
+
+</body>
+</html>

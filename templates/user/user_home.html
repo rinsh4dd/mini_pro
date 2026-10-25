@@ -1,0 +1,1679 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MaatriCare - Maternal Health Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-bg: #062e20;
+            --sidebar-hover: rgba(255, 255, 255, 0.08);
+            --sidebar-active: rgba(255, 255, 255, 0.14);
+            --sidebar-text: #e2e8e5;
+            --sidebar-muted: #8da89d;
+            --page-bg: #faf7f0;
+            --card-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --subcard-bg: #ede8dc;
+            --border-color: #ede8dc;
+            --border-light: #e5e0d4;
+            --accent-green: #062e20;
+            --accent-green-light: #d6e4db;
+            --accent-green-pill: #eaf3ee;
+            --accent-red: #dc2626;
+            --accent-red-border: #dc2626;
+            --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--page-bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 240px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 100;
+            padding: 1.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-brand {
+            padding: 0.5rem 0.75rem 1.75rem;
+            text-decoration: none;
+            display: block;
+        }
+
+        .sidebar-brand h2 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+        }
+
+        .sidebar-brand p {
+            font-size: 0.78rem;
+            color: var(--sidebar-muted);
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            width: 100%;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0.7rem 1rem;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+        }
+
+        .nav-link i {
+            font-size: 1.05rem;
+            width: 20px;
+            text-align: center;
+            color: #a4c2b5;
+        }
+
+        .nav-link:hover {
+            background-color: var(--sidebar-hover);
+            color: #ffffff;
+        }
+
+        .nav-link.active {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .nav-link.active i {
+            color: #ffffff;
+        }
+
+        .sidebar-bottom {
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-sidebar-logout {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.7rem 1rem;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .btn-sidebar-logout i {
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+            color: #a4c2b5;
+        }
+
+        .btn-sidebar-logout:hover {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+        }
+        .btn-sidebar-logout:hover i {
+            color: #fca5a5;
+        }
+
+        /* ================= MAIN CONTAINER ================= */
+        .main-wrapper {
+            margin-left: 240px;
+            flex-grow: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--page-bg);
+            position: relative;
+        }
+
+        /* Top Header */
+        .top-header {
+            padding: 1.1rem 2.5rem;
+            background-color: var(--page-bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .search-box-wrap {
+            position: relative;
+            width: 360px;
+            max-width: 100%;
+        }
+
+        .search-box-wrap i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8b968f;
+            font-size: 0.9rem;
+        }
+
+        .search-input {
+            width: 100%;
+            background-color: var(--subcard-bg);
+            border: 1px solid transparent;
+            border-radius: 8px;
+            padding: 0.65rem 1rem 0.65rem 2.4rem;
+            font-size: 0.88rem;
+            color: var(--text-main);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input::placeholder {
+            color: #8b968f;
+        }
+
+        .search-input:focus {
+            border-color: #cbd5e1;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(6, 46, 32, 0.06);
+        }
+
+        .top-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .top-action-btn {
+            background: none;
+            border: none;
+            color: #4b5563;
+            font-size: 1.15rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .top-action-btn:hover {
+            background-color: var(--subcard-bg);
+            color: var(--accent-green);
+        }
+
+        .notif-badge-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-red);
+            border-radius: 50%;
+        }
+
+        /* Content Area */
+        .content-container {
+            padding: 0.5rem 2.5rem 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Greeting & Calendar */
+        .hero-greeting-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.25rem;
+        }
+
+        .hero-greeting-bar h1 {
+            font-size: 1.95rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero-greeting-bar p {
+            color: #4b5563;
+            font-size: 0.95rem;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .date-pill-badge {
+            background-color: var(--subcard-bg);
+            color: #374151;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        /* 2 Top KPI Cards: Pregnancy Stage & New Notifications */
+        .kpi-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .kpi-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.25rem 1.35rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 105px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(6, 46, 32, 0.06);
+        }
+
+        .kpi-card-with-accent {
+            border-left: 3.5px solid var(--accent-green);
+        }
+
+        .kpi-card-notif {
+            border-left: 3.5px solid var(--accent-red-border);
+        }
+
+        .kpi-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .kpi-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #374151;
+            text-transform: capitalize;
+            letter-spacing: 0.01em;
+        }
+
+        .kpi-icon {
+            font-size: 0.95rem;
+            color: #4b5563;
+        }
+
+        .kpi-icon-red {
+            color: var(--accent-red);
+        }
+
+        .kpi-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-top: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        /* 2-Column Main Section */
+        .portal-main-grid {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 1.25rem;
+            margin-top: 0.25rem;
+        }
+
+        .portal-panel {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.65rem 1.75rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .panel-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+        }
+
+        .panel-badge-right {
+            text-align: right;
+        }
+
+        .panel-badge-right .due-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #6b7280;
+            font-weight: 700;
+        }
+
+        .panel-badge-right .due-value {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-top: 2px;
+        }
+
+        .btn-more-options {
+            background-color: var(--subcard-bg);
+            border: none;
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 0.95rem;
+            color: #4b5563;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-more-options:hover {
+            background-color: #dfd8c7;
+            color: var(--text-main);
+        }
+
+        /* Pregnancy Progress Bar */
+        .gestation-track-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            padding: 0.25rem 0;
+        }
+
+        .track-labels-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .track-indicator-active {
+            color: var(--accent-green);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 9px;
+            background-color: var(--accent-green-light);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-inner {
+            height: 100%;
+            background-color: var(--accent-green);
+            border-radius: 10px;
+            transition: width 0.8s ease;
+        }
+
+        /* Info Sub-Boxes */
+        .subboxes-2col {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+
+        .sub-box {
+            background-color: var(--subcard-bg);
+            border-radius: 10px;
+            padding: 1.15rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sub-box-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        .sub-box-value {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+        }
+
+        /* Child Growth List & Visual Area */
+        .child-growth-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .growth-metric-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .growth-icon-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+        }
+
+        .growth-icon-circle.green {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .growth-icon-circle.teal {
+            background-color: #ccfbf1;
+            color: #0f766e;
+        }
+
+        .growth-metric-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .growth-metric-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        .growth-metric-value {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .child-visual-card {
+            background-color: var(--subcard-bg);
+            border-radius: 12px;
+            height: 135px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #8b968f;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .child-visual-card:hover {
+            background-color: #e5ded0;
+            color: var(--accent-green);
+        }
+
+        .child-visual-card i {
+            font-size: 2.2rem;
+        }
+
+        /* ================= FLOATING ACTION BUTTON (FAB) ================= */
+        .fab-button {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 15px rgba(6, 46, 32, 0.35);
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            z-index: 99;
+        }
+
+        .fab-button:hover {
+            transform: scale(1.08);
+            background-color: #0c4a34;
+        }
+
+        /* ================= MODAL DIALOGS ================= */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 20px;
+            max-width: 650px;
+            width: 100%;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            animation: modalFadeIn 0.25s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(12px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .modal-header {
+            padding: 1.25rem 1.75rem;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close-btn {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            opacity: 1;
+        }
+
+        .modal-body {
+            padding: 1.5rem 1.75rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .modal-item-box {
+            background: #faf8f5;
+            border: 1px solid #e7e2d6;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .modal-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--sidebar-bg);
+        }
+
+        .modal-item-meta {
+            font-size: 0.82rem;
+            color: #6b7280;
+        }
+
+        .chip-status {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .chip-status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .kpi-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .portal-main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-wrapper {
+                margin-left: 0;
+            }
+            .top-header {
+                padding: 1rem 1.25rem;
+            }
+            .content-container {
+                padding: 0.5rem 1.25rem 3rem;
+            }
+            .kpi-cards-grid {
+                grid-template-columns: 1fr;
+            }
+            .subboxes-2col {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= LEFT SIDEBAR ================= -->
+    <aside class="sidebar" id="mainSidebar">
+        <div>
+            <!-- Brand Header -->
+            <a href="/myapp/userhome/" class="sidebar-brand">
+                <h2>MaatriCare</h2>
+                <p>Maternal Health</p>
+            </a>
+
+            <!-- Navigation Links -->
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a href="/myapp/userhome/" class="nav-link active">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_profile/" class="nav-link">
+                        <i class="fa-regular fa-user"></i>
+                        <span>My Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_pregnancy_record/" class="nav-link">
+                        <i class="fa-solid fa-person-pregnant"></i>
+                        <span>Pregnancy Record</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_child_profile/" class="nav-link">
+                        <i class="fa-regular fa-face-smile"></i>
+                        <span>Child Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_child_growth/" class="nav-link">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Child Growth</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_vaccination_schedule/" class="nav-link">
+                        <i class="fa-solid fa-syringe"></i>
+                        <span>Vaccination</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_kit_history/" class="nav-link">
+                        <i class="fa-solid fa-box-archive"></i>
+                        <span>Nutrition Kits</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/myapp/user_notifications/" class="nav-link" style="display: flex; align-items: center; justify-content: space-between;">
+                        <span style="display: flex; align-items: center; gap: 14px;">
+                            <i class="fa-regular fa-bell"></i>
+                            <span>Notifications</span>
+                        </span>
+                        {% if notif_count > 0 %}
+                        <span id="sidebarNotifBadge" style="background: #dc2626; color: #ffffff; font-size: 0.7rem; font-weight: 800; padding: 2px 7px; border-radius: 10px;">{{ notif_count }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Bottom Logout -->
+        <div class="sidebar-bottom">
+            <a href="/myapp/logout/" class="btn-sidebar-logout">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN WRAPPER ================= -->
+    <div class="main-wrapper">
+
+        <!-- Top Header Navigation -->
+        <header class="top-header" style="justify-content: flex-end;">
+            <div class="top-header-actions" style="display: flex; align-items: center; gap: 14px;">
+                <a href="/myapp/user_notifications/" class="top-action-btn" title="Notifications" style="position: relative; text-decoration: none;">
+                    <i class="fa-regular fa-bell"></i>
+                    {% if notif_count > 0 %}
+                    <span id="headerNotifBadge" style="position: absolute; top: -4px; right: -4px; width: 18px; height: 18px; background: #dc2626; color: #ffffff; border-radius: 50%; font-size: 0.65rem; font-weight: 800; display: flex; align-items: center; justify-content: center;">{{ notif_count }}</span>
+                    {% endif %}
+                </a>
+                <a href="/myapp/user_profile/" class="user-pill-profile" style="text-decoration: none; display: flex; align-items: center; gap: 8px; background: var(--card-bg); padding: 5px 12px 5px 6px; border-radius: 30px; border: 1px solid var(--border-color);">
+                    <div class="user-avatar-circle" style="width: 32px; height: 32px; border-radius: 50%; background: var(--subcard-bg); color: var(--accent-green); display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">
+                        <i class="fa-regular fa-user"></i>
+                    </div>
+                    <span class="user-pill-name" style="font-size: 0.85rem; font-weight: 700; color: var(--text-main);">{{ mother.name|default:"Registered Mother" }}</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Content Body -->
+        <main class="content-container">
+
+            <!-- Greeting Banner & Date Pill -->
+            <div class="hero-greeting-bar">
+                <div>
+                    <h1>Hello, {{ mother.name|default:"Mother" }} 👋</h1>
+                    <p>Here's your maternal health and child care summary for today.</p>
+                </div>
+                <div class="date-pill-badge" title="Current Health Record Date">
+                    <i class="fa-regular fa-calendar"></i>
+                    <span>{{ today|default:"---" }}</span>
+                </div>
+            </div>
+
+            <!-- Top KPI Cards (Pregnancy Stage & New Notifications) -->
+            <div class="kpi-cards-grid">
+                <!-- Card 1: Pregnancy Stage -->
+                <div class="kpi-card kpi-card-with-accent" onclick="window.location.href='/myapp/user_pregnancy_record/'" style="cursor: pointer;" title="View Pregnancy Record">
+                    <div class="kpi-header-row">
+                        <span class="kpi-title">Pregnancy Stage</span>
+                        <i class="fa-solid fa-person-pregnant kpi-icon"></i>
+                    </div>
+                    <div class="kpi-value">{{ pregnancy_stage_str|default:"---" }}</div>
+                </div>
+
+                <!-- Card 2: New Notifications (strictly unseen count) -->
+                <div class="kpi-card kpi-card-notif" onclick="if(document.getElementById('loginNotifModal')){ openModal('loginNotifModal'); } else { openModal('notifModal'); }" style="cursor: pointer;" title="View Notifications & Alerts">
+                    <div class="kpi-header-row">
+                        <span class="kpi-title">New Notifications</span>
+                        <i class="fa-regular fa-bell kpi-icon kpi-icon-red"></i>
+                    </div>
+                    <div class="kpi-value" id="kpiNotifCount">{{ notif_count|default:"0" }}</div>
+                </div>
+            </div>
+
+            <!-- 2-Column Main Section -->
+            <div class="portal-main-grid">
+
+                <!-- Left Panel: Pregnancy Progress -->
+                <div class="portal-panel" id="pregnancyPanel">
+                    <div class="panel-header-row">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                {% if is_currently_pregnant %}
+                                <h2 class="panel-title">Active Pregnancy Progress</h2>
+                                <span style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.02em;">PREGNANCY #{{ current_preg_number }} • MONTH {{ gest_month|default:1 }}</span>
+                                {% elif has_delivered %}
+                                <h2 class="panel-title">Postpartum Health & Care</h2>
+                                <span style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.02em;">STATUS: DELIVERED</span>
+                                {% else %}
+                                <h2 class="panel-title">Active Pregnancy Progress</h2>
+                                <span style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.02em;">PREGNANCY #1 • MONTH {{ gest_month|default:1 }}</span>
+                                {% endif %}
+                            </div>
+                            <p style="font-size: 0.78rem; color: #64748b; margin-top: 3px;">
+                                {% if is_currently_pregnant %}
+                                <i class="fa-solid fa-person-pregnant" style="color: var(--accent-green); margin-right: 4px;"></i>{% if current_preg_number > 1 %}Expecting Second Baby{% else %}Expecting Baby{% endif %} • Due {{ edd_str|default:"---" }} • Trimester {{ trimester|default:3 }} (Week {{ gest_weeks|default:29 }})
+                                {% elif has_delivered %}
+                                <i class="fa-solid fa-baby" style="color: #047857; margin-right: 4px;"></i>Delivered Mother • Postpartum Care & Child Immunization Phase
+                                {% else %}
+                                <i class="fa-solid fa-person-pregnant" style="color: var(--accent-green); margin-right: 4px;"></i>Registered Mother • Health Monitoring
+                                {% endif %}
+                            </p>
+                        </div>
+                        {% if not has_delivered and edd_str %}
+                        <div class="panel-badge-right">
+                            <div class="due-label">DUE DATE</div>
+                            <div class="due-value">{{ edd_str|default:"---" }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Gestational Track -->
+                    <div class="gestation-track-section">
+                        <div class="track-labels-row">
+                            <span>Week 1</span>
+                            <span class="track-indicator-active">Week {{ gest_weeks|default:"0" }}</span>
+                            <span>Week 40</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-inner" style="width: {{ gest_percent|default:0 }}%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Info Sub-Boxes -->
+                    <div class="subboxes-2col">
+                        {% if not has_delivered %}
+                        <div class="sub-box">
+                            <span class="sub-box-label">Days to go</span>
+                            <span class="sub-box-value">{{ days_to_go_str|default:"---" }}</span>
+                        </div>
+                        {% else %}
+                        <div class="sub-box">
+                            <span class="sub-box-label">Delivery Status</span>
+                            <span class="sub-box-value" style="color: #065f46; font-weight: 800;">Completed</span>
+                        </div>
+                        {% endif %}
+                        <div class="sub-box">
+                            <span class="sub-box-label">Current Weight</span>
+                            <span class="sub-box-value">{{ current_weight_str|default:"---" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Child Growth -->
+                <div class="portal-panel" id="childPanel">
+                    <div class="panel-header-row">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <h2 class="panel-title">Child Growth Records</h2>
+                                {% if first_child %}
+                                <span style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.02em;">CHILD #1 • FROM PREGNANCY #1</span>
+                                {% endif %}
+                            </div>
+                            <p style="font-size: 0.78rem; color: #64748b; margin-top: 3px;">
+                                {% if first_child %}
+                                <i class="fa-solid fa-child" style="color: #0284c7; margin-right: 4px;"></i>{{ first_child.child_name }} (Born {{ first_child.date_of_birth|date:"M d, Y"|default:"Aug 15, 2024" }} • Age: {{ first_child_age_str|default:"2 Years" }} • All {{ first_child_growth_count|default:"12" }} Months Recorded)
+                                {% else %}
+                                <i class="fa-solid fa-circle-info" style="color: #64748b; margin-right: 4px;"></i>No delivered child registered yet.
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Metrics List -->
+                    <div class="child-growth-list">
+                        <!-- Weight -->
+                        <div class="growth-metric-item">
+                            <div class="growth-icon-circle green">
+                                <i class="fa-regular fa-face-smile"></i>
+                            </div>
+                            <div class="growth-metric-info">
+                                <span class="growth-metric-label">Weight</span>
+                                <span class="growth-metric-value">{{ child_weight_str|default:"---" }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Height -->
+                        <div class="growth-metric-item">
+                            <div class="growth-icon-circle teal">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+                            <div class="growth-metric-info">
+                                <span class="growth-metric-label">Height</span>
+                                <span class="growth-metric-value">{{ child_height_str|default:"---" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- ================= INTERACTIVE MODALS ================= -->
+
+    <!-- Pregnancy Modal -->
+    <div class="modal-overlay" id="pregnancyModal">
+        <div class="modal-card" style="max-width: 640px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-person-pregnant"></i> Pregnancy Clinical Records</h3>
+                <button class="modal-close-btn" onclick="closeModal('pregnancyModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" style="max-height: 520px; overflow-y: auto;">
+                {% if has_multiple_pregnancies %}
+                    <!-- Pregnancy #2: Active 7th Month -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <div style="background: #e0f2fe; padding: 8px 12px; border-radius: 8px; border-left: 4px solid #0284c7; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-weight: 800; color: #0369a1; font-size: 0.88rem;"><i class="fa-solid fa-baby" style="margin-right: 5px;"></i>PREGNANCY #2 (Current • Month 7 Active)</span>
+                            <span style="font-size: 0.78rem; font-weight: 700; color: #0284c7;">EDD: {{ edd_str|default:"Dec 14, 2026" }}</span>
+                        </div>
+                        {% for rec in current_preg_records %}
+                        <div class="modal-item-box" style="margin-bottom: 8px;">
+                            <div class="modal-item-header">
+                                <span>Checkup: {{ rec.checkup_date|date:"F d, Y" }} ({{ rec.gestation_week_display }})</span>
+                                <span class="chip-status">{{ rec.health_status|default:"Normal" }}</span>
+                            </div>
+                            <div class="modal-item-meta">
+                                <strong>Weight:</strong> {{ rec.weight }} kg &bull; 
+                                <strong>BP:</strong> {{ rec.blood_pressure|default:"120/80" }} &bull; 
+                                <strong>Hb:</strong> {{ rec.hemoglobin|default:"12.0" }} g/dL
+                            </div>
+                            {% if rec.additional_report %}
+                            <div style="font-size: 0.8rem; color: #4b5563; margin-top: 3px;">
+                                <em>{{ rec.additional_report }}</em>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Pregnancy #1: Delivered First Child -->
+                    <div>
+                        <div style="background: #ecfdf5; padding: 8px 12px; border-radius: 8px; border-left: 4px solid #059669; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-weight: 800; color: #047857; font-size: 0.88rem;"><i class="fa-solid fa-child" style="margin-right: 5px;"></i>PREGNANCY #1 RESULT (Delivered Child: {{ first_child.child_name|default:"Aarav Krishna" }})</span>
+                            <span style="font-size: 0.78rem; font-weight: 700; color: #059669;">Delivered: {{ first_child.date_of_birth|date:"M d, Y"|default:"Aug 15, 2024" }}</span>
+                        </div>
+                        {% for rec in previous_preg_records %}
+                        <div class="modal-item-box" style="margin-bottom: 8px;">
+                            <div class="modal-item-header">
+                                <span>Checkup: {{ rec.checkup_date|date:"F d, Y" }} (Month {{ forloop.counter }})</span>
+                                <span class="chip-status">{{ rec.health_status|default:"Normal" }}</span>
+                            </div>
+                            <div class="modal-item-meta">
+                                <strong>Weight:</strong> {{ rec.weight }} kg &bull; 
+                                <strong>BP:</strong> {{ rec.blood_pressure|default:"120/80" }} &bull; 
+                                <strong>Hb:</strong> {{ rec.hemoglobin|default:"12.0" }} g/dL
+                            </div>
+                            {% if rec.additional_report %}
+                            <div style="font-size: 0.8rem; color: #4b5563; margin-top: 3px;">
+                                <em>{{ rec.additional_report }}</em>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {% for rec in all_pregnancy_records %}
+                    <div class="modal-item-box">
+                        <div class="modal-item-header">
+                            <span>Checkup: {{ rec.checkup_date|date:"F d, Y" }}</span>
+                            <span class="chip-status">{{ rec.health_status|default:"Normal" }}</span>
+                        </div>
+                        <div class="modal-item-meta">
+                            <strong>Expected Delivery:</strong> {{ rec.expected_delivery_date|date:"F d, Y" }} &bull; 
+                            <strong>Blood Pressure:</strong> {{ rec.blood_pressure|default:"120/80" }} &bull; 
+                            <strong>Hemoglobin:</strong> {{ rec.hemoglobin|default:"11.5" }} g/dL &bull; 
+                            <strong>Weight:</strong> {{ rec.weight }} kg
+                        </div>
+                        {% if rec.additional_report %}
+                        <div style="font-size: 0.82rem; color: #4b5563; margin-top: 4px;">
+                            <em>Notes: {{ rec.additional_report }}</em>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% empty %}
+                    <div style="text-align: center; padding: 2rem; color: #6b7280;">
+                        <i class="fa-solid fa-clipboard-list" style="font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                        <p>No pregnancy checkup record added yet.</p>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Child Growth Modal -->
+    <div class="modal-overlay" id="childModal">
+        <div class="modal-card" style="max-width: 580px;">
+            <div class="modal-header">
+                <h3><i class="fa-regular fa-face-smile"></i> Child Growth & Milestones</h3>
+                <button class="modal-close-btn" onclick="closeModal('childModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" style="max-height: 520px; overflow-y: auto;">
+                {% if children %}
+                    {% for ch in children %}
+                    <div class="modal-item-box" style="background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); border: 1.5px solid #bbf7d0; border-left: 5px solid #10b981; padding: 1.1rem 1.25rem;">
+                        <div class="modal-item-header">
+                            <span style="font-size: 1.05rem; font-weight: 800; color: #062e20;">👶 {{ ch.child_name }} ({{ ch.gender }})</span>
+                            <span class="chip-status" style="background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; font-weight: 800;">
+                                {{ ch.health_status|default:"Healthy" }}
+                            </span>
+                        </div>
+                        <div class="modal-item-meta" style="margin-top: 6px; line-height: 1.6;">
+                            <strong>Date of Birth:</strong> {{ ch.date_of_birth|date:"M d, Y" }} &bull; 
+                            <strong>Birth Weight:</strong> {{ ch.birth_weight }} kg &bull; 
+                            <strong>Birth Height:</strong> {{ ch.birth_height }} cm &bull; 
+                            <strong>Blood Group:</strong> {{ ch.blood_group|default:"O+" }}
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    {% if all_growth_records %}
+                    <div style="margin-top: 1.1rem;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                            <h4 style="font-size: 0.85rem; font-weight: 800; color: #062e20; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
+                                <i class="fa-solid fa-chart-line" style="color: #065f46;"></i> Checkup & Growth Milestones
+                            </h4>
+                            <a href="/myapp/user_child_growth/" style="font-size: 0.8rem; font-weight: 700; color: #065f46; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                                Full Tracker <i class="fa-solid fa-arrow-right" style="font-size: 0.72rem;"></i>
+                            </a>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            {% for g in all_growth_records %}
+                            <div class="modal-item-box" style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid {% if g.month == 0 %}#10b981{% else %}#0284c7{% endif %}; padding: 0.85rem 1rem;">
+                                <div class="modal-item-header">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <span style="{% if g.month == 0 %}background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0;{% else %}background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;{% endif %} font-weight: 800; padding: 2px 9px; border-radius: 20px; font-size: 0.74rem; display: inline-flex; align-items: center; gap: 4px;">
+                                            <i class="fa-regular fa-calendar-check"></i> {{ g.stage_label }}
+                                        </span>
+                                        <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">{{ g.date }}</span>
+                                    </div>
+                                    <span class="chip-status" style="font-size: 0.72rem;">{{ g.health_condition|default:"Normal" }}</span>
+                                </div>
+                                <div class="modal-item-meta" style="margin-top: 6px;">
+                                    <strong>Weight:</strong> {{ g.weight }} kg &bull; 
+                                    <strong>Height:</strong> {{ g.height }} cm
+                                    {% if g.report_details %}&bull; <span style="color: #4b5563;">{{ g.report_details }}</span>{% endif %}
+                                    {% if g.media_url %}
+                                    <div style="margin-top: 6px;">
+                                        <a href="{{ g.media_url }}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.72rem;">
+                                            {% if g.media_type == 'image' %}
+                                                <i class="fa-solid fa-image"></i> View Attached Image
+                                            {% elif g.media_type == 'pdf' %}
+                                                <i class="fa-solid fa-file-pdf" style="color: #e11d48;"></i> View Attached PDF
+                                            {% else %}
+                                                <i class="fa-solid fa-paperclip"></i> View Attached Report
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div style="text-align: center; padding: 2rem; color: #6b7280;">
+                        <i class="fa-regular fa-face-smile" style="font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                        <p>No child record added yet under this profile.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Vaccination Modal -->
+    <div class="modal-overlay" id="vaccineModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-syringe"></i> Child Immunization Schedule</h3>
+                <button class="modal-close-btn" onclick="closeModal('vaccineModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                {% if all_vax_records %}
+                    {% for v in all_vax_records %}
+                    <div class="modal-item-box">
+                        <div class="modal-item-header">
+                            <span>{{ v.vaccine_name }} {% if v.vaccine_code %}({{ v.vaccine_code }}){% endif %}</span>
+                            <span class="chip-status" style="{% if v.effective_status == 'Taken' %}background: #dcfce7; color: #166534; border: 1px solid #bbf7d0;{% elif v.effective_status == 'Missed' %}background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5;{% elif v.effective_status == 'Rescheduled' %}background: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe;{% else %}background: #fef3c7; color: #92400e; border: 1px solid #fde68a;{% endif %}">
+                                {% if v.effective_status == 'Taken' %}
+                                    <i class="fa-solid fa-circle-check"></i> Taken / Administered
+                                {% elif v.effective_status == 'Missed' %}
+                                    <i class="fa-solid fa-circle-exclamation"></i> Missed Dose
+                                {% elif v.effective_status == 'Rescheduled' %}
+                                    <i class="fa-solid fa-clock-rotate-left"></i> Rescheduled
+                                {% else %}
+                                    <i class="fa-solid fa-clock"></i> Scheduled
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="modal-item-meta">
+                            <strong>Type:</strong> {{ v.vaccine_type|default:"General Vaccine" }} &bull; 
+                            <strong>Date:</strong> {{ v.vaccination_date|date:"M d, Y"|default:"TBD" }}
+                        </div>
+                        {% if v.description %}
+                        <div style="font-size: 0.8rem; color: #4b5563;">{{ v.description }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="text-align: center; padding: 2rem; color: #6b7280;">
+                        <i class="fa-solid fa-syringe" style="font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                        <p>No active scheduled or administered vaccination records yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Nutrition Kit Modal -->
+    <div class="modal-overlay" id="kitModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-box-archive"></i> Nutrition Kit Supplies & Distribution</h3>
+                <button class="modal-close-btn" onclick="closeModal('kitModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                {% if kits %}
+                    {% for k in kits %}
+                    <div class="modal-item-box">
+                        <div class="modal-item-header">
+                            <span>📦 {{ k.product_name|default:k.kit_type }}</span>
+                            <span class="chip-status">Issued</span>
+                        </div>
+                        <div class="modal-item-meta">
+                            <strong>Type:</strong> {{ k.kit_type }} &bull; 
+                            <strong>Quantity:</strong> {{ k.quantity }} Pack(s) &bull; 
+                            <strong>Distribution Date:</strong> {{ k.distribution_date|date:"M d, Y" }}
+                        </div>
+                        {% if k.product_details %}
+                        <div style="font-size: 0.8rem; color: #4b5563;">{{ k.product_details }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="text-align: center; padding: 2rem; color: #6b7280;">
+                        <i class="fa-solid fa-box-archive" style="font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                        <p>No nutrition kit record added yet. Check back with your Anganwadi center!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Modal (Strictly Kit from Anganwadi & Vaccine from Admin) -->
+    <div class="modal-overlay" id="notifModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-regular fa-bell"></i> Notifications & Center Alerts</h3>
+                <button class="modal-close-btn" onclick="closeModal('notifModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" style="max-height: 520px; overflow-y: auto;">
+                {% if active_notifs or past_notifs %}
+                    <!-- Active & Upcoming Section -->
+                    <div style="margin-bottom: 1rem;">
+                        <div style="font-size: 0.8rem; font-weight: 800; color: #065f46; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+                            <span><i class="fa-solid fa-bell"></i> Active & Upcoming Alerts</span>
+                            <span style="background: #d1fae5; color: #065f46; font-size: 0.72rem; padding: 2px 8px; border-radius: 12px; font-weight: 800;">{{ active_notifs|length }}</span>
+                        </div>
+
+                        {% if active_notifs %}
+                            {% for n in active_notifs %}
+                            <div class="modal-item-box" style="{% if n.is_rescheduled %}background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%); border: 1.5px solid #e879f9; border-left: 5px solid #c026d3; box-shadow: 0 4px 12px rgba(192, 38, 211, 0.08);{% else %}border-left: 4px solid {% if n.type == 'vaccine' %}#f59e0b{% else %}#0284c7{% endif %};{% endif %}">
+                                <div class="modal-item-header">
+                                    <span style="display: inline-flex; align-items: center; gap: 6px;">
+                                        {% if n.is_rescheduled %}
+                                        <i class="fa-solid fa-clock-rotate-left" style="color: #7e22ce;"></i>
+                                        {% elif n.type == 'vaccine' %}
+                                        <i class="fa-solid fa-syringe" style="color: #d97706;"></i>
+                                        {% else %}
+                                        <i class="fa-solid fa-box-archive" style="color: #0284c7;"></i>
+                                        {% endif %}
+                                        <strong style="{% if n.is_rescheduled %}color: #701a75;{% endif %}">{{ n.title|default:"Alert" }}</strong>
+                                    </span>
+                                    <span style="font-size: 0.78rem; color: #6b7280;"><i class="fa-regular fa-clock"></i> {{ n.date }}</span>
+                                </div>
+                                <div style="margin: 4px 0;">
+                                    <span style="font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 5px; display: inline-flex; align-items: center; gap: 4px; {% if n.is_rescheduled %}background: #fae8ff; color: #86198f; border: 1px solid #f0abfc;{% elif n.type == 'vaccine' %}background: #fef3c7; color: #92400e; border: 1px solid #fde68a;{% else %}background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;{% endif %}">
+                                        {% if n.is_rescheduled %}<i class="fa-solid fa-clock-rotate-left"></i>{% elif n.type == 'vaccine' %}<i class="fa-solid fa-shield-halved"></i>{% else %}<i class="fa-solid fa-chalkboard-user"></i>{% endif %}
+                                        {{ n.sender_badge }}
+                                    </span>
+                                    {% if n.is_new %}
+                                    <span style="background: #dc2626; color: #ffffff; font-size: 0.65rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; margin-left: 6px;">NEW</span>
+                                    {% endif %}
+                                </div>
+                                <div style="font-size: 0.88rem; color: {% if n.is_rescheduled %}#4a044e{% else %}#1f2937{% endif %}; margin-top: 4px; line-height: 1.45;">
+                                    {{ n.message }}
+                                </div>
+                                <div style="margin-top: 8px; text-align: right;">
+                                    <a href="{{ n.link }}" style="font-size: 0.8rem; font-weight: 700; color: #065f46; text-decoration: none;">
+                                        {{ n.action_label }} &rarr;
+                                    </a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 0.85rem 1rem; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #166534;">
+                                <i class="fa-solid fa-circle-check" style="font-size: 1.1rem; color: #16a34a;"></i>
+                                <span>You are up to date! No unread or upcoming alerts.</span>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Past Notifications History (Seen & Date Passed) -->
+                    {% if past_notifs %}
+                    <details style="margin-top: 1.25rem; border: 1px solid var(--border-color); border-radius: 14px; padding: 0.85rem 1.1rem; background: #fafaf9; box-shadow: 0 1px 4px rgba(0,0,0,0.03);">
+                        <summary style="font-size: 0.84rem; font-weight: 800; color: #475569; cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none;">
+                            <span style="display: inline-flex; align-items: center; gap: 8px;">
+                                <i class="fa-solid fa-clock-rotate-left" style="color: #64748b;"></i> Past Notifications History ({{ past_notifs|length }})
+                                <span style="font-size: 0.68rem; color: #94a3b8; font-weight: 600; background: #f1f5f9; padding: 2px 7px; border-radius: 10px; border: 1px solid #e2e8f0;"><i class="fa-regular fa-clock"></i> Cleared after 1 day</span>
+                            </span>
+                            <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 600;">Click to view &bull; 24h archive</span>
+                        </summary>
+                        <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+                            {% for n in past_notifs %}
+                            <div class="modal-item-box" style="background: #ffffff; opacity: 0.94; border: 1px solid #e2e8f0; border-left: 4px solid #94a3b8; padding: 0.85rem 1rem;">
+                                <div class="modal-item-header">
+                                    <span style="font-size: 0.88rem; font-weight: 700; color: #334155;">{{ n.title }}</span>
+                                    <span style="font-size: 0.75rem; color: #94a3b8;"><i class="fa-regular fa-clock"></i> {{ n.date }}</span>
+                                </div>
+                                <div style="font-size: 0.83rem; color: #64748b; margin-top: 4px; line-height: 1.45;">
+                                    {{ n.message }}
+                                </div>
+                                <div style="margin-top: 8px; display: flex; align-items: center; justify-content: space-between;">
+                                    <span style="font-size: 0.7rem; color: #64748b; font-weight: 700; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
+                                        <i class="fa-solid fa-check"></i> Past Event
+                                    </span>
+                                    <a href="{{ n.link }}" style="font-size: 0.78rem; font-weight: 700; color: #065f46; text-decoration: none;">
+                                        {{ n.action_label }} &rarr;
+                                    </a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </details>
+                    {% endif %}
+
+                    <div style="text-align: center; margin-top: 1.25rem;">
+                        <a href="/myapp/user_notifications/" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 800; color: #065f46; text-decoration: none; padding: 6px 14px; background: rgba(6, 95, 70, 0.08); border-radius: 8px;">
+                            View Notification Center &rarr;
+                        </a>
+                    </div>
+                {% else %}
+                    <div style="text-align: center; padding: 2rem; color: #6b7280;">
+                        <i class="fa-regular fa-bell" style="font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.5;"></i>
+                        <p>You have 0 alerts at this time.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Notification Pop-up Modal -->
+    {% if show_login_popup and popup_notifications %}
+    <div class="modal-overlay active" id="loginNotifModal" style="display: flex; z-index: 9999;">
+        <div class="modal-card" style="max-width: 580px; border: 2px solid rgba(6, 95, 70, 0.2); box-shadow: 0 25px 50px -12px rgba(6, 46, 32, 0.35); border-radius: 20px;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #062e20 0%, #0d4a36 100%); color: #ffffff; padding: 1.25rem 1.6rem; border-radius: 18px 18px 0 0;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #fde047; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
+                        <i class="fa-solid fa-bell"></i>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0;">Welcome, {{ mother.name }}!</h3>
+                        <p style="font-size: 0.82rem; color: #a7f3d0; margin: 2px 0 0 0;">You have {{ popup_notifications|length }} new notification{{ popup_notifications|length|pluralize }} from Admin & Anganwadi</p>
+                    </div>
+                </div>
+                <button class="modal-close-btn" onclick="handleRemindMeAgain()" title="Remind me again" style="color: #ffffff; background: rgba(255,255,255,0.15);"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" style="padding: 1.25rem 1.5rem; max-height: 420px; overflow-y: auto;">
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    {% for n in popup_notifications %}
+                    <div style="border-radius: 14px; padding: 1rem; {% if n.is_rescheduled %}background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%); border: 1.5px solid #e879f9; border-left: 5px solid #c026d3; box-shadow: 0 4px 14px rgba(192, 38, 211, 0.1);{% else %}background: {% if n.type == 'vaccine' %}#fffdf7{% else %}#f8fafc{% endif %}; border: 1px solid #e2e8f0; border-left: 4px solid {% if n.type == 'vaccine' %}#f59e0b{% else %}#0284c7{% endif %};{% endif %}">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                            <span style="font-size: 0.74rem; font-weight: 800; padding: 2px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 5px; {% if n.is_rescheduled %}background: #fae8ff; color: #86198f; border: 1px solid #f0abfc;{% elif n.type == 'vaccine' %}background: #fef3c7; color: #92400e; border: 1px solid #fde68a;{% else %}background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;{% endif %}">
+                                {% if n.is_rescheduled %}
+                                <i class="fa-solid fa-clock-rotate-left"></i> {{ n.sender_badge }}
+                                {% elif n.type == 'vaccine' %}
+                                <i class="fa-solid fa-syringe"></i> {{ n.sender_badge }}
+                                {% else %}
+                                <i class="fa-solid fa-box-archive"></i> {{ n.sender_badge }}
+                                {% endif %}
+                            </span>
+                            <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">
+                                <i class="fa-regular fa-clock"></i> {{ n.date }}
+                            </span>
+                        </div>
+                        <div style="font-size: 0.92rem; font-weight: 700; color: {% if n.is_rescheduled %}#701a75{% else %}#0f172a{% endif %}; margin-bottom: 4px;">
+                            {{ n.title }}
+                        </div>
+                        <div style="font-size: 0.86rem; color: {% if n.is_rescheduled %}#4a044e{% else %}#334155{% endif %}; line-height: 1.45;">
+                            {{ n.message }}
+                        </div>
+                        <div style="margin-top: 10px; display: flex; justify-content: flex-end;">
+                            <a href="{{ n.link }}" style="font-size: 0.82rem; font-weight: 700; color: {% if n.is_rescheduled %}#86198f{% else %}#065f46{% endif %}; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; background: {% if n.is_rescheduled %}rgba(192, 38, 211, 0.08){% else %}rgba(6, 95, 70, 0.08){% endif %}; border-radius: 6px;">
+                                {{ n.action_label }} <i class="fa-solid fa-arrow-right" style="font-size: 0.75rem;"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div style="padding: 1.1rem 1.6rem; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; border-radius: 0 0 18px 18px; flex-wrap: wrap; gap: 12px;">
+                <a href="/myapp/user_notifications/" style="font-size: 0.85rem; font-weight: 700; color: #065f46; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-list-check"></i> View Notification Center
+                </a>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button type="button" onclick="handleRemindMeAgain()" id="btnRemindMeAgain" style="padding: 0.6rem 1.25rem; background: #ffffff; color: #334155; border: 1.5px solid #cbd5e1; border-radius: 9px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); transition: all 0.2s;">
+                        <i class="fa-regular fa-clock" style="color: #64748b;"></i> Remind me again
+                    </button>
+                    <button type="button" onclick="handleConfirmOkPopup()" id="btnConfirmOkPopup" style="padding: 0.6rem 1.45rem; background: linear-gradient(135deg, #062e20 0%, #0d4a36 100%); color: #ffffff; border: none; border-radius: 9px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; box-shadow: 0 4px 12px rgba(6, 46, 32, 0.25); transition: all 0.2s;">
+                        <i class="fa-solid fa-check"></i> OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Profile Modal -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-regular fa-user"></i> Registered Mother Profile</h3>
+                <button class="modal-close-btn" onclick="closeModal('profileModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                {% if mother %}
+                <div class="modal-item-box" style="gap: 10px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="font-size: 1.1rem; font-weight: 800; color: #062e20;">{{ mother.name }}</span>
+                        <span class="chip-status">Active Beneficiary</span>
+                    </div>
+                    <div class="modal-item-meta" style="line-height: 1.6;">
+                        <strong>Husband's Name:</strong> {{ mother.husband_name }}<br>
+                        <strong>Age:</strong> {{ mother.age }} Years &bull; <strong>DOB:</strong> {{ mother.dob|date:"M d, Y" }}<br>
+                        <strong>Blood Group:</strong> {{ mother.blood_group }}<br>
+                        <strong>Contact Phone:</strong> {{ mother.phone }}<br>
+                        <strong>Email Address:</strong> {{ mother.Email }}<br>
+                        <strong>Panchayath / Ward:</strong> {{ mother.panchayath }}<br>
+                        <strong>Address:</strong> {{ mother.Address }}, {{ mother.district }}, {{ mother.state }} - {{ mother.pincode }}
+                    </div>
+                </div>
+
+                {% if mother.ASHA %}
+                <div class="modal-item-box" style="background: #f0fdf4; border-color: #bbf7d0;">
+                    <span style="font-size: 0.92rem; font-weight: 800; color: #065f46;">Assigned ASHA Healthcare Worker</span>
+                    <div class="modal-item-meta" style="margin-top: 4px;">
+                        <strong>Name:</strong> {{ mother.ASHA.Full_name }} &bull; 
+                        <strong>Phone:</strong> {{ mother.ASHA.Phone }} &bull; 
+                        <strong>Area:</strong> {{ mother.ASHA.Area_assigned }}
+                    </div>
+                </div>
+                {% endif %}
+                {% else %}
+                <p style="color: #6b7280; text-align: center;">Profile data is not available.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal-overlay" id="helpModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-regular fa-circle-question"></i> MaatriCare Help & Guidance</h3>
+                <button class="modal-close-btn" onclick="closeModal('helpModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-item-box">
+                    <strong style="color: #062e20;">Maternal Health & Routine Checkups</strong>
+                    <p style="font-size: 0.85rem; color: #4b5563; margin-top: 4px;">
+                        Your pregnancy stage and gestational tracking updates automatically based on regular checkups recorded by your ASHA healthcare worker.
+                    </p>
+                </div>
+                <div class="modal-item-box">
+                    <strong style="color: #062e20;">Nutrition Kit Collection</strong>
+                    <p style="font-size: 0.85rem; color: #4b5563; margin-top: 4px;">
+                        Monthly supplemental nutrition kits can be collected from your designated Anganwadi Center. Check notifications for pickup schedules.
+                    </p>
+                </div>
+                <div class="modal-item-box">
+                    <strong style="color: #062e20;">Emergency Helpline</strong>
+                    <p style="font-size: 0.85rem; color: #4b5563; margin-top: 4px;">
+                        National Maternal & Child Health Helpline: <strong>1075 / 108</strong> (24/7 Toll-Free).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions Modal -->
+    <div class="modal-overlay" id="quickActionsModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-bolt"></i> Quick Maternal Actions</h3>
+                <button class="modal-close-btn" onclick="closeModal('quickActionsModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <button class="sub-box" style="border: 1px solid #e7e2d6; cursor: pointer; text-align: left;" onclick="closeModal('quickActionsModal'); openModal('pregnancyModal');">
+                        <i class="fa-solid fa-person-pregnant" style="font-size: 1.25rem; color: #062e20; margin-bottom: 6px;"></i>
+                        <span style="font-weight: 700; font-size: 0.9rem; color: #062e20;">Pregnancy Records</span>
+                        <span style="font-size: 0.75rem; color: #6b7280;">View all antenatal checkups</span>
+                    </button>
+
+                    <button class="sub-box" style="border: 1px solid #e7e2d6; cursor: pointer; text-align: left;" onclick="closeModal('quickActionsModal'); openModal('childModal');">
+                        <i class="fa-regular fa-face-smile" style="font-size: 1.25rem; color: #062e20; margin-bottom: 6px;"></i>
+                        <span style="font-weight: 700; font-size: 0.9rem; color: #062e20;">Child Growth</span>
+                        <span style="font-size: 0.75rem; color: #6b7280;">View weight & height logs</span>
+                    </button>
+
+                    <button class="sub-box" style="border: 1px solid #e7e2d6; cursor: pointer; text-align: left;" onclick="closeModal('quickActionsModal'); openModal('vaccineModal');">
+                        <i class="fa-solid fa-syringe" style="font-size: 1.25rem; color: #062e20; margin-bottom: 6px;"></i>
+                        <span style="font-weight: 700; font-size: 0.9rem; color: #062e20;">Vaccination Plan</span>
+                        <span style="font-size: 0.75rem; color: #6b7280;">Check upcoming immunizations</span>
+                    </button>
+
+                    <button class="sub-box" style="border: 1px solid #e7e2d6; cursor: pointer; text-align: left;" onclick="closeModal('quickActionsModal'); openModal('kitModal');">
+                        <i class="fa-solid fa-box-archive" style="font-size: 1.25rem; color: #062e20; margin-bottom: 6px;"></i>
+                        <span style="font-weight: 700; font-size: 0.9rem; color: #062e20;">Nutrition Kits</span>
+                        <span style="font-size: 0.75rem; color: #6b7280;">Track kit distribution</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Interactivity & Modals -->
+    <script>
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+                modal.style.display = 'flex';
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+                modal.style.display = 'none';
+            }
+        }
+
+        function handleRemindMeAgain() {
+            closeModal('loginNotifModal');
+            fetch('/myapp/mark_notifications_seen/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: 'action=remind_again'
+            }).then(r => r.json()).then(data => {
+                showToastNotification('Reminder set: This notification will pop up again next time you log in.');
+            }).catch(err => console.error(err));
+        }
+
+        function handleConfirmOkPopup() {
+            closeModal('loginNotifModal');
+            fetch('/myapp/mark_notifications_seen/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: 'action=ok&all=1'
+            }).then(r => r.json()).then(data => {
+                const hb = document.getElementById('headerNotifBadge');
+                if (hb) hb.remove();
+                const kb = document.getElementById('kpiNotifCount');
+                if (kb) kb.textContent = '0';
+                const sb = document.getElementById('sidebarNotifBadge');
+                if (sb) sb.remove();
+                showToastNotification('Notification acknowledged and marked as read.');
+            }).catch(err => console.error(err));
+        }
+
+        function dismissLoginPopup() {
+            handleRemindMeAgain();
+        }
+
+        function showToastNotification(message) {
+            let toast = document.getElementById('dashboardFloatingToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'dashboardFloatingToast';
+                toast.style.position = 'fixed';
+                toast.style.bottom = '24px';
+                toast.style.right = '24px';
+                toast.style.zIndex = '99999';
+                toast.style.background = '#062e20';
+                toast.style.color = '#ffffff';
+                toast.style.padding = '12px 20px';
+                toast.style.borderRadius = '12px';
+                toast.style.boxShadow = '0 10px 25px rgba(0,0,0,0.25)';
+                toast.style.fontSize = '0.88rem';
+                toast.style.fontWeight = '600';
+                toast.style.display = 'flex';
+                toast.style.alignItems = 'center';
+                toast.style.gap = '10px';
+                toast.style.transition = 'all 0.3s ease';
+                toast.innerHTML = '<i class="fa-solid fa-circle-check" style="color: #6ee7b7; font-size: 1.1rem;"></i> <span id="dashboardToastMsg"></span>';
+                document.body.appendChild(toast);
+            }
+            document.getElementById('dashboardToastMsg').textContent = message;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateY(0)';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+            }, 3500);
+        }
+
+        // Close on clicking outside modal card (clicking outside sets Remind Me Again)
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal-overlay')) {
+                if (e.target.id === 'loginNotifModal') {
+                    handleRemindMeAgain();
+                } else {
+                    e.target.classList.remove('active');
+                }
+            }
+        });
+
+
+
+        function switchDashboardTab(tab) {
+            // Dashboard button keeps user on the home overview
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Auto-open Login Notification Pop-up on page load when user logs in
+        document.addEventListener('DOMContentLoaded', function() {
+            {% if show_login_popup and popup_notifications %}
+            openModal('loginNotifModal');
+            {% endif %}
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,636 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MaatriCare</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --brand-green: #144d37;
+            --brand-green-hover: #0c3525;
+            --brand-green-light: #eaf4ef;
+            --brand-green-border: #cfe3d8;
+            --bg-warm: #f6f3ed;
+            --card-bg: #ffffff;
+            --text-dark: #111827;
+            --text-muted: #6b7280;
+            --text-placeholder: #9ca3af;
+            --border-color: #e5e7eb;
+            --border-card: #ebe5dc;
+            --input-focus: #144d37;
+            --shadow-card: 0 12px 36px rgba(20, 77, 55, 0.07), 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--bg-warm);
+            background-image: 
+                radial-gradient(at 15% 15%, rgba(20, 77, 55, 0.04) 0px, transparent 50%),
+                radial-gradient(at 85% 85%, rgba(20, 77, 55, 0.04) 0px, transparent 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        /* Login Card Container */
+        .login-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-card);
+            border-radius: 20px;
+            padding: 2.75rem 2.25rem 2.5rem;
+            width: 100%;
+            max-width: 410px;
+            box-shadow: var(--shadow-card);
+            position: relative;
+            animation: fadeIn 0.35s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mother Holding Child Shadow Logo Badge */
+        .logo-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .logo-circle {
+            width: 82px;
+            height: 82px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2.5px solid var(--brand-green-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(20, 77, 55, 0.1);
+            background-color: #a8d5be;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .logo-circle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(20, 77, 55, 0.16);
+        }
+
+        .logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Headings */
+        .card-header {
+            text-align: center;
+            margin-bottom: 1.65rem;
+        }
+
+        .card-title {
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: #111827;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.35rem;
+            transition: all 0.2s ease;
+        }
+
+        .card-subtitle {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            transition: all 0.2s ease;
+        }
+
+        /* Alert Notifications */
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            line-height: 1.35;
+        }
+
+        .alert-warning {
+            background-color: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #b45309;
+        }
+
+        .alert-error, .alert-danger {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+        }
+
+        .alert-success {
+            background-color: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+        }
+
+        .form-alert-box {
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-size: 0.86rem;
+            margin-bottom: 1.25rem;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            line-height: 1.35;
+            background-color: #fff7ed;
+            border: 1px solid #fed7aa;
+            color: #c2410c;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 1.2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.45rem;
+            display: block;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .field-icon {
+            position: absolute;
+            left: 14px;
+            color: var(--text-placeholder);
+            font-size: 0.95rem;
+            pointer-events: none;
+            transition: color 0.2s ease;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.78rem 1rem 0.78rem 2.65rem;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.92rem;
+            color: var(--text-dark);
+            background-color: #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        .form-input.has-toggle {
+            padding-right: 2.75rem;
+        }
+
+        .form-input::placeholder {
+            color: var(--text-placeholder);
+            font-size: 0.9rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--brand-green);
+            box-shadow: 0 0 0 3px rgba(20, 77, 55, 0.12);
+        }
+
+        .form-input.is-invalid {
+            border-color: #ef4444 !important;
+            background-color: #fffbfb;
+        }
+
+        .form-input.is-invalid:focus {
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+        }
+
+        .form-input.is-valid {
+            border-color: #10b981;
+        }
+
+        .field-warning {
+            color: #dc2626;
+            font-size: 0.78rem;
+            font-weight: 500;
+            margin-top: 0.35rem;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            line-height: 1.3;
+        }
+
+        .field-warning.active {
+            display: flex;
+        }
+
+        .input-wrapper:focus-within .field-icon {
+            color: var(--brand-green);
+        }
+
+        /* Password Eye Toggle */
+        .btn-toggle-pw {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            color: var(--text-placeholder);
+            cursor: pointer;
+            padding: 6px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+        }
+
+        .btn-toggle-pw:hover {
+            color: var(--text-dark);
+        }
+
+        /* Forgot Password Link */
+        .forgot-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: -0.35rem;
+            margin-bottom: 1.35rem;
+        }
+
+        .forgot-link {
+            font-size: 0.84rem;
+            font-weight: 500;
+            color: var(--brand-green);
+            text-decoration: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            transition: color 0.2s ease, text-decoration 0.2s ease;
+        }
+
+        .forgot-link:hover {
+            color: var(--brand-green-hover);
+            text-decoration: underline;
+        }
+
+        /* Action Buttons */
+        .btn-login {
+            width: 100%;
+            padding: 0.82rem 1.25rem;
+            background-color: var(--brand-green);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.96rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(20, 77, 55, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-login:hover {
+            background-color: var(--brand-green-hover);
+            box-shadow: 0 6px 18px rgba(20, 77, 55, 0.28);
+            transform: translateY(-1px);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        /* Bottom Prompts */
+        .register-prompt {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        .register-link {
+            color: var(--brand-green);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            margin-left: 3px;
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .register-link:hover {
+            color: var(--brand-green-hover);
+            text-decoration: underline;
+        }
+
+        /* Form view transition */
+        .form-view {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 2.25rem 1.5rem 2rem;
+                border-radius: 16px;
+            }
+
+            .card-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <a href="/" style="color: var(--text-muted); font-size: 0.84rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-weight: 500; transition: color 0.2s ease;">
+                <i class="fa-solid fa-arrow-left"></i> Back to Home
+            </a>
+            <span style="font-size: 0.78rem; font-weight: 700; color: var(--brand-green); text-transform: uppercase; letter-spacing: 0.05em;">MaatriCare</span>
+        </div>
+
+        <!-- Mother Holding Child Shadow Logo -->
+        <div class="logo-wrapper">
+            <a href="/" class="logo-circle" title="MaatriCare - Return to Home">
+                <img src="{% static 'images/mother_child_logo.png' %}" alt="Mother Holding Child Silhouette" class="logo-img" onerror="this.onerror=null; this.src='/static/images/mother_child_logo.png';">
+            </a>
+        </div>
+
+        <!-- Dynamic Header Titles -->
+        <div class="card-header">
+            <h1 class="card-title" id="formHeaderTitle">Welcome Back!</h1>
+            <p class="card-subtitle" id="formHeaderSubtitle">Login to your account</p>
+        </div>
+
+        <!-- Django Messages / Alert -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'warning' }}">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if error %}
+            <div class="alert alert-error">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span>{{ error }}</span>
+            </div>
+        {% endif %}
+
+        <!-- ================= 1. LOGIN FORM ================= -->
+        <div id="loginFormSection" class="form-view">
+            <form method="POST" action="/myapp/login_post/" id="loginForm">
+                {% csrf_token %}
+
+                <!-- Username Field -->
+                <div class="form-group">
+                    <label class="form-label" for="username">Username / Email</label>
+                    <div class="input-wrapper">
+                        <i class="fa-regular fa-user field-icon"></i>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            class="form-input" 
+                            placeholder="Enter username or email" 
+                            value="{{ prefill_username|default:'' }}"
+                            autocomplete="username"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock field-icon"></i>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form-input has-toggle" 
+                            placeholder="Enter password" 
+                            autocomplete="current-password"
+                            required
+                        >
+                        <button 
+                            type="button" 
+                            class="btn-toggle-pw" 
+                            onclick="togglePasswordVisibility('password', 'pwdToggleIcon')" 
+                            aria-label="Toggle password visibility"
+                            title="Show/Hide password"
+                        >
+                            <i class="fa-regular fa-eye" id="pwdToggleIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Forgot Password Trigger Button -->
+                <div class="forgot-row">
+                    <button type="button" class="forgot-link" onclick="switchToChangePassword()">Forgot Password?</button>
+                </div>
+
+                <!-- Login Button -->
+                <button type="submit" class="btn-login" id="loginBtn">
+                    Login
+                </button>
+
+                <!-- Register Prompt -->
+                <div class="register-prompt">
+                    Don't have an account? <a href="/myapp/user_registartion/" class="register-link">Register Now</a>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- ================= 2. CHANGE PASSWORD FORM (SAME PAGE) ================= -->
+        <div id="changePasswordSection" class="form-view" style="display: none;">
+            <form method="POST" action="/myapp/change_password_post/" id="changePasswordForm">
+                {% csrf_token %}
+
+                <!-- Username Field -->
+                <div class="form-group">
+                    <label class="form-label" for="reset_username">Username / Email</label>
+                    <div class="input-wrapper">
+                        <i class="fa-regular fa-user field-icon"></i>
+                        <input 
+                            type="text" 
+                            id="reset_username" 
+                            name="username" 
+                            class="form-input" 
+                            placeholder="Enter your username or email" 
+                            value="{{ reset_username|default:'' }}"
+                            autocomplete="username"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <!-- New Password Field -->
+                <div class="form-group">
+                    <label class="form-label" for="new_password">New Password</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock field-icon"></i>
+                        <input 
+                            type="password" 
+                            id="new_password" 
+                            name="new_password" 
+                            class="form-input has-toggle" 
+                            placeholder="Enter new password (min 6 characters)" 
+                            autocomplete="new-password"
+                            required
+                            minlength="6"
+                        >
+                        <button 
+                            type="button" 
+                            class="btn-toggle-pw" 
+                            onclick="togglePasswordVisibility('new_password', 'newPwdIcon')" 
+                            aria-label="Toggle new password visibility"
+                            title="Show/Hide password"
+                        >
+                            <i class="fa-regular fa-eye" id="newPwdIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Confirm New Password Field -->
+                <div class="form-group">
+                    <label class="form-label" for="confirm_password">Confirm New Password</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-shield-halved field-icon"></i>
+                        <input 
+                            type="password" 
+                            id="confirm_password" 
+                            name="confirm_password" 
+                            class="form-input has-toggle" 
+                            placeholder="Confirm new password" 
+                            autocomplete="new-password"
+                            required
+                            minlength="6"
+                        >
+                        <button 
+                            type="button" 
+                            class="btn-toggle-pw" 
+                            onclick="togglePasswordVisibility('confirm_password', 'confirmPwdIcon')" 
+                            aria-label="Toggle confirm password visibility"
+                            title="Show/Hide password"
+                        >
+                            <i class="fa-regular fa-eye" id="confirmPwdIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Change Password Submit Button -->
+                <button type="submit" class="btn-login" style="margin-top: 0.5rem;">
+                    Change Password
+                </button>
+
+                <!-- Back to Login Prompt -->
+                <div class="register-prompt">
+                    Remember your password? <button type="button" class="register-link" onclick="switchToLogin()">Back to Login</button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // Toggle Password Field Visibility
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fa-regular fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fa-regular fa-eye';
+            }
+        }
+
+        // Switch to Change Password view on the same page
+        function switchToChangePassword() {
+            document.getElementById('loginFormSection').style.display = 'none';
+            document.getElementById('changePasswordSection').style.display = 'block';
+            document.getElementById('formHeaderTitle').textContent = 'Change Password';
+            document.getElementById('formHeaderSubtitle').textContent = 'Set a new password for your account';
+            
+            const typedUser = document.getElementById('username').value.trim();
+            if (typedUser && !document.getElementById('reset_username').value.trim()) {
+                document.getElementById('reset_username').value = typedUser;
+            }
+            document.getElementById('reset_username').focus();
+        }
+
+        // Switch back to Login view on the same page
+        function switchToLogin() {
+            document.getElementById('changePasswordSection').style.display = 'none';
+            document.getElementById('loginFormSection').style.display = 'block';
+            document.getElementById('formHeaderTitle').textContent = 'Welcome Back!';
+            document.getElementById('formHeaderSubtitle').textContent = 'Login to your account';
+            document.getElementById('username').focus();
+        }
+
+        // Confirm Password Match Check
+        document.getElementById('changePasswordForm').addEventListener('submit', function(e) {
+            const p1 = document.getElementById('new_password').value;
+            const p2 = document.getElementById('confirm_password').value;
+            if (p1 !== p2) {
+                e.preventDefault();
+                alert('Passwords do not match. Please re-enter your password.');
+                document.getElementById('confirm_password').focus();
+            }
+        });
+
+        // Check if server indicated active_tab == 'forgot'
+        {% if active_tab == 'forgot' %}
+            switchToChangePassword();
+        {% endif %}
+    </script>
+</body>
+</html>
