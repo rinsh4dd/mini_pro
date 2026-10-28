@@ -382,3 +382,40 @@ The project uses a MySQL relational database named **`healthcare`**, managed via
    - User identity and permissions are tracked across HTTP requests via HTTP-only session cookies (`sessionid`) and Django session backends.
    - Every state-altering form (`POST`) contains Django's `{% csrf_token %}` to prevent Cross-Site Request Forgery attacks.
    - Role boundaries are strictly enforced inside Python view functions using Django's `request.user.groups` verification and session-stored identifier bindings (`request.session['asha_id']`, `mother = user_table.objects.filter(LOGIN=request.user).first()`).
+
+---
+
+## 7. System Credentials Reference & Demo Accounts
+
+All credentials can be initialized or refreshed into the database using:
+```bash
+python manage.py seed_demo_data
+```
+
+### 7.1 Administrator Account
+| Role | Username | Password | Email | Access Scope |
+| :--- | :--- | :--- | :--- | :--- |
+| **System Administrator** | `admin` | `admin123` | `admin@gmail.com` | Full Administrative Portal (`/myapp/adminhome/`) & Django Admin (`/admin/`) |
+
+### 7.2 ASHA Healthcare Workers (Panchayath Wards 01 to 05)
+| Ward Code | Assigned Area | Staff Name | Username | Password | Contact Phone |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Ward 01** | Main Community Center | Fatima Beevi | `asha01` | `asha01` | 9847123456 |
+| **Ward 02** | East Sector | Kavitha Nair | `asha02` | `asha02` | 9847123458 |
+| **Ward 03** | West Gram | Priya Nair | `asha03` | `asha03` | 9847234567 |
+| **Ward 04** | North Colony | Rekha Menon | `asha04` | `asha04` | 9847345677 |
+| **Ward 05** | South Extension | Mary Joseph | `asha05` | `asha05` | 9847345678 |
+
+### 7.3 Anganwadi Teachers (Centers 01 to 05)
+| Ward Code | Anganwadi Center | Teacher Name | Username | Password | Contact Phone |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Ward 01** | Model Anganwadi Center 01 | Anita Sharma | `teacher01` | `teacher01` | 9847456789 |
+| **Ward 02** | Community Anganwadi Center 02 | Lakshmi Menon | `teacher02` | `teacher02` | 9847567890 |
+| **Ward 03** | West Gram Anganwadi Center 03 | Sunitha Varghese | `teacher03` | `teacher03` | 9847678901 |
+| **Ward 04** | North Colony Anganwadi Center 04 | Radhika Pillai | `teacher04` | `teacher04` | 9847789012 |
+| **Ward 05** | South Extension Anganwadi Center 05 | Deepa Mohan | `teacher05` | `teacher05` | 9847890123 |
+
+### 7.4 Beneficiary Mother Accounts
+- Beneficiary mothers register directly via the portal at `/myapp/user_registartion/`.
+- Mothers choose their own `username` and `password` during registration.
+- Once registered, the mother must be verified by the ASHA worker assigned to her designated ward before her login becomes active.

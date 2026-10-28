@@ -3,6 +3,22 @@
 ## 1. PAGE OVERVIEW
 The **Unified Login Portal** is the central authentication gateway for all MaatriCare users. It supports multi-role access for Administrators, ASHA Field Health Workers, Anganwadi Teachers, and Beneficiary Mothers through a single interface. It handles credential verification, role-based redirection, verification checks for new mothers (ensuring only ASHA-verified mothers can log in), and contains a password recovery tab.
 
+### 1.1 Default System Credentials Reference
+
+| Role | Ward / Center | Name | Username | Password |
+| :--- | :--- | :--- | :--- | :--- |
+| **Administrator** | Central Administration | Administrative Officer | `admin` | `admin123` |
+| **ASHA Worker** | Ward 01 - Main Community Center | Fatima Beevi | `asha01` | `asha01` |
+| **ASHA Worker** | Ward 02 - East Sector | Kavitha Nair | `asha02` | `asha02` |
+| **ASHA Worker** | Ward 03 - West Gram | Priya Nair | `asha03` | `asha03` |
+| **ASHA Worker** | Ward 04 - North Colony | Rekha Menon | `asha04` | `asha04` |
+| **ASHA Worker** | Ward 05 - South Extension | Mary Joseph | `asha05` | `asha05` |
+| **Anganwadi Teacher** | Model Center 01 (Ward 01) | Anita Sharma | `teacher01` | `teacher01` |
+| **Anganwadi Teacher** | Community Center 02 (Ward 02) | Lakshmi Menon | `teacher02` | `teacher02` |
+| **Anganwadi Teacher** | West Gram Center 03 (Ward 03) | Sunitha Varghese | `teacher03` | `teacher03` |
+| **Anganwadi Teacher** | North Colony Center 04 (Ward 04) | Radhika Pillai | `teacher04` | `teacher04` |
+| **Anganwadi Teacher** | South Extension Center 05 (Ward 05) | Deepa Mohan | `teacher05` | `teacher05` |
+
 ---
 
 ## 2. DATA USED IN THIS PAGE
